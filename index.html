@@ -1,0 +1,1762 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1A2A4A">
+<meta name="description" content="Conseils spirituels pour vivre dans la Divine Volonté au quotidien">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Luisa">
+<title>Lettres de Luisa Piccarreta</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+/* ═══ RESET & ROOT ═══ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ivory: #F9F6F0;
+  --night: #1A2A4A;
+  --gold: #C9A84C;
+  --gold-light: #E8D5A3;
+  --gold-pale: #F5EDD8;
+  --ink: #2C1810;
+  --muted: #7A6E62;
+  --border: #E2D9CC;
+  --white: #FFFFFF;
+  --serif: 'IM Fell English', Georgia, serif;
+  --body: 'Crimson Text', Georgia, serif;
+  --reader-size: 16px;
+  --sat-top: env(safe-area-inset-top, 0px);
+  --sat-bot: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ivory: #1A1612;
+    --night: #E8D9C4;
+    --gold: #D4A843;
+    --gold-light: #5A4520;
+    --gold-pale: #2A2010;
+    --ink: #D4C8BC;
+    --muted: #8A7E72;
+    --border: #2E2820;
+    --white: #201C18;
+  }
+}
+
+html, body { height: 100%; background: var(--ivory); }
+body {
+  font-family: var(--body);
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100dvh;
+  overscroll-behavior: none;
+}
+
+/* ═══ APP FRAME ═══ */
+#app {
+  width: 100%;
+  max-width: 480px;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--ivory);
+  position: relative;
+}
+
+/* ═══ SCREENS ═══ */
+.screen {
+  display: none;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+.screen.active { display: flex; }
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.screen.active { animation: slideIn .2s ease; }
+
+/* ═══ SCROLL AREA ═══ */
+.scroll {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+.scroll::-webkit-scrollbar { width: 3px; }
+.scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* ═══ TOP NAV ═══ */
+.top-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(8px + var(--sat-top)) 16px 10px;
+  border-bottom: 0.5px solid var(--border);
+  background: var(--ivory);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.top-nav .title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 18px;
+  color: var(--night);
+  letter-spacing: .01em;
+}
+.btn-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 20px;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  transition: color .15s, background .15s;
+}
+.btn-icon:hover { color: var(--night); background: var(--gold-pale); }
+
+/* ═══ BOTTOM NAV ═══ */
+.bottom-nav {
+  display: flex;
+  background: var(--ivory);
+  border-top: 0.5px solid var(--border);
+  padding: 6px 0 calc(8px + var(--sat-bot));
+}
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-size: 10px;
+  font-family: var(--body);
+  padding: 4px 0;
+  transition: color .15s;
+  position: relative;
+}
+.nav-item.active { color: var(--night); }
+.nav-item .ti { font-size: 22px; }
+.nav-item::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: var(--gold);
+  border-radius: 0 0 2px 2px;
+  transition: width .2s;
+}
+.nav-item.active::after { width: 28px; }
+
+/* ═══ HOME SCREEN ═══ */
+.ldj-card {
+  background: var(--night);
+  margin: 12px;
+  border-radius: 14px;
+  padding: 18px 20px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform .1s;
+}
+.ldj-card:active { transform: scale(.98); }
+.ldj-card::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 140px; height: 140px;
+  border-radius: 50%;
+  border: 1px solid rgba(201,168,76,.12);
+  pointer-events: none;
+}
+.ldj-card::after {
+  content: '';
+  position: absolute;
+  bottom: -20px; right: 30px;
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  border: 1px solid rgba(201,168,76,.08);
+  pointer-events: none;
+}
+.ldj-eyebrow {
+  font-size: 10px;
+  letter-spacing: .14em;
+  color: var(--gold);
+  font-family: var(--body);
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.ldj-num { font-size: 11px; color: rgba(255,255,255,.3); font-family: var(--body); margin-bottom: 7px; letter-spacing: .04em; }
+.ldj-title { font-family: var(--serif); font-size: 17px; color: #fff; margin-bottom: 10px; line-height: 1.4; }
+.ldj-excerpt {
+  font-family: var(--body);
+  font-size: 14px;
+  line-height: 1.72;
+  color: rgba(255,255,255,.72);
+  font-style: italic;
+  margin-bottom: 6px;
+}
+.ldj-dest { font-size: 11px; color: var(--gold); font-family: var(--body); }
+.ldj-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  background: rgba(201,168,76,.18);
+  border: 0.5px solid rgba(201,168,76,.4);
+  color: var(--gold);
+  font-size: 12px;
+  font-family: var(--body);
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  letter-spacing: .03em;
+  transition: background .15s;
+}
+.ldj-cta:hover { background: rgba(201,168,76,.3); }
+
+.section-head {
+  font-family: var(--serif);
+  font-size: 14px;
+  color: var(--night);
+  padding: 16px 16px 8px;
+  letter-spacing: .01em;
+}
+
+/* Situations grid */
+.situations {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 0 12px 4px;
+}
+.situ-card {
+  background: var(--white);
+  border: 0.5px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 10px;
+  cursor: pointer;
+  transition: border-color .15s, transform .1s;
+  text-align: left;
+}
+.situ-card:hover { border-color: var(--gold); }
+.situ-card:active { transform: scale(.97); }
+.situ-icon { font-size: 20px; color: var(--gold); margin-bottom: 6px; display: block; }
+.situ-label { font-size: 12.5px; line-height: 1.4; color: var(--night); font-family: var(--body); }
+.situ-count { font-size: 10px; color: var(--muted); margin-top: 3px; font-family: var(--body); }
+
+/* Continue card */
+.continue-card {
+  margin: 4px 12px 16px;
+  background: var(--white);
+  border: 0.5px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: border-color .15s;
+}
+.continue-card:hover { border-color: var(--gold-light); }
+.cont-thumb {
+  width: 38px; height: 38px;
+  background: var(--gold-pale);
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-family: var(--serif);
+  font-size: 14px;
+  color: var(--night);
+}
+.cont-info { flex: 1; min-width: 0; }
+.cont-title { font-size: 13px; color: var(--night); font-family: var(--body); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cont-sub { font-size: 11px; color: var(--muted); font-family: var(--body); }
+.cont-progress { height: 2px; background: var(--border); border-radius: 1px; margin-top: 6px; }
+.cont-bar { height: 2px; background: var(--gold); border-radius: 1px; }
+
+/* ═══ LIST SCREEN ═══ */
+.filter-row {
+  display: flex;
+  gap: 6px;
+  padding: 8px 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  background: var(--ivory);
+  position: sticky;
+  top: 57px;
+  z-index: 5;
+  border-bottom: 0.5px solid var(--border);
+}
+.filter-row::-webkit-scrollbar { display: none; }
+.chip {
+  flex-shrink: 0;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 11.5px;
+  font-family: var(--body);
+  cursor: pointer;
+  border: 0.5px solid var(--border);
+  background: var(--white);
+  color: var(--muted);
+  transition: all .15s;
+  letter-spacing: .02em;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.chip.active { background: var(--night); color: var(--gold); border-color: var(--night); }
+.chip:hover:not(.active) { border-color: var(--gold-light); color: var(--night); }
+
+.letter-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 0.5px solid var(--border);
+  cursor: pointer;
+  transition: background .1s;
+}
+.letter-item:hover { background: rgba(201,168,76,.04); }
+.letter-item:active { background: var(--gold-pale); }
+.li-num {
+  font-size: 10px;
+  color: var(--muted);
+  font-family: var(--body);
+  letter-spacing: .04em;
+  width: 28px;
+  flex-shrink: 0;
+  text-align: right;
+  margin-top: 3px;
+  position: relative;
+}
+.li-num.is-fav::after {
+  content: '♥';
+  font-size: 7px;
+  color: var(--gold);
+  position: absolute;
+  top: -3px; right: -1px;
+}
+.li-body { flex: 1; min-width: 0; }
+.li-title { font-family: var(--serif); font-size: 14.5px; color: var(--night); line-height: 1.35; margin-bottom: 3px; }
+.li-dest { font-size: 11px; color: var(--muted); font-family: var(--body); margin-bottom: 5px; }
+.li-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+.topic-pill {
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 10px;
+  background: var(--gold-pale);
+  color: #7A5A20;
+  font-family: var(--body);
+}
+@media (prefers-color-scheme: dark) {
+  .topic-pill { color: #D4A050; }
+}
+.li-date { font-size: 10px; color: var(--muted); font-family: var(--body); flex-shrink: 0; margin-top: 3px; white-space: nowrap; }
+
+.empty-state {
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--muted);
+  font-family: var(--body);
+  font-size: 13.5px;
+  line-height: 1.7;
+}
+.empty-state .ti { font-size: 32px; opacity: .3; display: block; margin-bottom: 10px; }
+
+/* ═══ SEARCH SCREEN ═══ */
+.search-bar {
+  margin: 10px 12px 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--white);
+  border: 0.5px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+.search-bar input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 15px;
+  font-family: var(--body);
+  color: var(--ink);
+  outline: none;
+}
+.search-bar input::placeholder { color: var(--muted); }
+.search-bar .ti { color: var(--muted); font-size: 17px; }
+.search-bar .clear-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 15px;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+}
+#search-hint {
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--muted);
+  font-family: var(--body);
+  line-height: 1.65;
+}
+.search-suggestion {
+  display: inline-block;
+  margin: 4px 4px 0 0;
+  padding: 3px 10px;
+  background: var(--gold-pale);
+  border-radius: 12px;
+  font-size: 12px;
+  color: var(--night);
+  cursor: pointer;
+  font-family: var(--body);
+  transition: background .15s;
+}
+.search-suggestion:hover { background: var(--gold-light); }
+.search-count { padding: 8px 16px 4px; font-size: 11px; color: var(--muted); font-family: var(--body); }
+
+/* ═══ READER SCREEN ═══ */
+.reader-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(8px + var(--sat-top)) 12px 10px;
+  border-bottom: 0.5px solid var(--border);
+  background: var(--ivory);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.btn-back {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 13px;
+  font-family: var(--body);
+  padding: 4px 8px 4px 2px;
+  border-radius: 6px;
+  transition: color .15s;
+}
+.btn-back:hover { color: var(--night); }
+.reader-counter {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: var(--body);
+}
+.nav-btn {
+  background: none;
+  border: 0.5px solid var(--border);
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 16px;
+  padding: 3px 6px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  transition: all .15s;
+}
+.nav-btn:hover { color: var(--night); border-color: var(--gold-light); }
+.nav-btn:disabled { opacity: .3; cursor: default; }
+
+/* Letter header */
+.letter-header { padding: 20px 20px 14px; }
+.lh-num {
+  font-size: 10px;
+  letter-spacing: .1em;
+  color: var(--gold);
+  font-family: var(--body);
+  text-transform: uppercase;
+  margin-bottom: 7px;
+}
+.lh-title {
+  font-family: var(--serif);
+  font-size: 21px;
+  color: var(--night);
+  line-height: 1.35;
+  margin-bottom: 10px;
+}
+.lh-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.lh-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: var(--body);
+}
+.lh-meta-item .ti { font-size: 13px; }
+.lh-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+.lh-divider {
+  height: 1px;
+  background: linear-gradient(90deg, var(--gold-light), transparent);
+  margin: 0 20px 16px;
+  opacity: .6;
+}
+
+/* Display paragraphs */
+.letter-body { padding: 0 20px 8px; }
+.dp {
+  font-family: var(--body);
+  font-size: var(--reader-size);
+  line-height: 1.8;
+  color: var(--ink);
+  margin-bottom: 1.3em;
+}
+.dp.salutation {
+  font-style: italic;
+  color: var(--night);
+  font-size: calc(var(--reader-size) - 1px);
+  margin-bottom: 1.5em;
+  opacity: .9;
+}
+.dp.signature {
+  font-style: italic;
+  font-size: calc(var(--reader-size) - 2px);
+  color: var(--muted);
+  border-top: 0.5px solid var(--border);
+  padding-top: 14px;
+  margin-top: 1em;
+  margin-bottom: 0;
+  text-align: center;
+}
+.dp.signature::before {
+  content: '✦  ✦  ✦';
+  display: block;
+  text-align: center;
+  color: var(--gold);
+  font-size: 10px;
+  margin-bottom: 10px;
+  font-style: normal;
+  letter-spacing: .3em;
+  opacity: .7;
+}
+
+/* Trust panel */
+.trust-panel {
+  margin: 16px 12px 24px;
+  border: 0.5px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.trust-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  cursor: pointer;
+  background: var(--white);
+  user-select: none;
+}
+.trust-head span {
+  font-size: 12px;
+  color: var(--muted);
+  font-family: var(--body);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.trust-head .ti { font-size: 14px; }
+.trust-chevron { font-size: 14px; color: var(--muted); transition: transform .2s; }
+.trust-panel.open .trust-chevron { transform: rotate(180deg); }
+.trust-body {
+  display: none;
+  padding: 10px 14px 12px;
+  background: var(--white);
+  border-top: 0.5px solid var(--border);
+}
+.trust-panel.open .trust-body { display: block; }
+.trust-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 5px 0;
+  border-bottom: 0.5px solid var(--border);
+  font-size: 11.5px;
+  font-family: var(--body);
+}
+.trust-row:last-child { border-bottom: none; }
+.trust-row .k { color: var(--muted); flex-shrink: 0; }
+.trust-row .v { color: var(--night); text-align: right; word-break: break-all; }
+.trust-row .v.pass { color: #2D7A40; }
+
+/* Action bar */
+.action-bar {
+  display: flex;
+  border-top: 0.5px solid var(--border);
+  background: var(--ivory);
+  padding: 8px 0 calc(8px + var(--sat-bot));
+}
+.action-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 10px;
+  font-family: var(--body);
+  padding: 4px 2px;
+  transition: color .15s;
+  border-radius: 6px;
+}
+.action-btn:hover { color: var(--night); }
+.action-btn .ti { font-size: 20px; }
+.action-btn.fav-active { color: var(--gold); }
+
+/* Text size control */
+.text-size-bar {
+  display: none;
+  position: fixed;
+  bottom: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--white);
+  border: 0.5px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.12);
+  z-index: 100;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--body);
+  font-size: 13px;
+  color: var(--night);
+}
+.text-size-bar.open { display: flex; }
+.tsz-btn {
+  background: none;
+  border: 0.5px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+  color: var(--night);
+  font-family: var(--body);
+  font-size: 14px;
+  transition: background .15s;
+}
+.tsz-btn:hover { background: var(--gold-pale); }
+
+/* ═══ EXPLORE SCREEN ═══ */
+.explore-section { padding: 12px 12px 0; }
+.exp-title { font-family: var(--serif); font-size: 15px; color: var(--night); margin-bottom: 10px; }
+.exp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+.exp-card {
+  background: var(--white);
+  border: 0.5px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  cursor: pointer;
+  transition: border-color .15s, transform .1s;
+}
+.exp-card:hover { border-color: var(--gold-light); }
+.exp-card:active { transform: scale(.97); }
+.exp-icon { font-size: 22px; color: var(--gold); margin-bottom: 6px; display: block; }
+.exp-label { font-size: 13px; color: var(--night); font-family: var(--body); margin-bottom: 2px; }
+.exp-sub { font-size: 11px; color: var(--muted); font-family: var(--body); }
+
+.dest-list, .chron-list {
+  background: var(--white);
+  border: 0.5px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.dest-item, .chron-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  border-bottom: 0.5px solid var(--border);
+  cursor: pointer;
+  transition: background .1s;
+}
+.dest-item:last-child, .chron-item:last-child { border-bottom: none; }
+.dest-item:hover, .chron-item:hover { background: var(--gold-pale); }
+.dest-name { flex: 1; font-size: 13px; color: var(--night); font-family: var(--body); }
+.dest-count { font-size: 11px; color: var(--muted); font-family: var(--body); flex-shrink: 0; }
+.chron-year { font-size: 11px; color: var(--gold); font-family: var(--body); width: 36px; flex-shrink: 0; }
+.chron-info { flex: 1; }
+.chron-info .ct { font-size: 13px; color: var(--night); font-family: var(--body); }
+.chron-info .cs { font-size: 11px; color: var(--muted); font-family: var(--body); }
+.see-all-row {
+  padding: 9px 14px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--gold);
+  font-family: var(--body);
+  background: var(--white);
+  border-top: 0.5px solid var(--border);
+  transition: background .1s;
+}
+.see-all-row:hover { background: var(--gold-pale); }
+
+/* ═══ NOTES SCREEN ═══ */
+.tab-row {
+  display: flex;
+  border-bottom: 0.5px solid var(--border);
+  background: var(--ivory);
+  position: sticky;
+  top: 57px;
+  z-index: 5;
+}
+.tab {
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+  font-size: 13px;
+  font-family: var(--body);
+  cursor: pointer;
+  color: var(--muted);
+  border-bottom: 2px solid transparent;
+  transition: all .15s;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+.tab.active { color: var(--night); border-bottom-color: var(--gold); }
+
+.fav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 16px;
+  border-bottom: 0.5px solid var(--border);
+  cursor: pointer;
+  transition: background .1s;
+}
+.fav-item:hover { background: var(--gold-pale); }
+.fav-num { font-size: 10px; color: var(--muted); width: 22px; font-family: var(--body); }
+.fav-title { font-family: var(--serif); font-size: 13.5px; color: var(--night); flex: 1; }
+.fav-heart { font-size: 14px; color: var(--gold); }
+
+.note-item {
+  padding: 13px 16px;
+  border-bottom: 0.5px solid var(--border);
+  cursor: pointer;
+  transition: background .1s;
+}
+.note-item:hover { background: var(--gold-pale); }
+.ni-ref { font-size: 10px; color: var(--gold); font-family: var(--body); letter-spacing: .06em; margin-bottom: 4px; }
+.ni-text {
+  font-size: 13.5px;
+  color: var(--ink);
+  font-family: var(--body);
+  line-height: 1.6;
+  font-style: italic;
+  margin-bottom: 5px;
+}
+.ni-date { font-size: 10px; color: var(--muted); font-family: var(--body); }
+
+/* ═══ TOAST ═══ */
+.toast {
+  position: fixed;
+  bottom: calc(80px + var(--sat-bot));
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: var(--night);
+  color: var(--gold);
+  font-family: var(--body);
+  font-size: 13px;
+  padding: 8px 18px;
+  border-radius: 20px;
+  opacity: 0;
+  transition: all .25s;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 1000;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ═══ INSTALL BANNER ═══ */
+.install-banner {
+  display: none;
+  margin: 8px 12px 0;
+  background: var(--gold-pale);
+  border: 0.5px solid var(--gold-light);
+  border-radius: 10px;
+  padding: 10px 14px;
+  align-items: center;
+  gap: 10px;
+}
+.install-banner.show { display: flex; }
+.install-banner p { flex: 1; font-size: 12.5px; color: var(--night); font-family: var(--body); line-height: 1.5; }
+.install-btn {
+  background: var(--night);
+  color: var(--gold);
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-family: var(--body);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.install-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 16px;
+  padding: 2px;
+  flex-shrink: 0;
+}
+
+/* ═══ LOADING ═══ */
+#loading {
+  position: fixed;
+  inset: 0;
+  background: var(--ivory);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  z-index: 9999;
+  transition: opacity .3s;
+}
+#loading.hide { opacity: 0; pointer-events: none; }
+.loading-cross {
+  font-size: 36px;
+  color: var(--gold);
+  animation: pulse 1.8s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: .5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+.loading-text { font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<!-- Loading screen -->
+<div id="loading">
+  <div class="loading-cross">✦</div>
+  <div class="loading-text">Chargement du corpus…</div>
+</div>
+
+<!-- Toast notification -->
+<div class="toast" id="toast"></div>
+
+<!-- Text size control -->
+<div class="text-size-bar" id="text-size-bar">
+  <button class="tsz-btn" onclick="adjustSize(-1.5)">A−</button>
+  <span id="tsz-label">16px</span>
+  <button class="tsz-btn" onclick="adjustSize(+1.5)">A+</button>
+  <button class="tsz-btn" onclick="closeTextBar()" style="border:none;color:var(--muted);padding:4px 6px">✕</button>
+</div>
+
+<div id="app">
+
+  <!-- ══════════════════════════════════════════
+       HOME SCREEN
+  ══════════════════════════════════════════ -->
+  <div class="screen active" id="s-home">
+    <div class="top-nav">
+      <span class="title">Lettres de Luisa</span>
+      <div style="display:flex;gap:4px">
+        <button class="btn-icon" onclick="toggleDark()" aria-label="Mode sombre"><i class="ti ti-moon" aria-hidden="true"></i></button>
+      </div>
+    </div>
+    <div class="scroll" id="home-scroll">
+      <!-- Install banner -->
+      <div class="install-banner" id="install-banner">
+        <p>Installez l'app pour un accès hors-ligne complet.</p>
+        <button class="install-btn" onclick="doInstall()">Installer</button>
+        <button class="install-close" onclick="dismissInstall()" aria-label="Fermer">✕</button>
+      </div>
+
+      <!-- Lettre du jour -->
+      <div class="ldj-card" id="ldj-card" onclick="openLetterFromHome()">
+        <div class="ldj-eyebrow"><i class="ti ti-sun" aria-hidden="true" style="font-size:11px"></i> Lettre du jour</div>
+        <div class="ldj-num" id="ldj-id">LP.LETTER.034</div>
+        <div class="ldj-title" id="ldj-title">Sur la croix comme trône du Fiat</div>
+        <div class="ldj-excerpt" id="ldj-excerpt">« Que la Volonté divine soit votre nourriture, votre vie, votre souffle — non pas seulement en paroles, mais dans chaque acte. »</div>
+        <div class="ldj-dest" id="ldj-dest">Mère Marie-Céleste Crostarosa</div>
+        <button class="ldj-cta"><i class="ti ti-book-open" aria-hidden="true" style="font-size:12px"></i> Lire la lettre</button>
+      </div>
+
+      <!-- Situations -->
+      <div class="section-head">Je cherche une lettre pour…</div>
+      <div class="situations" id="situ-grid"></div>
+
+      <!-- Continue -->
+      <div class="section-head" id="continue-head" style="display:none">Continuer la lecture</div>
+      <div class="continue-card" id="continue-card" style="display:none" onclick="resumeReading()">
+        <div class="cont-thumb" id="cont-num"></div>
+        <div class="cont-info">
+          <div class="cont-title" id="cont-title"></div>
+          <div class="cont-sub" id="cont-sub"></div>
+          <div class="cont-progress"><div class="cont-bar" id="cont-bar"></div></div>
+        </div>
+        <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:16px;color:var(--muted)"></i>
+      </div>
+
+      <div style="height:16px"></div>
+    </div>
+    <nav class="bottom-nav" aria-label="Navigation principale">
+      <button class="nav-item active" onclick="goScreen('s-home')" aria-label="Accueil"><i class="ti ti-home" aria-hidden="true"></i><span>Accueil</span></button>
+      <button class="nav-item" onclick="goScreen('s-list')" aria-label="Corpus"><i class="ti ti-books" aria-hidden="true"></i><span>Corpus</span></button>
+      <button class="nav-item" onclick="goScreen('s-search')" aria-label="Recherche"><i class="ti ti-search" aria-hidden="true"></i><span>Recherche</span></button>
+      <button class="nav-item" onclick="goScreen('s-notes')" aria-label="Notes"><i class="ti ti-bookmark" aria-hidden="true"></i><span>Notes</span></button>
+      <button class="nav-item" onclick="goScreen('s-explore')" aria-label="Explorer"><i class="ti ti-layout-grid" aria-hidden="true"></i><span>Explorer</span></button>
+    </nav>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       LIST SCREEN
+  ══════════════════════════════════════════ -->
+  <div class="screen" id="s-list">
+    <div class="top-nav">
+      <span class="title" id="list-title">136 Lettres</span>
+      <button class="btn-icon" onclick="resetFilter()" aria-label="Réinitialiser filtre"><i class="ti ti-filter-off" aria-hidden="true"></i></button>
+    </div>
+    <div class="filter-row" id="filter-row"></div>
+    <div class="scroll" id="letter-list"></div>
+    <nav class="bottom-nav">
+      <button class="nav-item" onclick="goScreen('s-home')"><i class="ti ti-home" aria-hidden="true"></i><span>Accueil</span></button>
+      <button class="nav-item active" onclick="goScreen('s-list')"><i class="ti ti-books" aria-hidden="true"></i><span>Corpus</span></button>
+      <button class="nav-item" onclick="goScreen('s-search')"><i class="ti ti-search" aria-hidden="true"></i><span>Recherche</span></button>
+      <button class="nav-item" onclick="goScreen('s-notes')"><i class="ti ti-bookmark" aria-hidden="true"></i><span>Notes</span></button>
+      <button class="nav-item" onclick="goScreen('s-explore')"><i class="ti ti-layout-grid" aria-hidden="true"></i><span>Explorer</span></button>
+    </nav>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SEARCH SCREEN
+  ══════════════════════════════════════════ -->
+  <div class="screen" id="s-search">
+    <div class="top-nav"><span class="title">Recherche</span></div>
+    <div class="search-bar">
+      <i class="ti ti-search" aria-hidden="true"></i>
+      <input type="text" id="search-input" placeholder="Rechercher dans les lettres…" oninput="doSearch()" autocomplete="off" autocorrect="off" spellcheck="false">
+      <button class="clear-btn" onclick="clearSearch()" aria-label="Effacer"><i class="ti ti-x" aria-hidden="true"></i></button>
+    </div>
+    <div id="search-hint">
+      <div style="color:var(--muted);line-height:1.65;font-size:13px">Recherchez par mots-clés, thème, destinataire ou numéro.</div>
+      <div style="margin-top:8px">
+        <span class="search-suggestion" onclick="searchFor('paix')">paix</span>
+        <span class="search-suggestion" onclick="searchFor('abandon')">abandon</span>
+        <span class="search-suggestion" onclick="searchFor('Fiat')">Fiat</span>
+        <span class="search-suggestion" onclick="searchFor('croix')">croix</span>
+        <span class="search-suggestion" onclick="searchFor('prêtres')">prêtres</span>
+        <span class="search-suggestion" onclick="searchFor('deuil')">deuil</span>
+        <span class="search-suggestion" onclick="searchFor('Hannibal')">Hannibal</span>
+      </div>
+    </div>
+    <div class="scroll" id="search-results"></div>
+    <nav class="bottom-nav">
+      <button class="nav-item" onclick="goScreen('s-home')"><i class="ti ti-home" aria-hidden="true"></i><span>Accueil</span></button>
+      <button class="nav-item" onclick="goScreen('s-list')"><i class="ti ti-books" aria-hidden="true"></i><span>Corpus</span></button>
+      <button class="nav-item active" onclick="goScreen('s-search')"><i class="ti ti-search" aria-hidden="true"></i><span>Recherche</span></button>
+      <button class="nav-item" onclick="goScreen('s-notes')"><i class="ti ti-bookmark" aria-hidden="true"></i><span>Notes</span></button>
+      <button class="nav-item" onclick="goScreen('s-explore')"><i class="ti ti-layout-grid" aria-hidden="true"></i><span>Explorer</span></button>
+    </nav>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       READER SCREEN
+  ══════════════════════════════════════════ -->
+  <div class="screen" id="s-reader">
+    <div class="reader-top">
+      <button class="btn-back" onclick="goBack()">
+        <i class="ti ti-arrow-left" aria-hidden="true" style="font-size:17px"></i> Retour
+      </button>
+      <div class="reader-counter">
+        <button class="nav-btn" id="btn-prev" onclick="prevLetter()" aria-label="Lettre précédente"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
+        <span id="reader-pos" style="min-width:50px;text-align:center">34 / 136</span>
+        <button class="nav-btn" id="btn-next" onclick="nextLetter()" aria-label="Lettre suivante"><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
+      </div>
+    </div>
+    <div class="scroll" id="reader-scroll">
+      <div class="letter-header">
+        <div class="lh-num" id="r-num"></div>
+        <div class="lh-title" id="r-title"></div>
+        <div class="lh-meta" id="r-meta"></div>
+        <div class="lh-topics" id="r-topics"></div>
+      </div>
+      <div class="lh-divider"></div>
+      <div class="letter-body" id="r-body"></div>
+      <div class="trust-panel" id="trust-panel">
+        <div class="trust-head" onclick="toggleTrust()" role="button" aria-expanded="false" id="trust-head">
+          <span><i class="ti ti-shield-check" aria-hidden="true"></i> Source et validation</span>
+          <i class="ti ti-chevron-down trust-chevron" aria-hidden="true"></i>
+        </div>
+        <div class="trust-body" id="trust-body"></div>
+      </div>
+    </div>
+    <div class="action-bar">
+      <button class="action-btn" id="fav-btn" onclick="toggleFav()" aria-label="Favori"><i class="ti ti-heart" aria-hidden="true"></i><span>Favori</span></button>
+      <button class="action-btn" onclick="addNote()" aria-label="Ajouter une note"><i class="ti ti-pencil" aria-hidden="true"></i><span>Note</span></button>
+      <button class="action-btn" onclick="shareLetter()" aria-label="Partager"><i class="ti ti-share" aria-hidden="true"></i><span>Partager</span></button>
+      <button class="action-btn" onclick="toggleTrust()" aria-label="Source"><i class="ti ti-shield-check" aria-hidden="true"></i><span>Source</span></button>
+      <button class="action-btn" onclick="openTextBar()" aria-label="Taille du texte"><i class="ti ti-typography" aria-hidden="true"></i><span>Texte</span></button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       EXPLORE SCREEN
+  ══════════════════════════════════════════ -->
+  <div class="screen" id="s-explore">
+    <div class="top-nav"><span class="title">Explorer</span></div>
+    <div class="scroll">
+      <div class="explore-section">
+        <div class="exp-title">Par situation spirituelle</div>
+        <div class="exp-grid" id="exp-situ-grid"></div>
+      </div>
+      <div class="explore-section">
+        <div class="exp-title">Par destinataire</div>
+        <div class="dest-list" id="dest-list"></div>
+      </div>
+      <div class="explore-section">
+        <div class="exp-title">Chronologie</div>
+        <div class="chron-list" id="chron-list"></div>
+      </div>
+      <div style="height:16px"></div>
+    </div>
+    <nav class="bottom-nav">
+      <button class="nav-item" onclick="goScreen('s-home')"><i class="ti ti-home" aria-hidden="true"></i><span>Accueil</span></button>
+      <button class="nav-item" onclick="goScreen('s-list')"><i class="ti ti-books" aria-hidden="true"></i><span>Corpus</span></button>
+      <button class="nav-item" onclick="goScreen('s-search')"><i class="ti ti-search" aria-hidden="true"></i><span>Recherche</span></button>
+      <button class="nav-item" onclick="goScreen('s-notes')"><i class="ti ti-bookmark" aria-hidden="true"></i><span>Notes</span></button>
+      <button class="nav-item active" onclick="goScreen('s-explore')"><i class="ti ti-layout-grid" aria-hidden="true"></i><span>Explorer</span></button>
+    </nav>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       NOTES / MON ESPACE SCREEN
+  ══════════════════════════════════════════ -->
+  <div class="screen" id="s-notes">
+    <div class="top-nav"><span class="title">Mon espace</span></div>
+    <div class="tab-row">
+      <button class="tab active" onclick="setTab(this,'t-favs')">Favoris</button>
+      <button class="tab" onclick="setTab(this,'t-notes')">Notes</button>
+      <button class="tab" onclick="setTab(this,'t-relire')">À relire</button>
+    </div>
+    <div class="scroll" id="notes-scroll">
+      <div id="t-favs"></div>
+      <div id="t-notes" style="display:none"></div>
+      <div id="t-relire" style="display:none"></div>
+    </div>
+    <nav class="bottom-nav">
+      <button class="nav-item" onclick="goScreen('s-home')"><i class="ti ti-home" aria-hidden="true"></i><span>Accueil</span></button>
+      <button class="nav-item" onclick="goScreen('s-list')"><i class="ti ti-books" aria-hidden="true"></i><span>Corpus</span></button>
+      <button class="nav-item" onclick="goScreen('s-search')"><i class="ti ti-search" aria-hidden="true"></i><span>Recherche</span></button>
+      <button class="nav-item active" onclick="goScreen('s-notes')"><i class="ti ti-bookmark" aria-hidden="true"></i><span>Notes</span></button>
+      <button class="nav-item" onclick="goScreen('s-explore')"><i class="ti ti-layout-grid" aria-hidden="true"></i><span>Explorer</span></button>
+    </nav>
+  </div>
+
+</div><!-- #app -->
+
+<script>
+'use strict';
+
+/* ════════════════════════════════════════
+   STATE
+════════════════════════════════════════ */
+let CORPUS = [];
+let TOPICS_INDEX = {};
+let RECIPIENTS_INDEX = {};
+let currentLetterIdx = 0;
+let prevScreenId = 's-home';
+let currentFilter = 'all';
+let readerSize = 16;
+let deferredInstall = null;
+
+const SITUATIONS = [
+  { label: 'Je manque de paix',           topic: 'Paix',                       icon: 'ti-wave-sine',        count: 12 },
+  { label: 'Je suis découragé',            topic: 'Confiance',                  icon: 'ti-shield-heart',     count: 10 },
+  { label: 'Je souffre',                   topic: 'Maladie et souffrance',      icon: 'ti-heart-handshake',  count: 8  },
+  { label: 'Vivre dans la Divine Volonté', topic: 'Vivre dans la Divine Volonté',icon: 'ti-star',            count: 8  },
+  { label: 'Je prie pour un prêtre',       topic: 'Prêtres',                    icon: 'ti-candle',           count: 4  },
+  { label: 'Je suis en deuil',             topic: 'Deuil',                      icon: 'ti-flower',           count: 3  },
+  { label: 'Faire connaître les écrits',   topic: 'Propagation des écrits',     icon: 'ti-send',             count: 14 },
+  { label: 'Vivre dans le Fiat',           topic: 'Divine Volonté',             icon: 'ti-arrow-forward',    count: 17 },
+];
+
+/* ════════════════════════════════════════
+   PERSISTENCE (localStorage)
+════════════════════════════════════════ */
+function loadState() {
+  try {
+    return {
+      favs: new Set(JSON.parse(localStorage.getItem('lp_favs') || '[]')),
+      relire: new Set(JSON.parse(localStorage.getItem('lp_relire') || '[]')),
+      notes: JSON.parse(localStorage.getItem('lp_notes') || '[]'),
+      lastRead: JSON.parse(localStorage.getItem('lp_last') || 'null'),
+      darkForced: localStorage.getItem('lp_dark'),
+      readerSize: parseFloat(localStorage.getItem('lp_size') || '16'),
+    };
+  } catch(e) {
+    return { favs: new Set(), relire: new Set(), notes: [], lastRead: null, darkForced: null, readerSize: 16 };
+  }
+}
+function saveState() {
+  try {
+    localStorage.setItem('lp_favs', JSON.stringify([...STATE.favs]));
+    localStorage.setItem('lp_relire', JSON.stringify([...STATE.relire]));
+    localStorage.setItem('lp_notes', JSON.stringify(STATE.notes));
+    if (STATE.lastRead) localStorage.setItem('lp_last', JSON.stringify(STATE.lastRead));
+    localStorage.setItem('lp_size', String(readerSize));
+  } catch(e) {}
+}
+const STATE = loadState();
+readerSize = STATE.readerSize;
+
+/* ════════════════════════════════════════
+   CORPUS LOADING
+════════════════════════════════════════ */
+async function loadCorpus() {
+  try {
+    const resp = await fetch('./corpus.json');
+    const data = await resp.json();
+    CORPUS = data.letters || [];
+    TOPICS_INDEX = data.topics_index || {};
+    RECIPIENTS_INDEX = data.recipients_index || {};
+  } catch(e) {
+    console.warn('Corpus fetch failed, using stub data.');
+    CORPUS = STUB;
+  }
+  initApp();
+}
+
+/* ════════════════════════════════════════
+   INIT
+════════════════════════════════════════ */
+function initApp() {
+  // Hide loading
+  setTimeout(() => {
+    const ld = document.getElementById('loading');
+    ld.classList.add('hide');
+    setTimeout(() => ld.remove(), 350);
+  }, 400);
+
+  // Dark mode
+  if (STATE.darkForced === 'true') document.documentElement.style.setProperty('--forced-dark','1');
+
+  // Lettre du jour (rotation par date)
+  const doy = Math.floor((Date.now() / 86400000)) % CORPUS.length;
+  const ldj = CORPUS[doy] || CORPUS[0];
+  document.getElementById('ldj-id').textContent = ldj.letter_id;
+  document.getElementById('ldj-title').textContent = ldj.title_fr;
+  document.getElementById('ldj-dest').textContent = ldj.recipient_display_fr;
+  // Best excerpt: first body DP
+  const firstBody = (ldj.display_paragraphs || []).find(dp => dp.split_reason === 'body');
+  if (firstBody) {
+    const excerpt = firstBody.text_fr.slice(0, 140) + (firstBody.text_fr.length > 140 ? '…' : '');
+    document.getElementById('ldj-excerpt').textContent = '« ' + excerpt + ' »';
+  }
+  document.getElementById('ldj-card').dataset.n = ldj.canonical_number;
+
+  // Situations grid
+  const sGrid = document.getElementById('situ-grid');
+  sGrid.innerHTML = SITUATIONS.map(s => {
+    const realCount = getTopicLetters(s.topic).length || s.count;
+    return `<div class="situ-card" onclick="filterByTopic('${esc(s.topic)}')">
+      <span class="situ-icon"><i class="ti ${s.icon}" aria-hidden="true"></i></span>
+      <div class="situ-label">${esc(s.label)}</div>
+      <div class="situ-count">${realCount} lettre${realCount > 1 ? 's' : ''}</div>
+    </div>`;
+  }).join('');
+
+  // Continue reading
+  updateContinueCard();
+
+  // Build filter chips
+  buildFilterChips();
+
+  // Build explore
+  buildExplore();
+
+  // Screen from URL param
+  const sp = new URLSearchParams(location.search).get('screen');
+  if (sp) goScreen('s-' + sp, true);
+
+  // Install prompt
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredInstall = e;
+    if (!localStorage.getItem('lp_install_dismissed')) {
+      document.getElementById('install-banner').classList.add('show');
+    }
+  });
+}
+
+function getTopicLetters(topic) {
+  return CORPUS.filter(l => (l.topics_fr || []).some(t => t.toLowerCase().includes(topic.toLowerCase())));
+}
+
+function updateContinueCard() {
+  const last = STATE.lastRead;
+  if (!last) return;
+  const l = CORPUS.find(x => x.canonical_number === last.n);
+  if (!l) return;
+  document.getElementById('continue-head').style.display = '';
+  document.getElementById('continue-card').style.display = 'flex';
+  document.getElementById('cont-num').textContent = l.canonical_number;
+  document.getElementById('cont-title').textContent = l.title_fr;
+  document.getElementById('cont-sub').textContent = l.recipient_display_fr + ' · reprise';
+  const pct = Math.min(100, Math.round((last.scroll || 0) * 100));
+  document.getElementById('cont-bar').style.width = Math.max(5, pct) + '%';
+}
+
+/* ════════════════════════════════════════
+   NAVIGATION
+════════════════════════════════════════ */
+const SCREEN_NAV_IDX = { 's-home': 0, 's-list': 1, 's-search': 2, 's-notes': 3, 's-explore': 4 };
+
+function goScreen(id, skipHistory) {
+  const prev = document.querySelector('.screen.active');
+  if (prev) prev.classList.remove('active');
+  const next = document.getElementById(id);
+  if (next) next.classList.add('active');
+
+  // Update bottom nav in all screens
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  const idx = SCREEN_NAV_IDX[id];
+  if (idx !== undefined) {
+    document.querySelectorAll('.nav-item').forEach(item => {
+      const items = item.closest('.bottom-nav')?.querySelectorAll('.nav-item');
+      if (items && items[idx]) items[idx].classList.add('active');
+    });
+  }
+
+  if (id === 's-list') renderList();
+  if (id === 's-notes') renderNotes();
+  if (id === 's-explore') buildExplore();
+  if (id === 's-search') setTimeout(() => document.getElementById('search-input').focus(), 200);
+
+  if (!skipHistory && id !== 's-reader') prevScreenId = id;
+}
+
+function goBack() { goScreen(prevScreenId); }
+
+/* ════════════════════════════════════════
+   READER
+════════════════════════════════════════ */
+function openLetterFromHome() {
+  const n = parseInt(document.getElementById('ldj-card').dataset.n || '34');
+  openLetter(n);
+}
+
+function resumeReading() {
+  if (STATE.lastRead) openLetter(STATE.lastRead.n);
+}
+
+function openLetter(n, skipHistory) {
+  const idx = CORPUS.findIndex(l => l.canonical_number === n);
+  if (idx < 0) { showToast('Lettre introuvable'); return; }
+  currentLetterIdx = idx;
+  if (!skipHistory) prevScreenId = document.querySelector('.screen.active')?.id || 's-home';
+  renderReader(CORPUS[idx]);
+  goScreen('s-reader', true);
+  STATE.lastRead = { n, scroll: 0 };
+  saveState();
+}
+
+function renderReader(l) {
+  document.getElementById('r-num').textContent = l.letter_id;
+  document.getElementById('r-title').textContent = l.title_fr;
+
+  let meta = `<span class="lh-meta-item"><i class="ti ti-user" aria-hidden="true"></i>${esc(l.recipient_display_fr)}</span>`;
+  if (l.date_text_fr) meta += `<span class="lh-meta-item"><i class="ti ti-calendar" aria-hidden="true"></i>${esc(l.date_text_fr)}</span>`;
+  else meta += `<span class="lh-meta-item"><i class="ti ti-calendar-off" aria-hidden="true"></i>Date inconnue</span>`;
+  if (l.place) meta += `<span class="lh-meta-item"><i class="ti ti-map-pin" aria-hidden="true"></i>${esc(l.place)}</span>`;
+  document.getElementById('r-meta').innerHTML = meta;
+
+  document.getElementById('r-topics').innerHTML = (l.topics_fr || []).map(t => `<span class="topic-pill">${esc(t)}</span>`).join('');
+
+  // Display paragraphs — signature via is_signature flag (set at build time from split_reason)
+  const SIG_REASONS = new Set(['signature','signature_or_postscript','signature_or_date','closing_signature_or_date']);
+  const SIG_REGEX = /petite fille|Luisa Piccarreta|Votre.*dévou|Corato,\s+\d/i;
+  const SAL_REASONS = new Set(['salutation','initial_formula','devotional_opening','opening_formula','devotional_header']);
+  const dps = (l.display_paragraphs || []).sort((a,b) => (a.display_order||0)-(b.display_order||0));
+  document.getElementById('r-body').innerHTML = dps.map(dp => {
+    let cls = 'dp';
+    const r = dp.split_reason || '';
+    if (SAL_REASONS.has(r)) cls += ' salutation';
+    else if (dp.is_signature || SIG_REASONS.has(r) || SIG_REGEX.test(dp.text_fr || '')) cls += ' signature';
+    return `<p class="${cls}">${(dp.text_fr||'').replace(/\n/g, '<br>')}</p>`;
+  }).join('');
+
+  // Apply current font size
+  document.getElementById('r-body').style.setProperty('--reader-size', readerSize + 'px');
+
+  // Prev/next buttons
+  document.getElementById('btn-prev').disabled = currentLetterIdx === 0;
+  document.getElementById('btn-next').disabled = currentLetterIdx === CORPUS.length - 1;
+  document.getElementById('reader-pos').textContent = `${l.canonical_number} / ${CORPUS.length}`;
+
+  // Fav button state
+  updateFavBtn(l.canonical_number);
+
+  // Trust panel
+  const tp = document.getElementById('trust-panel');
+  tp.classList.remove('open');
+  document.getElementById('trust-head').setAttribute('aria-expanded','false');
+  document.getElementById('trust-body').innerHTML = `
+    <div class="trust-row"><span class="k">Identifiant stable</span><span class="v" style="font-size:11px;font-family:monospace">${l.letter_id}</span></div>
+    <div class="trust-row"><span class="k">Base de traduction</span><span class="v">Version anglaise</span></div>
+    <div class="trust-row"><span class="k">Parallèle français</span><span class="v">${l.french_parallel_status === 'FR_PARALLEL_RELIABLE' ? '✓ Fiable' : l.french_parallel_status || '—'}</span></div>
+    <div class="trust-row"><span class="k">Équivalence sémantique</span><span class="v">${l.semantic_equivalence_status === 'SEMANTIC_EQUIVALENT_STRONG' ? '✓ Forte' : l.semantic_equivalence_status || '—'}</span></div>
+    <div class="trust-row"><span class="k">Terminologie</span><span class="v pass">${l.terminology_status === 'harmonized' ? '✓ Harmonisée' : l.terminology_status || '—'}</span></div>
+    <div class="trust-row"><span class="k">Statut qualité</span><span class="v pass">${l.quality_status === 'validated' ? '✓ Validé' : l.quality_status || '—'}</span></div>
+    ${l.fingerprint_sha256 ? `<div class="trust-row"><span class="k">Empreinte SHA-256</span><span class="v" style="font-size:9px;font-family:monospace;word-break:break-all">${l.fingerprint_sha256.slice(0,32)}…</span></div>` : ''}
+  `;
+
+  // Scroll to top
+  document.getElementById('reader-scroll').scrollTop = 0;
+}
+
+function prevLetter() {
+  if (currentLetterIdx > 0) { currentLetterIdx--; openLetter(CORPUS[currentLetterIdx].canonical_number, true); }
+}
+function nextLetter() {
+  if (currentLetterIdx < CORPUS.length - 1) { currentLetterIdx++; openLetter(CORPUS[currentLetterIdx].canonical_number, true); }
+}
+
+function toggleTrust() {
+  const tp = document.getElementById('trust-panel');
+  tp.classList.toggle('open');
+  const open = tp.classList.contains('open');
+  document.getElementById('trust-head').setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+
+function updateFavBtn(n) {
+  const btn = document.getElementById('fav-btn');
+  if (STATE.favs.has(n)) btn.classList.add('fav-active');
+  else btn.classList.remove('fav-active');
+}
+
+function toggleFav() {
+  const l = CORPUS[currentLetterIdx];
+  if (!l) return;
+  if (STATE.favs.has(l.canonical_number)) STATE.favs.delete(l.canonical_number);
+  else STATE.favs.add(l.canonical_number);
+  updateFavBtn(l.canonical_number);
+  saveState();
+  showToast(STATE.favs.has(l.canonical_number) ? '♥ Ajouté aux favoris' : 'Retiré des favoris');
+}
+
+function addNote() {
+  const l = CORPUS[currentLetterIdx];
+  if (!l) return;
+  const txt = prompt(`Note pour ${l.letter_id} :`);
+  if (txt && txt.trim()) {
+    STATE.notes.unshift({
+      letter_id: l.letter_id,
+      n: l.canonical_number,
+      text: txt.trim(),
+      date: new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
+    });
+    saveState();
+    showToast('Note enregistrée');
+  }
+}
+
+function shareLetter() {
+  const l = CORPUS[currentLetterIdx];
+  if (!l) return;
+  const text = `${l.title_fr}\n${l.letter_id}\n\nLettres de Luisa Piccarreta`;
+  if (navigator.share) {
+    navigator.share({ title: l.title_fr, text }).catch(() => {});
+  } else {
+    navigator.clipboard?.writeText(l.letter_id).then(() => showToast('Référence copiée'));
+  }
+}
+
+/* ════════════════════════════════════════
+   TEXT SIZE
+════════════════════════════════════════ */
+function openTextBar() {
+  document.getElementById('text-size-bar').classList.add('open');
+  document.getElementById('tsz-label').textContent = readerSize + 'px';
+}
+function closeTextBar() { document.getElementById('text-size-bar').classList.remove('open'); }
+function adjustSize(delta) {
+  readerSize = Math.min(22, Math.max(13, readerSize + delta));
+  document.getElementById('tsz-label').textContent = readerSize + 'px';
+  document.getElementById('r-body').style.setProperty('--reader-size', readerSize + 'px');
+  document.querySelectorAll('.dp').forEach(p => p.style.fontSize = readerSize + 'px');
+  saveState();
+}
+
+/* ════════════════════════════════════════
+   LIST & FILTERS
+════════════════════════════════════════ */
+const FILTER_CHIPS = [
+  { id: 'all',          label: 'Toutes' },
+  { id: 'fav',          label: '♥ Favoris' },
+  { id: 'Divine Volonté', label: 'Divine Volonté' },
+  { id: 'Croix',        label: 'Croix' },
+  { id: 'Paix',         label: 'Paix' },
+  { id: 'Prêtres',      label: 'Prêtres' },
+  { id: 'Deuil',        label: 'Deuil' },
+  { id: 'Abandon',      label: 'Abandon' },
+  { id: 'Propagation',  label: 'Propagation' },
+];
+
+function buildFilterChips() {
+  document.getElementById('filter-row').innerHTML = FILTER_CHIPS.map(c =>
+    `<div class="chip${c.id === currentFilter ? ' active' : ''}" onclick="setFilter('${c.id}',this)">${c.label}</div>`
+  ).join('');
+}
+
+function setFilter(val, el) {
+  currentFilter = val;
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderList();
+}
+
+function resetFilter() { currentFilter = 'all'; buildFilterChips(); renderList(); }
+
+function filterByTopic(topic) {
+  currentFilter = topic;
+  prevScreenId = document.querySelector('.screen.active')?.id || 's-home';
+  goScreen('s-list');
+  buildFilterChips();
+  const chip = [...document.querySelectorAll('.chip')].find(c => c.textContent.trim() === topic);
+  if (chip) chip.classList.add('active');
+  renderList();
+}
+
+function renderList() {
+  let items;
+  if (currentFilter === 'all') items = CORPUS;
+  else if (currentFilter === 'fav') items = CORPUS.filter(l => STATE.favs.has(l.canonical_number));
+  else items = CORPUS.filter(l => (l.topics_fr || []).some(t => t.toLowerCase().includes(currentFilter.toLowerCase())));
+
+  const title = currentFilter === 'all' ? `${CORPUS.length} Lettres`
+    : currentFilter === 'fav' ? 'Favoris'
+    : currentFilter + ` (${items.length})`;
+  document.getElementById('list-title').textContent = title;
+
+  if (!items.length) {
+    document.getElementById('letter-list').innerHTML = `<div class="empty-state"><i class="ti ti-letter-case" aria-hidden="true"></i>Aucune lettre pour ce filtre.</div>`;
+    return;
+  }
+
+  document.getElementById('letter-list').innerHTML = items.map(l => `
+    <div class="letter-item" onclick="openLetter(${l.canonical_number})">
+      <div class="li-num${STATE.favs.has(l.canonical_number) ? ' is-fav' : ''}">${l.canonical_number}</div>
+      <div class="li-body">
+        <div class="li-title">${esc(l.title_fr)}</div>
+        <div class="li-dest">${esc(l.recipient_display_fr)}${l.date_text_fr ? ' · ' + l.date_text_fr : ''}</div>
+        <div class="li-topics">${(l.topics_fr || []).slice(0,4).map(t => `<span class="topic-pill">${esc(t)}</span>`).join('')}</div>
+      </div>
+    </div>`).join('');
+}
+
+/* ════════════════════════════════════════
+   SEARCH
+════════════════════════════════════════ */
+function searchFor(q) {
+  document.getElementById('search-input').value = q;
+  doSearch();
+}
+
+function doSearch() {
+  const q = document.getElementById('search-input').value.trim().toLowerCase();
+  const hint = document.getElementById('search-hint');
+  const res = document.getElementById('search-results');
+  if (!q) { hint.style.display = ''; res.innerHTML = ''; return; }
+  hint.style.display = 'none';
+
+  const matches = CORPUS.filter(l =>
+    l.title_fr.toLowerCase().includes(q) ||
+    l.recipient_display_fr.toLowerCase().includes(q) ||
+    (l.topics_fr || []).some(t => t.toLowerCase().includes(q)) ||
+    (l.display_paragraphs || []).some(dp => dp.text_fr.toLowerCase().includes(q)) ||
+    String(l.canonical_number) === q
+  );
+
+  if (!matches.length) {
+    res.innerHTML = `<div class="empty-state"><i class="ti ti-search-off" aria-hidden="true"></i>Aucun résultat pour « ${esc(q)} »</div>`;
+    return;
+  }
+
+  res.innerHTML = `<div class="search-count">${matches.length} résultat${matches.length > 1 ? 's' : ''}</div>` +
+    matches.map(l => `
+      <div class="letter-item" onclick="openLetter(${l.canonical_number})">
+        <div class="li-num${STATE.favs.has(l.canonical_number) ? ' is-fav' : ''}">${l.canonical_number}</div>
+        <div class="li-body">
+          <div class="li-title">${esc(l.title_fr)}</div>
+          <div class="li-dest">${esc(l.recipient_display_fr)}</div>
+          <div class="li-topics">${(l.topics_fr || []).slice(0,3).map(t => `<span class="topic-pill">${esc(t)}</span>`).join('')}</div>
+        </div>
+      </div>`).join('');
+}
+
+function clearSearch() {
+  document.getElementById('search-input').value = '';
+  document.getElementById('search-results').innerHTML = '';
+  document.getElementById('search-hint').style.display = '';
+}
+
+/* ════════════════════════════════════════
+   EXPLORE
+════════════════════════════════════════ */
+function buildExplore() {
+  // Top 4 situations
+  document.getElementById('exp-situ-grid').innerHTML = SITUATIONS.slice(0,4).map(s => {
+    const count = getTopicLetters(s.topic).length || s.count;
+    return `<div class="exp-card" onclick="filterByTopic('${esc(s.topic)}')">
+      <span class="exp-icon"><i class="ti ${s.icon}" aria-hidden="true"></i></span>
+      <div class="exp-label">${esc(s.label)}</div>
+      <div class="exp-sub">${count} lettre${count > 1 ? 's' : ''}</div>
+    </div>`;
+  }).join('');
+
+  // Recipients
+  const rKeys = Object.keys(RECIPIENTS_INDEX).length
+    ? Object.keys(RECIPIENTS_INDEX)
+    : [...new Map(CORPUS.map(l => [l.recipient_normalized, l])).keys()];
+
+  const recipientsData = rKeys.map(k => {
+    if (RECIPIENTS_INDEX[k]) return RECIPIENTS_INDEX[k];
+    const letters = CORPUS.filter(l => l.recipient_normalized === k);
+    return { display_fr: letters[0].recipient_display_fr, count: letters.length, letters: letters.map(l => l.canonical_number) };
+  }).sort((a,b) => b.count - a.count);
+
+  const topRec = recipientsData.slice(0,4);
+  document.getElementById('dest-list').innerHTML = topRec.map(r =>
+    `<div class="dest-item" onclick="filterByRecipient('${esc(r.recipient_normalized || r.display_fr)}')">
+      <div class="dest-name">${esc(r.display_fr)}</div>
+      <div class="dest-count">${r.count} lettre${r.count > 1 ? 's' : ''}</div>
+      <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:14px;color:var(--muted)"></i>
+    </div>`
+  ).join('') + `<div class="see-all-row" onclick="goScreen('s-list')">Voir toutes les lettres →</div>`;
+
+  // Chronology
+  const dated = CORPUS.filter(l => l.date_iso).sort((a,b) => a.date_iso > b.date_iso ? 1 : -1);
+  document.getElementById('chron-list').innerHTML = dated.slice(0,6).map(l =>
+    `<div class="chron-item" onclick="openLetter(${l.canonical_number})">
+      <div class="chron-year">${l.date_iso.slice(0,4)}</div>
+      <div class="chron-info">
+        <div class="ct">${esc(l.title_fr)}</div>
+        <div class="cs">${esc(l.recipient_display_fr)}</div>
+      </div>
+      <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:14px;color:var(--muted)"></i>
+    </div>`
+  ).join('') + `<div class="see-all-row" onclick="filterByDate()">Voir toutes les lettres datées →</div>`;
+}
+
+function filterByRecipient(key) {
+  const letters = CORPUS.filter(l =>
+    (l.recipient_normalized && l.recipient_normalized === key) ||
+    l.recipient_display_fr === key
+  );
+  if (!letters.length) return;
+  prevScreenId = 's-explore';
+  const name = letters[0].recipient_display_fr;
+  document.getElementById('letter-list').innerHTML = letters.map(l => `
+    <div class="letter-item" onclick="openLetter(${l.canonical_number})">
+      <div class="li-num${STATE.favs.has(l.canonical_number) ? ' is-fav' : ''}">${l.canonical_number}</div>
+      <div class="li-body">
+        <div class="li-title">${esc(l.title_fr)}</div>
+        <div class="li-dest">${l.date_text_fr || 'Date inconnue'}</div>
+        <div class="li-topics">${(l.topics_fr || []).slice(0,3).map(t => `<span class="topic-pill">${esc(t)}</span>`).join('')}</div>
+      </div>
+    </div>`).join('');
+  document.getElementById('list-title').textContent = name + ` (${letters.length})`;
+  goScreen('s-list', true);
+}
+
+function filterByDate() {
+  const dated = CORPUS.filter(l => l.date_iso).sort((a,b) => a.date_iso > b.date_iso ? 1 : -1);
+  document.getElementById('letter-list').innerHTML = dated.map(l => `
+    <div class="letter-item" onclick="openLetter(${l.canonical_number})">
+      <div class="li-num${STATE.favs.has(l.canonical_number) ? ' is-fav' : ''}">${l.canonical_number}</div>
+      <div class="li-body">
+        <div class="li-title">${esc(l.title_fr)}</div>
+        <div class="li-dest">${esc(l.recipient_display_fr)} · ${l.date_text_fr}</div>
+        <div class="li-topics">${(l.topics_fr || []).slice(0,3).map(t => `<span class="topic-pill">${esc(t)}</span>`).join('')}</div>
+      </div>
+    </div>`).join('');
+  document.getElementById('list-title').textContent = `Chronologie (${dated.length})`;
+  goScreen('s-list', true);
+}
+
+/* ════════════════════════════════════════
+   NOTES / MON ESPACE
+════════════════════════════════════════ */
+function renderNotes() {
+  // Favoris
+  const favEl = document.getElementById('t-favs');
+  if (!STATE.favs.size) {
+    favEl.innerHTML = `<div class="empty-state"><i class="ti ti-heart" aria-hidden="true"></i>Appuyez sur ♥ dans une lettre pour l'ajouter ici.</div>`;
+  } else {
+    favEl.innerHTML = [...STATE.favs].map(n => {
+      const l = CORPUS.find(x => x.canonical_number === n);
+      return l ? `<div class="fav-item" onclick="openLetter(${l.canonical_number})">
+        <div class="fav-num">${l.canonical_number}</div>
+        <div class="fav-title">${esc(l.title_fr)}</div>
+        <span class="fav-heart">♥</span>
+      </div>` : '';
+    }).join('');
+  }
+
+  // Notes
+  const notesEl = document.getElementById('t-notes');
+  if (!STATE.notes.length) {
+    notesEl.innerHTML = `<div class="empty-state"><i class="ti ti-pencil" aria-hidden="true"></i>Aucune note pour l'instant.<br>Ajoutez-en depuis le lecteur.</div>`;
+  } else {
+    notesEl.innerHTML = STATE.notes.map((n,i) => `<div class="note-item" onclick="openLetter(${n.n})">
+      <div class="ni-ref">${n.letter_id}</div>
+      <div class="ni-text">« ${esc(n.text)} »</div>
+      <div class="ni-date">${n.date} <span style="float:right;cursor:pointer;color:var(--muted)" onclick="deleteNote(event,${i})"><i class="ti ti-trash" aria-hidden="true" style="font-size:12px"></i></span></div>
+    </div>`).join('');
+  }
+
+  // À relire
+  const relireEl = document.getElementById('t-relire');
+  if (!STATE.relire.size) {
+    relireEl.innerHTML = `<div class="empty-state"><i class="ti ti-bookmark" aria-hidden="true"></i>Aucune lettre marquée à relire.</div>`;
+  } else {
+    relireEl.innerHTML = [...STATE.relire].map(n => {
+      const l = CORPUS.find(x => x.canonical_number === n);
+      return l ? `<div class="fav-item" onclick="openLetter(${l.canonical_number})">
+        <div class="fav-num">${l.canonical_number}</div>
+        <div class="fav-title">${esc(l.title_fr)}</div>
+        <i class="ti ti-bookmark" aria-hidden="true" style="color:var(--gold);font-size:16px"></i>
+      </div>` : '';
+    }).join('');
+  }
+}
+
+function setTab(el, target) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  ['t-favs','t-notes','t-relire'].forEach(id => document.getElementById(id).style.display = 'none');
+  document.getElementById(target).style.display = '';
+}
+
+function deleteNote(e, idx) {
+  e.stopPropagation();
+  STATE.notes.splice(idx, 1);
+  saveState();
+  renderNotes();
+}
+
+/* ════════════════════════════════════════
+   DARK MODE TOGGLE
+════════════════════════════════════════ */
+function toggleDark() {
+  const isDark = document.documentElement.classList.toggle('forced-dark');
+  localStorage.setItem('lp_dark', isDark ? 'true' : 'false');
+}
+
+/* ════════════════════════════════════════
+   INSTALL
+════════════════════════════════════════ */
+function doInstall() {
+  if (!deferredInstall) return;
+  deferredInstall.prompt();
+  deferredInstall.userChoice.then(() => { deferredInstall = null; });
+  document.getElementById('install-banner').classList.remove('show');
+}
+function dismissInstall() {
+  document.getElementById('install-banner').classList.remove('show');
+  localStorage.setItem('lp_install_dismissed','1');
+}
+
+/* ════════════════════════════════════════
+   UTILITIES
+════════════════════════════════════════ */
+function esc(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+/* ════════════════════════════════════════
+   KEYBOARD NAVIGATION (reader)
+════════════════════════════════════════ */
+document.addEventListener('keydown', e => {
+  const active = document.querySelector('.screen.active')?.id;
+  if (active !== 's-reader') return;
+  if (e.key === 'ArrowLeft') prevLetter();
+  if (e.key === 'ArrowRight') nextLetter();
+  if (e.key === 'Escape') goBack();
+});
+
+/* ════════════════════════════════════════
+   SWIPE NAVIGATION (reader)
+════════════════════════════════════════ */
+let touchStartX = 0;
+document.getElementById('app').addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+document.getElementById('app').addEventListener('touchend', e => {
+  const active = document.querySelector('.screen.active')?.id;
+  if (active !== 's-reader') return;
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 60) { if (dx > 0) prevLetter(); else nextLetter(); }
+}, { passive: true });
+
+/* ════════════════════════════════════════
+   SERVICE WORKER
+════════════════════════════════════════ */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(e => console.log('SW error:', e));
+  });
+}
+
+/* ════════════════════════════════════════
+   BOOT
+════════════════════════════════════════ */
+// Stub fallback — minimal inline data if fetch fails
+const STUB = [];
+
+loadCorpus();
+</script>
+</body>
+</html>
