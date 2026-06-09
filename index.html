@@ -428,7 +428,7 @@ html[data-theme="dark"] .topic-pill,[data-theme="system"] .topic-pill{color:inhe
     <button class="snav-item" onclick="switchPanel('p-notes')" id="snav-notes" aria-label="Notes"><i class="ti ti-bookmark" aria-hidden="true"></i>Notes</button>
     <div class="sidebar-bottom">
       <button class="snav-item" onclick="cycleTheme()" id="snav-theme" aria-label="Thème"><i class="ti ti-moon" aria-hidden="true"></i>Thème</button>
-      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v1.1.3</div>
+      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v1.1.4</div>
     </div>
   </nav>
 
@@ -468,7 +468,7 @@ html[data-theme="dark"] .topic-pill,[data-theme="system"] .topic-pill{color:inhe
           <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:16px;color:var(--muted)"></i>
         </button>
         <div style="height:12px"></div>
-        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v1.1.3</div>
+        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v1.1.4</div>
       </div>
     </div>
 
@@ -807,7 +807,7 @@ function initApp() {
   // Situations
   document.getElementById('situ-grid').innerHTML = SITUATIONS.map(s => {
     const c = getTopicLetters(s.topic).length || s.count;
-    return `<button class="situ-card" onclick="filterByTopic(${JSON.stringify(s.topic)})" role="listitem">
+    return `<button class="situ-card" data-action="topic" data-topic="${esc(s.topic)}" role="listitem">
       <span class="situ-icon" aria-hidden="true"><i class="ti ${s.icon}"></i></span>
       <div class="situ-label">${esc(s.label)}</div>
       <div class="situ-count">${c} lettre${c>1?'s':''}</div>
@@ -1185,7 +1185,7 @@ const FILTER_CHIPS = [
 ];
 function buildFilterChips() {
   document.getElementById('filter-row').innerHTML = FILTER_CHIPS.map(c =>
-    `<button class="chip${c.id===currentFilter?' active':''}" onclick="setFilter(${JSON.stringify(c.id)},this)">${esc(c.label)}</button>`
+    `<button class="chip${c.id===currentFilter?' active':''}" data-action="filter" data-filter="${esc(c.id)}">${esc(c.label)}</button>`
   ).join('');
 }
 function setFilter(val, el) {
@@ -1306,7 +1306,7 @@ function highlight(text, query) {
 function buildExplore() {
   document.getElementById('exp-situ-grid').innerHTML = SITUATIONS.slice(0,4).map(s => {
     const c = getTopicLetters(s.topic).length||s.count;
-    return `<button class="exp-card" onclick="filterByTopic(${JSON.stringify(s.topic)})" role="listitem">
+    return `<button class="exp-card" data-action="topic" data-topic="${esc(s.topic)}" role="listitem">
       <span class="exp-icon" aria-hidden="true"><i class="ti ${s.icon}"></i></span>
       <div class="exp-label">${esc(s.label)}</div>
       <div class="exp-sub">${c} lettre${c>1?'s':''}</div>
@@ -1324,7 +1324,7 @@ function buildExplore() {
 
   document.getElementById('dest-list').innerHTML =
     recData.slice(0,5).map(r =>
-      `<button class="dest-item" onclick="filterByRecipient(${JSON.stringify(r.display_fr)})" role="listitem">
+      `<button class="dest-item" data-action="recipient" data-recipient="${esc(r.display_fr)}" role="listitem">
         <div class="dest-name">${esc(r.display_fr)}</div>
         <div class="dest-count">${r.count} lettre${r.count>1?'s':''}</div>
         <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:13px;color:var(--muted)"></i>
@@ -1463,6 +1463,24 @@ function showToast(msg) {
   t.textContent = msg; t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2200);
 }
+
+/* ════════════════════════════════════════
+   DELEGATED CLICK HANDLER
+   Handles all data-action buttons generated via innerHTML
+   (avoids JSON.stringify quote-break in onclick attributes)
+════════════════════════════════════════ */
+document.addEventListener('click', function(e) {
+  var btn = e.target.closest('[data-action]');
+  if (!btn) return;
+  var action = btn.getAttribute('data-action');
+  if (action === 'topic') {
+    filterByTopic(btn.getAttribute('data-topic'));
+  } else if (action === 'filter') {
+    setFilter(btn.getAttribute('data-filter'), btn);
+  } else if (action === 'recipient') {
+    filterByRecipient(btn.getAttribute('data-recipient'));
+  }
+});
 
 /* ════════════════════════════════════════
    KEYBOARD
