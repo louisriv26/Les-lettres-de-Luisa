@@ -72,6 +72,7 @@ body{overflow:hidden;}
 .li-num.is-fav::after{content:'♥';font-size:7px;color:var(--gold);position:absolute;top:-3px;right:-1px;}
 .li-body{flex:1;min-width:0;}
 .li-title{font-family:var(--serif);font-size:14px;color:var(--night);line-height:1.35;margin-bottom:3px;}
+.li-read{opacity:.55;}
 .li-dest{font-size:11px;color:var(--muted);font-family:var(--body);margin-bottom:5px;}
 .li-topics{display:flex;flex-wrap:wrap;gap:4px;}
 .topic-pill{font-size:10px;padding:2px 7px;border-radius:10px;background:var(--gold-pale);
@@ -246,7 +247,7 @@ html[data-theme="dark"] .topic-pill,[data-theme="system"] .topic-pill{color:inhe
 .loading-text{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--muted);}
 
 /* Home screen */
-.ldj-card{background:var(--night);margin:12px;border-radius:14px;padding:18px 20px;
+.ldj-card{background:#1A2A4A;margin:12px;border-radius:14px;padding:18px 20px;
   cursor:pointer;position:relative;overflow:hidden;transition:transform .1s;
   display:block;width:calc(100% - 24px);text-align:left;border:none;}
 .ldj-card:hover,.ldj-card:focus-visible{transform:translateY(-1px);outline:none;}
@@ -396,6 +397,14 @@ html[data-theme="dark"] .topic-pill,[data-theme="system"] .topic-pill{color:inhe
   }
   /* Ensure panels don't overflow behind fixed nav */
   #app { padding-bottom: 0; }
+  /* Push scroll content above fixed phone-nav + home indicator */
+  .panel > .scroll {
+    padding-bottom: calc(68px + env(safe-area-inset-bottom));
+  }
+  /* Reader action bar: clear iPhone home indicator */
+  #phone-reader .action-bar {
+    padding-bottom: calc(8px + env(safe-area-inset-bottom));
+  }
 }
 </style>
 </head>
@@ -408,6 +417,17 @@ html[data-theme="dark"] .topic-pill,[data-theme="system"] .topic-pill{color:inhe
 
 <!-- Toast: aria-live so screen readers announce it -->
 <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+<!-- Note bottom sheet (replaces prompt()) -->
+<div id="note-overlay" onclick="closeNoteSheet()" style="display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.45)"></div>
+<div id="note-sheet" role="dialog" aria-modal="true" aria-label="Ajouter une note" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:601;background:var(--ivory);border-radius:16px 16px 0 0;padding:20px 16px calc(20px + env(safe-area-inset-bottom));box-shadow:0 -4px 24px rgba(0,0,0,.18)">
+  <div style="font-family:var(--serif);font-style:italic;font-size:16px;color:var(--night);margin-bottom:12px" id="note-sheet-title">Note</div>
+  <textarea id="note-input" rows="4" placeholder="Votre note…" style="width:100%;border:0.5px solid var(--border);border-radius:8px;padding:10px 12px;font-family:var(--body);font-size:14px;color:var(--ink);background:var(--white);resize:none;outline:none;line-height:1.6"></textarea>
+  <div style="display:flex;gap:8px;margin-top:12px">
+    <button onclick="closeNoteSheet()" style="flex:1;padding:10px;border:0.5px solid var(--border);border-radius:8px;background:none;font-family:var(--body);font-size:13px;color:var(--muted);cursor:pointer">Annuler</button>
+    <button onclick="saveNoteSheet()" style="flex:2;padding:10px;border:none;border-radius:8px;background:var(--night);font-family:var(--body);font-size:13px;color:var(--gold);cursor:pointer;font-weight:500">Enregistrer</button>
+  </div>
+</div>
 
 <div class="text-size-bar" id="text-size-bar" role="toolbar" aria-label="Taille du texte">
   <button class="tsz-btn" onclick="adjustSize(-1.5)" aria-label="Réduire">A−</button>
@@ -428,7 +448,7 @@ html[data-theme="dark"] .topic-pill,[data-theme="system"] .topic-pill{color:inhe
     <button class="snav-item" onclick="switchPanel('p-notes')" id="snav-notes" aria-label="Notes"><i class="ti ti-bookmark" aria-hidden="true"></i>Notes</button>
     <div class="sidebar-bottom">
       <button class="snav-item" onclick="cycleTheme()" id="snav-theme" aria-label="Thème"><i class="ti ti-moon" aria-hidden="true"></i>Thème</button>
-      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v1.1.4</div>
+      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v1.1.5</div>
     </div>
   </nav>
 
@@ -468,7 +488,7 @@ html[data-theme="dark"] .topic-pill,[data-theme="system"] .topic-pill{color:inhe
           <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:16px;color:var(--muted)"></i>
         </button>
         <div style="height:12px"></div>
-        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v1.1.4</div>
+        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v1.1.5</div>
       </div>
     </div>
 
@@ -479,6 +499,12 @@ html[data-theme="dark"] .topic-pill,[data-theme="system"] .topic-pill{color:inhe
         <button class="btn-icon" onclick="resetFilter()" aria-label="Réinitialiser le filtre"><i class="ti ti-filter-off" aria-hidden="true"></i></button>
       </div>
       <div class="filter-row" id="filter-row" role="toolbar" aria-label="Filtres"></div>
+      <div id="list-read-progress" style="display:none;padding:4px 16px 8px">
+        <div style="height:3px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:4px">
+          <div class="lrp-bar" style="height:100%;background:var(--gold);border-radius:2px;width:0;transition:width .4s"></div>
+        </div>
+        <div class="lrp-label" style="font-size:10px;color:var(--muted);font-family:var(--body)"></div>
+      </div>
       <div class="scroll" id="letter-list" role="list"></div>
     </div>
 
@@ -513,6 +539,10 @@ html[data-theme="dark"] .topic-pill,[data-theme="system"] .topic-pill{color:inhe
         <div class="explore-section">
           <div class="exp-title">Par situation</div>
           <div class="exp-grid" id="exp-situ-grid" role="list"></div>
+        </div>
+        <div class="explore-section">
+          <div class="exp-title">Par thème</div>
+          <div class="exp-grid" id="exp-theme-grid" role="list"></div>
         </div>
         <div class="explore-section">
           <div class="exp-title">Par destinataire</div>
@@ -691,18 +721,22 @@ function loadState() {
       lastRead: JSON.parse(localStorage.getItem('lp_last') || 'null'),
       readerSize: parseFloat(localStorage.getItem('lp_size') || '16'),
       theme: localStorage.getItem('lp_theme') || 'system',
+      positions: JSON.parse(localStorage.getItem('lp_positions') || '{}'),
+      readSet: new Set(JSON.parse(localStorage.getItem('lp_read') || '[]')),
     };
-  } catch { return {favs:new Set(),relire:new Set(),notes:[],lastRead:null,readerSize:16,theme:'system'}; }
+  } catch(e) { console.warn('[Luisa] loadState error:', e); return {favs:new Set(),relire:new Set(),notes:[],lastRead:null,readerSize:16,theme:'system',positions:{},readSet:new Set()}; }
 }
 function saveState() {
   try {
-    localStorage.setItem('lp_favs',   JSON.stringify([...STATE.favs]));
-    localStorage.setItem('lp_relire', JSON.stringify([...STATE.relire]));
-    localStorage.setItem('lp_notes',  JSON.stringify(STATE.notes));
+    localStorage.setItem('lp_favs',      JSON.stringify([...STATE.favs]));
+    localStorage.setItem('lp_relire',    JSON.stringify([...STATE.relire]));
+    localStorage.setItem('lp_notes',     JSON.stringify(STATE.notes));
     if (STATE.lastRead) localStorage.setItem('lp_last', JSON.stringify(STATE.lastRead));
-    localStorage.setItem('lp_size',   String(readerSize));
-    localStorage.setItem('lp_theme',  STATE.theme);
-  } catch {}
+    localStorage.setItem('lp_size',      String(readerSize));
+    localStorage.setItem('lp_theme',     STATE.theme);
+    localStorage.setItem('lp_positions', JSON.stringify(STATE.positions));
+    localStorage.setItem('lp_read',      JSON.stringify([...STATE.readSet]));
+  } catch(e) { console.warn('[Luisa] saveState error:', e); }
 }
 const STATE = loadState();
 readerSize = STATE.readerSize;
@@ -928,9 +962,21 @@ function openLetter(n) {
     renderPhoneReader(l);
     document.getElementById('phone-reader').classList.add('open');
   }
-  STATE.lastRead = { n: n, scroll: (STATE.lastRead && STATE.lastRead.n === n) ? (STATE.lastRead.scroll||5) : 5 };
+  STATE.lastRead = { n: n, scroll: STATE.positions[n] || 5 };
   saveState();
   updateContinueCard();
+  // Restore scroll position after render
+  var savedPct = STATE.positions[n] || 0;
+  if (savedPct > 2) {
+    setTimeout(function() {
+      var scroller = isWide()
+        ? document.getElementById('wide-reader-scroll')
+        : document.getElementById('phone-reader-scroll');
+      if (!scroller) return;
+      var maxScroll = scroller.scrollHeight - scroller.clientHeight;
+      if (maxScroll > 0) scroller.scrollTop = Math.round(savedPct / 100 * maxScroll);
+    }, 80);
+  }
 }
 
 function openLetterAtDP(n, dpId) {
@@ -1059,21 +1105,25 @@ function nextLetter() { if (currentLetterIdx<CORPUS.length-1){ currentLetterIdx+
 const _progressDebounce = {};
 function updateReadProgress(prefix) {
   clearTimeout(_progressDebounce[prefix]);
-  _progressDebounce[prefix] = setTimeout(() => {
+  _progressDebounce[prefix] = setTimeout(function() {
     const scrollEl = document.getElementById(prefix === 'wr' ? 'wide-reader-scroll' : 'phone-reader-scroll');
     const progEl   = document.getElementById(prefix + '-progress');
     if (!scrollEl || !progEl) return;
     const { scrollTop, scrollHeight, clientHeight } = scrollEl;
     const pct = scrollHeight <= clientHeight ? 100 : Math.round(scrollTop / (scrollHeight - clientHeight) * 100);
     progEl.style.width = pct + '%';
-    // Save real scroll progress
-    if (STATE.lastRead && currentLetterIdx >= 0 && CORPUS[currentLetterIdx]) {
+    if (currentLetterIdx >= 0 && CORPUS[currentLetterIdx]) {
       const n = CORPUS[currentLetterIdx].canonical_number;
-      if (STATE.lastRead.n === n) {
-        STATE.lastRead.scroll = pct;
-        saveState();
-        document.getElementById('cont-bar').style.width = Math.max(5, pct) + '%';
+      // Save per-letter position
+      STATE.positions[n] = pct;
+      // Update lastRead
+      STATE.lastRead = { n: n, scroll: pct };
+      // Mark as read if scrolled past 80%
+      if (pct >= 80 && !STATE.readSet.has(n)) {
+        STATE.readSet.add(n);
       }
+      saveState();
+      document.getElementById('cont-bar').style.width = Math.max(5, pct) + '%';
     }
   }, 150);
 }
@@ -1134,14 +1184,27 @@ function toggleRelire() {
 ════════════════════════════════════════ */
 function addNote() {
   const l = CORPUS[currentLetterIdx]; if (!l) return;
-  const txt = prompt(`Note pour ${l.letter_id} :`);
-  if (txt && txt.trim()) {
+  document.getElementById('note-sheet-title').textContent = 'Note — ' + l.letter_id;
+  document.getElementById('note-input').value = '';
+  document.getElementById('note-overlay').style.display = '';
+  document.getElementById('note-sheet').style.display = '';
+  setTimeout(() => document.getElementById('note-input').focus(), 80);
+}
+function closeNoteSheet() {
+  document.getElementById('note-overlay').style.display = 'none';
+  document.getElementById('note-sheet').style.display = 'none';
+}
+function saveNoteSheet() {
+  const l = CORPUS[currentLetterIdx]; if (!l) return;
+  const txt = document.getElementById('note-input').value.trim();
+  if (txt) {
     STATE.notes.unshift({
-      letter_id: l.letter_id, n: l.canonical_number, text: txt.trim(),
+      letter_id: l.letter_id, n: l.canonical_number, text: txt,
       date: new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'})
     });
     saveState(); showToast('Note enregistrée');
   }
+  closeNoteSheet();
 }
 
 /* ════════════════════════════════════════
@@ -1175,6 +1238,7 @@ function adjustSize(delta) {
 const FILTER_CHIPS = [
   {id:'all',         label:'Toutes'},
   {id:'fav',         label:'♥ Favoris'},
+  {id:'unread',      label:'Non lues'},
   {id:'Divine Volonté',        label:'Divine Volonté'},
   {id:'Croix',                 label:'Croix'},
   {id:'Paix',                  label:'Paix'},
@@ -1203,15 +1267,31 @@ function filterByTopic(topic) {
 }
 
 function renderList() {
-  let items;
+  var items;
   if (currentFilter==='all') items = CORPUS;
-  else if (currentFilter==='fav') items = CORPUS.filter(l=>STATE.favs.has(l.canonical_number));
-  else items = CORPUS.filter(l=>(l.topics_fr||[]).some(t=>t.toLowerCase().includes(currentFilter.toLowerCase())));
+  else if (currentFilter==='fav') items = CORPUS.filter(function(l){return STATE.favs.has(l.canonical_number);});
+  else if (currentFilter==='unread') items = CORPUS.filter(function(l){return !STATE.readSet.has(l.canonical_number);});
+  else items = CORPUS.filter(function(l){return (l.topics_fr||[]).some(function(t){return t.toLowerCase().includes(currentFilter.toLowerCase());});});
 
+  var readCount = STATE.readSet.size;
+  var progressStr = currentFilter==='all' ? ` · ${readCount}/${CORPUS.length} lues` : '';
   document.getElementById('list-title').textContent =
     currentFilter==='all' ? `${CORPUS.length} Lettres` :
     currentFilter==='fav' ? 'Favoris' :
+    currentFilter==='unread' ? `Non lues (${items.length})` :
     `${currentFilter} (${items.length})`;
+  // Show read progress bar under title when showing all
+  var progEl = document.getElementById('list-read-progress');
+  if (progEl) {
+    if (currentFilter==='all' && CORPUS.length > 0) {
+      var pct = Math.round(readCount / CORPUS.length * 100);
+      progEl.style.display = '';
+      progEl.querySelector('.lrp-bar').style.width = pct + '%';
+      progEl.querySelector('.lrp-label').textContent = `${readCount} / ${CORPUS.length} lues (${pct}%)`;
+    } else {
+      progEl.style.display = 'none';
+    }
+  }
 
   if (!items.length) {
     document.getElementById('letter-list').innerHTML =
@@ -1219,17 +1299,18 @@ function renderList() {
     return;
   }
   var cur = (currentLetterIdx >= 0 && CORPUS[currentLetterIdx]) ? CORPUS[currentLetterIdx].canonical_number : -1;
-  document.getElementById('letter-list').innerHTML = items.map(l =>
-    `<button class="letter-item${l.canonical_number===cur?' selected':''}" data-n="${l.canonical_number}"
+  document.getElementById('letter-list').innerHTML = items.map(function(l) {
+    var isRead = STATE.readSet.has(l.canonical_number);
+    return `<button class="letter-item${l.canonical_number===cur?' selected':''}" data-n="${l.canonical_number}"
       onclick="openLetter(${l.canonical_number})" role="listitem" aria-label="${esc(l.title_fr)}">
       <div class="li-num${STATE.favs.has(l.canonical_number)?' is-fav':''}" aria-hidden="true">${l.canonical_number}</div>
       <div class="li-body">
-        <div class="li-title">${esc(l.title_fr)}</div>
+        <div class="li-title${isRead?' li-read':''}">${esc(l.title_fr)}</div>
         <div class="li-dest">${esc(l.recipient_display_fr)}${l.date_text_fr?' · '+esc(l.date_text_fr):''}</div>
-        <div class="li-topics" aria-hidden="true">${(l.topics_fr||[]).slice(0,4).map(t=>`<span class="topic-pill">${esc(t)}</span>`).join('')}</div>
+        <div class="li-topics" aria-hidden="true">${(l.topics_fr||[]).slice(0,4).map(function(t){return `<span class="topic-pill">${esc(t)}</span>`;}).join('')}</div>
       </div>
-    </button>`
-  ).join('');
+    </button>`;
+  }).join('');
 }
 
 /* ════════════════════════════════════════
@@ -1309,6 +1390,23 @@ function buildExplore() {
     return `<button class="exp-card" data-action="topic" data-topic="${esc(s.topic)}" role="listitem">
       <span class="exp-icon" aria-hidden="true"><i class="ti ${s.icon}"></i></span>
       <div class="exp-label">${esc(s.label)}</div>
+      <div class="exp-sub">${c} lettre${c>1?'s':''}</div>
+    </button>`;
+  }).join('');
+
+  // All corpus topics, sorted by letter count descending
+  var topicMap = {};
+  CORPUS.forEach(function(l) {
+    (l.topics_fr||[]).forEach(function(t) {
+      if (!topicMap[t]) topicMap[t] = 0;
+      topicMap[t]++;
+    });
+  });
+  var allTopics = Object.keys(topicMap).sort(function(a,b){ return topicMap[b]-topicMap[a]; });
+  document.getElementById('exp-theme-grid').innerHTML = allTopics.map(function(t) {
+    var c = topicMap[t];
+    return `<button class="exp-card" data-action="topic" data-topic="${esc(t)}" role="listitem">
+      <div class="exp-label" style="font-size:12px">${esc(t)}</div>
       <div class="exp-sub">${c} lettre${c>1?'s':''}</div>
     </button>`;
   }).join('');
