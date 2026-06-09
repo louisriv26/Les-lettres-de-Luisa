@@ -1,11 +1,11 @@
-/* Luisa Piccarreta PWA — Service Worker v1.1.1
+/* Luisa Piccarreta PWA — Service Worker v1.1.2
    Strategy:
    - App shell (HTML, icons, manifest) → cache-first, local files only
    - corpus.json → network-first, cache fallback
    - Google Fonts / CDN → stale-while-revalidate, never in install precache
 */
-const CACHE_VERSION = 'luisa-v1.1.1';
-const CORPUS_CACHE  = 'luisa-corpus-v1.1.1';
+const CACHE_VERSION = 'luisa-v1.1.2';
+const CORPUS_CACHE  = 'luisa-corpus-v1.1.2';
 
 // ONLY local files — no external URLs that can fail install
 const APP_SHELL = [
@@ -64,6 +64,12 @@ self.addEventListener('fetch', event => {
     return;
   }
 
+  // index.html → network-first so updates are immediate
+  if (url.pathname === '/' || url.pathname.endsWith('/index.html') || url.pathname.endsWith('/')) {
+    event.respondWith(networkFirstShell(event.request));
+    return;
+  }
+
   // App shell and local assets → cache-first
   if (url.origin === self.location.origin) {
     event.respondWith(cacheFirst(event.request));
@@ -105,6 +111,21 @@ async function cacheFirst(request) {
   }
 }
 
+async function networkFirstShell(request) {
+  try {
+    const response = await fetch(request);
+    if (response.ok) {
+      const cache = await caches.open(CACHE_VERSION);
+      cache.put(request, response.clone());
+    }
+    return response;
+  } catch {
+    const cached = await caches.match(request);
+    if (cached) return cached;
+    return new Response('Offline', { status: 503 });
+  }
+}
+
 async function staleWhileRevalidate(request) {
   const cached = await caches.match(request);
   const networkPromise = fetch(request).then(response => {
@@ -118,5 +139,5 @@ async function staleWhileRevalidate(request) {
 
 // Accept skip-waiting messages
 self.addEventListener('message', event => {
-  if (event.data?.type === 'SKIP_WAITING') self.skipWaiting();
+  if (event.data && event.data.type === 'SKIP_WAITING') self.skipWaiting();
 });

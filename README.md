@@ -1,7 +1,35 @@
 # Lettres de Luisa Piccarreta — PWA
 
 Application de référence pour les Lettres de Luisa Piccarreta.  
-136 lettres · Spiritualité de la Divine Volonté · Offline-first · Installable
+136 lettres · Spiritualité de la Divine Volonté · Offline-first (corpus + assets; index.html network-first) · Installable
+
+---
+
+
+## v1.1.2 — iOS/Safari Emergency Patch (2026-06-09)
+
+### What was fixed
+- **P0** — Optional chaining `?.` removed from all JS (was breaking iOS Safari < 15)
+- **P0** — Nullish coalescing `??` removed from all JS
+- **P0** — `.scroll` now has `flex:1; min-height:0` — fixes iPhone scroll completely broken
+- **P0** — `#left-panel` has explicit mobile flex rule — fixes iPad menu not working
+- **P0** — `#app` height: full iOS fallback chain (`100vh → -webkit-fill-available → 100svh → 100dvh`)
+- **P0** — iOS `@media` safety net with `position:fixed` bottom nav
+- **P1** — `index.html` switched to network-first in service worker (no stale cache on update)
+- **P1** — Cache version bumped to `luisa-v1.1.2` (forces cache purge on next load)
+- **P1** — `?screen=` parameter whitelisted (security + stability)
+- **P1** — "Continuer" now restores actual scroll position
+- **P1** — Search results open at the matching paragraph (scroll + brief highlight)
+- **P1** — `search_blob` fixed: `Volition` → `Volonté` in 8 letters
+- **P1** — Trust panel nested `role="button"` removed
+
+### Test obligatoire avant usage
+- [ ] iPhone Safari : scroll accueil, bottom nav, boutons situations, ouverture lettre, scroll lettre
+- [ ] iPad Safari : menu gauche (Accueil/Corpus/Recherche/Explorer/Notes), ouverture lecteur droit
+- [ ] Supprimer l'ancienne PWA et vider cache Safari avant test
+
+### Status
+`PATCH_READY — awaiting iPhone/iPad real device validation`
 
 ---
 
@@ -69,7 +97,7 @@ L'app sera disponible sur `https://TON-USERNAME.github.io/TON-REPO/`
 - **Favoris · Notes · À relire** — persistés en localStorage
 - **Taille de texte ajustable** — 13 à 22px
 - **Mode sombre** — automatique + toggle manuel
-- **Offline-first** — service worker, corpus mis en cache au premier chargement
+- **Offline-first (corpus + assets; index.html network-first)** — service worker, corpus mis en cache au premier chargement
 - **Installable** — manifest PWA complet, icônes toutes tailles
 
 ---
@@ -98,4 +126,4 @@ L'app sera disponible sur `https://TON-USERNAME.github.io/TON-REPO/`
 
 ---
 
-*Corpus v1.1.0 · QA PASS · Juin 2026*
+*Corpus v1.1.0 · PATCH v1.1.2 — iOS/Safari emergency fix · Juin 2026*

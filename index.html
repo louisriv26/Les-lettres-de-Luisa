@@ -48,7 +48,7 @@ html,body{height:100%;background:var(--ivory);font-family:var(--body);color:var(
 body{overflow:hidden;}
 
 /* ══════ SCROLL ══════ */
-.scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;}
+.scroll{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;}
 .scroll::-webkit-scrollbar{width:4px;}
 .scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
 
@@ -300,10 +300,11 @@ html[data-theme="dark"] .topic-pill,[data-theme="system"] .topic-pill{color:inhe
 /* ══════════════════════════════════════════════════════
    PHONE LAYOUT (< 768px)
 ══════════════════════════════════════════════════════ */
-#app{width:100%;height:100dvh;display:flex;flex-direction:column;background:var(--ivory);overflow:hidden;}
+#app{width:100%;height:100vh;height:-webkit-fill-available;height:100svh;height:100dvh;display:flex;flex-direction:column;background:var(--ivory);overflow:hidden;}
 
 .panel{display:none;flex-direction:column;flex:1;min-height:0;overflow:hidden;}
 .panel.active{display:flex;animation:fadeUp .2s ease;}
+#left-panel{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
 .phone-nav{display:flex;background:var(--ivory);border-top:0.5px solid var(--border);
@@ -375,6 +376,26 @@ html[data-theme="dark"] .topic-pill,[data-theme="system"] .topic-pill{color:inhe
   .lh-divider{margin:0 32px 20px;}
   .letter-body{padding:0 32px 8px;}
   .trust-panel{margin:16px 24px 32px;}
+}
+
+/* ══════════════════════════════════════════════════════
+   iOS/Safari scroll fallback — if internal flex scroll fails
+══════════════════════════════════════════════════════ */
+@supports not (height: 100dvh) {
+  #app { height: 100vh; height: -webkit-fill-available; }
+}
+@media(max-width:767px) {
+  /* Safety net: if flex scroll chain breaks, allow document scroll */
+  html { height: -webkit-fill-available; }
+  body { min-height: -webkit-fill-available; }
+  .phone-nav {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 400;
+    padding-bottom: calc(4px + env(safe-area-inset-bottom));
+  }
+  /* Ensure panels don't overflow behind fixed nav */
+  #app { padding-bottom: 0; }
 }
 </style>
 </head>
@@ -717,7 +738,7 @@ async function loadCorpus() {
     const r = await fetch('./corpus.json');
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
     const d = await r.json();
-    if (d.error || !d.letters?.length) throw new Error('empty_corpus');
+    if (d.error || !d.letters || !d.letters.length) throw new Error('empty_corpus');
     CORPUS = d.letters;
     TOPICS_INDEX = d.topics_index || {};
     RECIPIENTS_INDEX = d.recipients_index || {};
@@ -794,8 +815,9 @@ function initApp() {
   buildExplore();
   renderList();
 
-  const sp = new URLSearchParams(location.search).get('screen');
-  if (sp) { isWide() ? switchPanel('p-'+sp) : phoneNav('p-'+sp, sp); }
+  var ALLOWED_SCREENS = {'home':1,'list':1,'search':1,'explore':1,'notes':1};
+  var sp = new URLSearchParams(location.search).get('screen');
+  if (sp && ALLOWED_SCREENS[sp]) { isWide() ? switchPanel('p-'+sp) : phoneNav('p-'+sp, sp); }
 
   window.addEventListener('beforeinstallprompt', e => {
     e.preventDefault(); deferredInstall = e;
@@ -830,21 +852,33 @@ function updateContinueCard() {
   document.getElementById('cont-sub').textContent   = l.recipient_display_fr;
   document.getElementById('cont-bar').style.width   = Math.max(5, Math.min(100, last.scroll||5)) + '%';
 }
-function resumeReading() { if (STATE.lastRead) openLetter(STATE.lastRead.n); }
+function resumeReading() {
+  if (!STATE.lastRead) return;
+  var savedPct = STATE.lastRead.scroll || 5;
+  openLetter(STATE.lastRead.n);
+  setTimeout(function() {
+    var scroller = isWide()
+      ? document.getElementById('wide-reader-scroll')
+      : document.getElementById('phone-reader-scroll');
+    if (scroller && scroller.scrollHeight > 0) {
+      scroller.scrollTop = scroller.scrollHeight * savedPct / 100;
+    }
+  }, 120);
+}
 
 /* ════════════════════════════════════════
    NAVIGATION
 ════════════════════════════════════════ */
 function switchPanel(id) {
   document.querySelectorAll('#left-panel .panel').forEach(p => p.classList.remove('active'));
-  document.getElementById(id)?.classList.add('active');
+  var _el840 = document.getElementById(id); if (_el840) _el840.classList.add('active');
   const MAP = {
     'p-home':'home','p-list':'list','p-search':'search',
     'p-explore':'explore','p-notes':'notes'
   };
   document.querySelectorAll('.snav-item').forEach(b => b.classList.remove('active'));
   const key = MAP[id];
-  if (key) document.getElementById('snav-'+key)?.classList.add('active');
+  if (key) { var _sn = document.getElementById('snav-'+key); if (_sn) _sn.classList.add('active'); }
   if (id==='p-list')    renderList();
   if (id==='p-notes')   renderNotes();
   if (id==='p-explore') buildExplore();
@@ -854,7 +888,7 @@ function switchPanel(id) {
 function phoneNav(panelId, navKey) {
   document.getElementById('phone-reader').classList.remove('open');
   document.querySelectorAll('#left-panel .panel').forEach(p => p.classList.remove('active'));
-  document.getElementById(panelId)?.classList.add('active');
+  var _pn = document.getElementById(panelId); if (_pn) _pn.classList.add('active');
   document.querySelectorAll('.pnav-item').forEach(b => {
     b.classList.remove('active');
     b.removeAttribute('aria-current');
@@ -890,9 +924,26 @@ function openLetter(n) {
     renderPhoneReader(l);
     document.getElementById('phone-reader').classList.add('open');
   }
-  STATE.lastRead = { n, scroll: STATE.lastRead?.n === n ? (STATE.lastRead.scroll||5) : 5 };
+  STATE.lastRead = { n: n, scroll: (STATE.lastRead && STATE.lastRead.n === n) ? (STATE.lastRead.scroll||5) : 5 };
   saveState();
   updateContinueCard();
+}
+
+function openLetterAtDP(n, dpId) {
+  openLetter(n);
+  if (!dpId) return;
+  setTimeout(function() {
+    var scroller = isWide()
+      ? document.getElementById('wide-reader-scroll')
+      : document.getElementById('phone-reader-scroll');
+    if (!scroller) return;
+    var target = scroller.querySelector('[data-dp-id="'+dpId+'"]');
+    if (target) {
+      target.scrollIntoView({behavior:'smooth', block:'center'});
+      target.style.background = 'rgba(201,168,76,0.25)';
+      setTimeout(function(){ target.style.background = ''; }, 1800);
+    }
+  }, 120);
 }
 
 function closePhoneReader() {
@@ -906,6 +957,7 @@ function buildDPs(l) {
   const dps = (l.display_paragraphs||[]).slice().sort((a,b) => (a.display_order||0)-(b.display_order||0));
   return dps.map(dp => {
     let cls = 'dp';
+    const dpAttr = dp.display_paragraph_id ? ' data-dp-id="'+esc(dp.display_paragraph_id)+'"' : '';
     const r = dp.split_reason || '';
     if (SAL_REASONS.has(r))
       cls += ' salutation';
@@ -913,7 +965,7 @@ function buildDPs(l) {
       cls += ' signature';
     // P0: escape text before inserting — then allow <br> only
     const safe = esc(dp.text_fr || '').replace(/\n/g, '<br>');
-    return `<p class="${cls}">${safe}</p>`;
+    return `<p class="${cls}"${dpAttr}>${safe}</p>`;
   }).join('');
 }
 
@@ -1079,7 +1131,7 @@ function toggleRelire() {
 function addNote() {
   const l = CORPUS[currentLetterIdx]; if (!l) return;
   const txt = prompt(`Note pour ${l.letter_id} :`);
-  if (txt?.trim()) {
+  if (txt && txt.trim()) {
     STATE.notes.unshift({
       letter_id: l.letter_id, n: l.canonical_number, text: txt.trim(),
       date: new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'})
@@ -1095,7 +1147,7 @@ function shareLetter() {
   const l = CORPUS[currentLetterIdx]; if (!l) return;
   const text = `${l.title_fr}\n${l.letter_id}\n\nLettres de Luisa Piccarreta`;
   if (navigator.share) navigator.share({title: l.title_fr, text}).catch(()=>{});
-  else navigator.clipboard?.writeText(l.letter_id).then(()=>showToast('Référence copiée'));
+  else if (navigator.clipboard) navigator.clipboard.writeText(l.letter_id).then(function(){showToast('Référence copiée');});
 }
 
 /* ════════════════════════════════════════
@@ -1162,7 +1214,7 @@ function renderList() {
       `<div class="empty-state" role="status"><i class="ti ti-letter-case" aria-hidden="true"></i>Aucune lettre pour ce filtre.</div>`;
     return;
   }
-  const cur = currentLetterIdx >= 0 ? CORPUS[currentLetterIdx]?.canonical_number : -1;
+  var cur = (currentLetterIdx >= 0 && CORPUS[currentLetterIdx]) ? CORPUS[currentLetterIdx].canonical_number : -1;
   document.getElementById('letter-list').innerHTML = items.map(l =>
     `<button class="letter-item${l.canonical_number===cur?' selected':''}" data-n="${l.canonical_number}"
       onclick="openLetter(${l.canonical_number})" role="listitem" aria-label="${esc(l.title_fr)}">
@@ -1223,8 +1275,9 @@ function doSearch() {
       const excerpt = hits[0]
         ? highlight(hits[0].text_fr.slice(0,200)+(hits[0].text_fr.length>200?'…':''), raw)
         : '';
+      var dpId = hits[0] ? hits[0].display_paragraph_id : '';
       return `<button class="letter-item" data-n="${l.canonical_number}"
-        onclick="openLetter(${l.canonical_number})" role="listitem" aria-label="${esc(l.title_fr)}">
+        onclick="openLetterAtDP(${l.canonical_number},'${dpId?dpId:''}')" role="listitem" aria-label="${esc(l.title_fr)}">
         <div class="li-num${STATE.favs.has(l.canonical_number)?' is-fav':''}" aria-hidden="true">${l.canonical_number}</div>
         <div class="li-body">
           <div class="li-title">${highlight(l.title_fr, raw)}</div>
@@ -1262,7 +1315,7 @@ function buildExplore() {
   const recData = rKeys.map(k => {
     if (RECIPIENTS_INDEX[k]) return RECIPIENTS_INDEX[k];
     const ls = CORPUS.filter(l=>(l.recipient_normalized||l.recipient_display_fr)===k);
-    return {display_fr:ls[0]?.recipient_display_fr||k, count:ls.length};
+    return {display_fr:(ls[0] && ls[0].recipient_display_fr) ? ls[0].recipient_display_fr : k, count:ls.length};
   }).sort((a,b)=>b.count-a.count);
 
   document.getElementById('dest-list').innerHTML =
@@ -1342,7 +1395,7 @@ function renderNotes() {
           <div class="ni-ref">${esc(n.letter_id)}</div>
           <div class="ni-text">« ${esc(n.text)} »</div>
           <div class="ni-date">${esc(n.date)}
-            <span onclick="deleteNote(event,${i})" aria-label="Supprimer la note" role="button" tabindex="0"
+            <span onclick="deleteNote(event,${i})" aria-label="Supprimer la note" tabindex="0"
               style="float:right;cursor:pointer;color:var(--muted);padding:0 4px"
               onkeydown="if(event.key==='Enter'){deleteNote(event,${i})}">
               <i class="ti ti-trash" aria-hidden="true" style="font-size:12px"></i>
@@ -1437,7 +1490,7 @@ if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js').then(reg => {
       reg.addEventListener('updatefound', () => {
-        reg.installing?.addEventListener('statechange', function() {
+        if (reg.installing) reg.installing.addEventListener('statechange', function() {
           if (this.state==='installed' && navigator.serviceWorker.controller)
             showToast('Mise à jour disponible — rechargez');
         });
