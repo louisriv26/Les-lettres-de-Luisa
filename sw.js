@@ -1,64 +1,122 @@
-/* Luisa Piccarreta PWA — Service Worker v1.0.0 */
-const CACHE_NAME = 'luisa-v1.0.0';
-const CORPUS_CACHE = 'luisa-corpus-v1.0.0';
+/* Luisa Piccarreta PWA — Service Worker v1.1.1
+   Strategy:
+   - App shell (HTML, icons, manifest) → cache-first, local files only
+   - corpus.json → network-first, cache fallback
+   - Google Fonts / CDN → stale-while-revalidate, never in install precache
+*/
+const CACHE_VERSION = 'luisa-v1.1.1';
+const CORPUS_CACHE  = 'luisa-corpus-v1.1.1';
 
+// ONLY local files — no external URLs that can fail install
 const APP_SHELL = [
   './',
   './index.html',
-  './corpus.json',
-  'https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap',
-  'https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css'
+  './manifest.json',
+  './icons/icon-192.png',
+  './icons/icon-512.png',
+  './icons/apple-touch-icon.png',
+  './icons/favicon-32.png',
 ];
 
+// ── Install: precache app shell only ──────────────────────
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL))
+    caches.open(CACHE_VERSION)
+      .then(cache => cache.addAll(APP_SHELL))
       .then(() => self.skipWaiting())
+      .catch(err => console.error('[SW] Install failed:', err))
   );
 });
 
+// ── Activate: purge old caches ─────────────────────────────
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE_NAME && k !== CORPUS_CACHE).map(k => caches.delete(k)))
-    ).then(() => self.clients.claim())
+    caches.keys()
+      .then(keys => Promise.all(
+        keys
+          .filter(k => k !== CACHE_VERSION && k !== CORPUS_CACHE)
+          .map(k => caches.delete(k))
+      ))
+      .then(() => self.clients.claim())
   );
 });
 
+// ── Fetch: routing strategies ──────────────────────────────
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
 
-  // Corpus JSON — cache-first, network fallback
+  // Skip non-GET
+  if (event.request.method !== 'GET') return;
+
+  // corpus.json → network-first, cache fallback (never stale)
   if (url.pathname.endsWith('corpus.json')) {
-    event.respondWith(
-      caches.match(event.request).then(cached => cached || fetch(event.request).then(resp => {
-        const clone = resp.clone();
-        caches.open(CORPUS_CACHE).then(c => c.put(event.request, clone));
-        return resp;
-      }))
-    );
+    event.respondWith(networkFirstCorpus(event.request));
     return;
   }
 
-  // Google Fonts & CDN — network-first, cache fallback
-  if (url.hostname.includes('googleapis') || url.hostname.includes('gstatic') || url.hostname.includes('jsdelivr')) {
-    event.respondWith(
-      fetch(event.request).then(resp => {
-        const clone = resp.clone();
-        caches.open(CACHE_NAME).then(c => c.put(event.request, clone));
-        return resp;
-      }).catch(() => caches.match(event.request))
-    );
+  // Google Fonts, jsDelivr → stale-while-revalidate (opportunistic)
+  if (
+    url.hostname.includes('fonts.googleapis.com') ||
+    url.hostname.includes('fonts.gstatic.com') ||
+    url.hostname.includes('jsdelivr.net')
+  ) {
+    event.respondWith(staleWhileRevalidate(event.request));
     return;
   }
 
-  // App shell — cache-first
-  event.respondWith(
-    caches.match(event.request).then(cached => cached || fetch(event.request))
-  );
+  // App shell and local assets → cache-first
+  if (url.origin === self.location.origin) {
+    event.respondWith(cacheFirst(event.request));
+    return;
+  }
 });
 
-// Background sync for user data (favoris, notes)
+async function networkFirstCorpus(request) {
+  try {
+    const response = await fetch(request);
+    if (response.ok) {
+      const cache = await caches.open(CORPUS_CACHE);
+      cache.put(request, response.clone());
+    }
+    return response;
+  } catch {
+    const cached = await caches.match(request);
+    if (cached) return cached;
+    // Return minimal error response
+    return new Response(
+      JSON.stringify({ error: 'corpus_unavailable', letters: [] }),
+      { status: 503, headers: { 'Content-Type': 'application/json' } }
+    );
+  }
+}
+
+async function cacheFirst(request) {
+  const cached = await caches.match(request);
+  if (cached) return cached;
+  try {
+    const response = await fetch(request);
+    if (response.ok) {
+      const cache = await caches.open(CACHE_VERSION);
+      cache.put(request, response.clone());
+    }
+    return response;
+  } catch {
+    return new Response('Offline — ressource non disponible', { status: 503 });
+  }
+}
+
+async function staleWhileRevalidate(request) {
+  const cached = await caches.match(request);
+  const networkPromise = fetch(request).then(response => {
+    if (response.ok) {
+      caches.open(CACHE_VERSION).then(c => c.put(request, response.clone()));
+    }
+    return response;
+  }).catch(() => null);
+  return cached || await networkPromise || new Response('', { status: 503 });
+}
+
+// Accept skip-waiting messages
 self.addEventListener('message', event => {
-  if (event.data && event.data.type === 'SKIP_WAITING') self.skipWaiting();
+  if (event.data?.type === 'SKIP_WAITING') self.skipWaiting();
 });

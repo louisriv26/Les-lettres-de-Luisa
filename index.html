@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="system">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -18,603 +18,526 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
 /* ══════════════════════════════════════════════════════
-   RESET & TOKENS
+   TOKENS — system, light, dark
 ══════════════════════════════════════════════════════ */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
-  --ivory: #F9F6F0;
-  --night: #1A2A4A;
-  --gold: #C9A84C;
-  --gold-light: #E8D5A3;
-  --gold-pale: #F5EDD8;
-  --ink: #2C1810;
-  --muted: #7A6E62;
-  --border: #E2D9CC;
-  --white: #FFFFFF;
-  --sidebar-w: 72px;
-  --list-w: 320px;
-  --serif: 'IM Fell English', Georgia, serif;
-  --body: 'Crimson Text', Georgia, serif;
-  --reader-size: 16px;
-  --sat-top: env(safe-area-inset-top, 0px);
-  --sat-bot: env(safe-area-inset-bottom, 0px);
-  --sat-left: env(safe-area-inset-left, 0px);
+  --ivory:#F9F6F0; --night:#1A2A4A; --gold:#C9A84C; --gold-light:#E8D5A3;
+  --gold-pale:#F5EDD8; --ink:#2C1810; --muted:#7A6E62; --border:#E2D9CC; --white:#FFFFFF;
+  --sidebar-w:72px; --list-w:320px;
+  --serif:'IM Fell English',Georgia,serif; --body:'Crimson Text',Georgia,serif;
+  --reader-size:16px;
+  --sat-top:env(safe-area-inset-top,0px); --sat-bot:env(safe-area-inset-bottom,0px);
 }
-@media (prefers-color-scheme: dark) {
-  :root {
-    --ivory: #1A1612;
-    --night: #E8D9C4;
-    --gold: #D4A843;
-    --gold-light: #5A4520;
-    --gold-pale: #2A2010;
-    --ink: #D4C8BC;
-    --muted: #8A7E72;
-    --border: #2E2820;
-    --white: #201C18;
-  }
+/* Auto dark */
+@media (prefers-color-scheme:dark){
+  :root{--ivory:#1A1612;--night:#E8D9C4;--gold:#D4A843;--gold-light:#5A4520;--gold-pale:#2A2010;
+        --ink:#D4C8BC;--muted:#8A7E72;--border:#2E2820;--white:#201C18;}
 }
-html { height: 100%; }
-body {
-  font-family: var(--body);
-  color: var(--ink);
-  background: var(--ivory);
-  height: 100%;
-  overflow: hidden;
+/* Forced dark (manual toggle) */
+html[data-theme="dark"]{
+  --ivory:#1A1612;--night:#E8D9C4;--gold:#D4A843;--gold-light:#5A4520;--gold-pale:#2A2010;
+  --ink:#D4C8BC;--muted:#8A7E72;--border:#2E2820;--white:#201C18;
 }
-
-/* ══════════════════════════════════════════════════════
-   SCROLL UTILITY
-══════════════════════════════════════════════════════ */
-.scroll {
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
+/* Forced light */
+html[data-theme="light"]{
+  --ivory:#F9F6F0;--night:#1A2A4A;--gold:#C9A84C;--gold-light:#E8D5A3;--gold-pale:#F5EDD8;
+  --ink:#2C1810;--muted:#7A6E62;--border:#E2D9CC;--white:#FFFFFF;
 }
-.scroll::-webkit-scrollbar { width: 4px; }
-.scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;background:var(--ivory);font-family:var(--body);color:var(--ink);}
+body{overflow:hidden;}
 
-/* ══════════════════════════════════════════════════════
-   SHARED COMPONENTS
-══════════════════════════════════════════════════════ */
-.btn-icon {
-  background: none; border: none; cursor: pointer;
-  color: var(--muted); font-size: 20px; padding: 6px;
-  display: flex; align-items: center; border-radius: 8px;
-  transition: color .15s, background .15s;
-}
-.btn-icon:hover { color: var(--night); background: var(--gold-pale); }
+/* ══════ SCROLL ══════ */
+.scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;}
+.scroll::-webkit-scrollbar{width:4px;}
+.scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
 
-.top-bar {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 16px; border-bottom: 0.5px solid var(--border);
-  background: var(--ivory); flex-shrink: 0;
-}
-.top-bar .title { font-family: var(--serif); font-style: italic; font-size: 17px; color: var(--night); }
+/* ══════ SHARED UI ══════ */
+.btn-icon{background:none;border:none;cursor:pointer;color:var(--muted);font-size:20px;padding:6px;
+  display:flex;align-items:center;border-radius:8px;transition:color .15s,background .15s;}
+.btn-icon:hover,.btn-icon:focus-visible{color:var(--night);background:var(--gold-pale);outline:none;}
 
-.letter-item {
-  display: flex; align-items: flex-start; gap: 10px;
-  padding: 12px 16px; border-bottom: 0.5px solid var(--border);
-  cursor: pointer; transition: background .1s;
-}
-.letter-item:hover { background: rgba(201,168,76,.05); }
-.letter-item.selected { background: var(--gold-pale); border-left: 2px solid var(--gold); }
-.li-num {
-  font-size: 10px; color: var(--muted); font-family: var(--body);
-  letter-spacing: .04em; width: 28px; flex-shrink: 0;
-  text-align: right; margin-top: 3px; position: relative;
-}
-.li-num.is-fav::after { content:'♥'; font-size:7px; color:var(--gold); position:absolute; top:-3px; right:-1px; }
-.li-body { flex: 1; min-width: 0; }
-.li-title { font-family: var(--serif); font-size: 14px; color: var(--night); line-height: 1.35; margin-bottom: 3px; }
-.li-dest { font-size: 11px; color: var(--muted); font-family: var(--body); margin-bottom: 5px; }
-.li-topics { display: flex; flex-wrap: wrap; gap: 4px; }
-.topic-pill { font-size: 10px; padding: 2px 7px; border-radius: 10px; background: var(--gold-pale); color: #7A5A20; font-family: var(--body); }
-@media (prefers-color-scheme: dark) { .topic-pill { color: #D4A050; } }
+.top-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;
+  border-bottom:0.5px solid var(--border);background:var(--ivory);flex-shrink:0;}
+.top-bar .title{font-family:var(--serif);font-style:italic;font-size:17px;color:var(--night);}
 
-.chip {
-  flex-shrink: 0; padding: 5px 12px; border-radius: 20px;
-  font-size: 11.5px; font-family: var(--body); cursor: pointer;
-  border: 0.5px solid var(--border); background: var(--white);
-  color: var(--muted); transition: all .15s; letter-spacing: .02em;
-}
-.chip.active { background: var(--night); color: var(--gold); border-color: var(--night); }
-.chip:hover:not(.active) { border-color: var(--gold-light); color: var(--night); }
+/* Letter list item */
+.letter-item{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;
+  border-bottom:0.5px solid var(--border);cursor:pointer;transition:background .1s;
+  background:none;width:100%;text-align:left;border-left:2px solid transparent;}
+.letter-item:hover,.letter-item:focus-visible{background:rgba(201,168,76,.05);outline:none;}
+.letter-item.selected{background:var(--gold-pale);border-left-color:var(--gold);}
+.li-num{font-size:10px;color:var(--muted);font-family:var(--body);letter-spacing:.04em;
+  width:28px;flex-shrink:0;text-align:right;margin-top:3px;position:relative;}
+.li-num.is-fav::after{content:'♥';font-size:7px;color:var(--gold);position:absolute;top:-3px;right:-1px;}
+.li-body{flex:1;min-width:0;}
+.li-title{font-family:var(--serif);font-size:14px;color:var(--night);line-height:1.35;margin-bottom:3px;}
+.li-dest{font-size:11px;color:var(--muted);font-family:var(--body);margin-bottom:5px;}
+.li-topics{display:flex;flex-wrap:wrap;gap:4px;}
+.topic-pill{font-size:10px;padding:2px 7px;border-radius:10px;background:var(--gold-pale);
+  color:#7A5A20;font-family:var(--body);}
+html[data-theme="dark"] .topic-pill,[data-theme="system"] .topic-pill{color:inherit;}
+@media(prefers-color-scheme:dark){.topic-pill{color:#D4A050;}}
 
-.filter-row {
-  display: flex; gap: 6px; padding: 8px 12px;
-  overflow-x: auto; scrollbar-width: none; flex-shrink: 0;
-  border-bottom: 0.5px solid var(--border); background: var(--ivory);
-}
-.filter-row::-webkit-scrollbar { display: none; }
+/* Chips */
+.filter-row{display:flex;gap:6px;padding:8px 12px;overflow-x:auto;scrollbar-width:none;
+  flex-shrink:0;border-bottom:0.5px solid var(--border);background:var(--ivory);}
+.filter-row::-webkit-scrollbar{display:none;}
+.chip{flex-shrink:0;padding:5px 12px;border-radius:20px;font-size:11.5px;font-family:var(--body);
+  cursor:pointer;border:0.5px solid var(--border);background:var(--white);color:var(--muted);
+  transition:all .15s;}
+.chip:hover,.chip:focus-visible{border-color:var(--gold-light);color:var(--night);outline:none;}
+.chip.active{background:var(--night);color:var(--gold);border-color:var(--night);}
 
-.empty-state { padding: 40px 20px; text-align: center; color: var(--muted); font-family: var(--body); font-size: 13px; line-height: 1.7; }
-.empty-state .ti { font-size: 28px; opacity: .3; display: block; margin-bottom: 10px; }
+/* Empty / error states */
+.empty-state{padding:40px 20px;text-align:center;color:var(--muted);font-family:var(--body);
+  font-size:13px;line-height:1.7;display:flex;flex-direction:column;align-items:center;gap:10px;}
+.empty-state .ti{font-size:28px;opacity:.3;}
+.error-state{padding:32px 20px;text-align:center;background:var(--white);margin:12px;
+  border-radius:12px;border:0.5px solid var(--border);}
+.error-state .ti{font-size:32px;color:var(--gold);display:block;margin-bottom:10px;}
+.error-state p{font-family:var(--body);font-size:13.5px;color:var(--ink);line-height:1.65;margin-bottom:12px;}
+.error-state button{background:var(--night);color:var(--gold);border:none;border-radius:8px;
+  padding:8px 18px;font-size:13px;font-family:var(--body);cursor:pointer;}
 
-.search-bar {
-  margin: 10px 12px 6px; display: flex; align-items: center; gap: 8px;
-  background: var(--white); border: 0.5px solid var(--border);
-  border-radius: 10px; padding: 8px 12px; flex-shrink: 0;
-}
-.search-bar input { flex:1; border:none; background:transparent; font-size:15px; font-family:var(--body); color:var(--ink); outline:none; }
-.search-bar input::placeholder { color: var(--muted); }
-.search-bar .ti { color: var(--muted); font-size: 16px; }
-.clear-btn { background:none; border:none; cursor:pointer; color:var(--muted); font-size:14px; padding:2px; display:flex; align-items:center; }
+/* Search */
+.search-bar{margin:10px 12px 6px;display:flex;align-items:center;gap:8px;background:var(--white);
+  border:0.5px solid var(--border);border-radius:10px;padding:8px 12px;flex-shrink:0;}
+.search-bar input{flex:1;border:none;background:transparent;font-size:15px;font-family:var(--body);
+  color:var(--ink);outline:none;}
+.search-bar input::placeholder{color:var(--muted);}
+.search-bar .ti{color:var(--muted);font-size:16px;}
+.clear-btn{background:none;border:none;cursor:pointer;color:var(--muted);font-size:14px;
+  padding:2px;display:flex;align-items:center;}
+.search-suggestion{display:inline-block;margin:4px 4px 0 0;padding:3px 10px;background:var(--gold-pale);
+  border-radius:12px;font-size:12px;color:var(--night);cursor:pointer;font-family:var(--body);
+  transition:background .15s;border:none;}
+.search-suggestion:hover,.search-suggestion:focus-visible{background:var(--gold-light);outline:none;}
+.search-count{padding:6px 16px 4px;font-size:11px;color:var(--muted);font-family:var(--body);}
 
-.search-suggestion { display:inline-block; margin:4px 4px 0 0; padding:3px 10px; background:var(--gold-pale); border-radius:12px; font-size:12px; color:var(--night); cursor:pointer; font-family:var(--body); transition:background .15s; }
-.search-suggestion:hover { background: var(--gold-light); }
-.search-count { padding:6px 16px 4px; font-size:11px; color:var(--muted); font-family:var(--body); }
+/* ══════ READER COMPONENTS ══════ */
+.reader-top{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;
+  border-bottom:0.5px solid var(--border);background:var(--ivory);flex-shrink:0;}
+.btn-back{display:flex;align-items:center;gap:5px;background:none;border:none;cursor:pointer;
+  color:var(--muted);font-size:13px;font-family:var(--body);padding:4px;border-radius:6px;
+  transition:color .15s;}
+.btn-back:hover,.btn-back:focus-visible{color:var(--night);outline:none;}
+.reader-counter{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--muted);font-family:var(--body);}
+.nav-btn{background:none;border:0.5px solid var(--border);cursor:pointer;color:var(--muted);
+  font-size:15px;padding:3px 7px;border-radius:6px;display:flex;align-items:center;transition:all .15s;}
+.nav-btn:hover,.nav-btn:focus-visible{color:var(--night);border-color:var(--gold-light);outline:none;}
+.nav-btn:disabled{opacity:.3;cursor:default;}
 
-/* Reader components */
-.reader-top {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 14px; border-bottom: 0.5px solid var(--border);
-  background: var(--ivory); flex-shrink: 0;
-}
-.btn-back { display:flex; align-items:center; gap:5px; background:none; border:none; cursor:pointer; color:var(--muted); font-size:13px; font-family:var(--body); padding:4px; border-radius:6px; transition:color .15s; }
-.btn-back:hover { color: var(--night); }
-.reader-counter { display:flex; align-items:center; gap:4px; font-size:12px; color:var(--muted); font-family:var(--body); }
-.nav-btn { background:none; border:0.5px solid var(--border); cursor:pointer; color:var(--muted); font-size:15px; padding:3px 6px; border-radius:6px; display:flex; align-items:center; transition:all .15s; }
-.nav-btn:hover { color:var(--night); border-color:var(--gold-light); }
-.nav-btn:disabled { opacity:.3; cursor:default; }
+.letter-header{padding:20px 24px 12px;}
+.lh-num{font-size:10px;letter-spacing:.1em;color:var(--gold);font-family:var(--body);text-transform:uppercase;margin-bottom:7px;}
+.lh-title{font-family:var(--serif);font-size:21px;color:var(--night);line-height:1.35;margin-bottom:10px;}
+.lh-meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
+.lh-meta-item{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--muted);font-family:var(--body);}
+.lh-topics{display:flex;flex-wrap:wrap;gap:4px;}
+.lh-divider{height:1px;background:linear-gradient(90deg,var(--gold-light),transparent);margin:0 24px 16px;opacity:.6;}
 
-.letter-header { padding: 20px 24px 12px; }
-.lh-num { font-size:10px; letter-spacing:.1em; color:var(--gold); font-family:var(--body); text-transform:uppercase; margin-bottom:7px; }
-.lh-title { font-family:var(--serif); font-size:21px; color:var(--night); line-height:1.35; margin-bottom:10px; }
-.lh-meta { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
-.lh-meta-item { display:flex; align-items:center; gap:4px; font-size:12px; color:var(--muted); font-family:var(--body); }
-.lh-meta-item .ti { font-size:13px; }
-.lh-divider { height:1px; background:linear-gradient(90deg,var(--gold-light),transparent); margin:0 24px 16px; opacity:.6; }
+.letter-body{padding:0 24px 8px;}
+.dp{font-family:var(--body);font-size:var(--reader-size);line-height:1.82;color:var(--ink);margin-bottom:1.3em;}
+.dp.salutation{font-style:italic;color:var(--night);font-size:calc(var(--reader-size) - 1px);margin-bottom:1.5em;opacity:.9;}
+.dp.signature{font-style:italic;font-size:calc(var(--reader-size) - 2px);color:var(--muted);
+  border-top:0.5px solid var(--border);padding-top:14px;margin-top:1em;margin-bottom:0;text-align:center;}
+.dp.signature::before{content:'✦  ✦  ✦';display:block;text-align:center;color:var(--gold);
+  font-size:10px;margin-bottom:10px;font-style:normal;letter-spacing:.3em;opacity:.7;}
 
-.letter-body { padding: 0 24px 8px; }
-.dp { font-family:var(--body); font-size:var(--reader-size); line-height:1.8; color:var(--ink); margin-bottom:1.3em; }
-.dp.salutation { font-style:italic; color:var(--night); font-size:calc(var(--reader-size) - 1px); margin-bottom:1.5em; opacity:.9; }
-.dp.signature { font-style:italic; font-size:calc(var(--reader-size) - 2px); color:var(--muted); border-top:0.5px solid var(--border); padding-top:14px; margin-top:1em; margin-bottom:0; text-align:center; }
-.dp.signature::before { content:'✦  ✦  ✦'; display:block; text-align:center; color:var(--gold); font-size:10px; margin-bottom:10px; font-style:normal; letter-spacing:.3em; opacity:.7; }
+/* Trust panel */
+.trust-panel{margin:16px 16px 24px;border:0.5px solid var(--border);border-radius:10px;overflow:hidden;}
+.trust-head{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;
+  cursor:pointer;background:var(--white);width:100%;border:none;text-align:left;}
+.trust-head:focus-visible{outline:2px solid var(--gold);outline-offset:-2px;}
+.trust-head span{font-size:12px;color:var(--muted);font-family:var(--body);display:flex;align-items:center;gap:6px;}
+.trust-chevron{font-size:13px;color:var(--muted);transition:transform .2s;}
+.trust-panel.open .trust-chevron{transform:rotate(180deg);}
+.trust-body{display:none;padding:10px 14px 12px;background:var(--white);border-top:0.5px solid var(--border);}
+.trust-panel.open .trust-body{display:block;}
+.trust-row{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding:5px 0;
+  border-bottom:0.5px solid var(--border);font-size:11px;font-family:var(--body);}
+.trust-row:last-child{border-bottom:none;}
+.trust-row .k{color:var(--muted);flex-shrink:0;}
+.trust-row .v{color:var(--night);text-align:right;word-break:break-all;}
+.trust-row .v.pass{color:#2D7A40;}
 
-.trust-panel { margin:16px 16px 24px; border:0.5px solid var(--border); border-radius:10px; overflow:hidden; }
-.trust-head { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; cursor:pointer; background:var(--white); }
-.trust-head span { font-size:12px; color:var(--muted); font-family:var(--body); display:flex; align-items:center; gap:6px; }
-.trust-chevron { font-size:13px; color:var(--muted); transition:transform .2s; }
-.trust-panel.open .trust-chevron { transform:rotate(180deg); }
-.trust-body { display:none; padding:10px 14px 12px; background:var(--white); border-top:0.5px solid var(--border); }
-.trust-panel.open .trust-body { display:block; }
-.trust-row { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; padding:5px 0; border-bottom:0.5px solid var(--border); font-size:11px; font-family:var(--body); }
-.trust-row:last-child { border-bottom:none; }
-.trust-row .k { color:var(--muted); flex-shrink:0; }
-.trust-row .v { color:var(--night); text-align:right; word-break:break-all; }
-.trust-row .v.pass { color:#2D7A40; }
+/* Action bar */
+.action-bar{display:flex;border-top:0.5px solid var(--border);background:var(--ivory);
+  padding:8px 0;flex-shrink:0;}
+.action-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;
+  border:none;cursor:pointer;color:var(--muted);font-size:10px;font-family:var(--body);
+  padding:4px 2px;transition:color .15s;border-radius:6px;}
+.action-btn:hover,.action-btn:focus-visible{color:var(--night);outline:none;}
+.action-btn .ti{font-size:20px;}
+.action-btn.fav-active{color:var(--gold);}
+.action-btn.relire-active{color:var(--gold);}
 
-.action-bar { display:flex; border-top:0.5px solid var(--border); background:var(--ivory); padding:8px 0; flex-shrink:0; }
-.action-btn { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; background:none; border:none; cursor:pointer; color:var(--muted); font-size:10px; font-family:var(--body); padding:4px 2px; transition:color .15s; border-radius:6px; }
-.action-btn:hover { color: var(--night); }
-.action-btn .ti { font-size:20px; }
-.action-btn.fav-active { color: var(--gold); }
+/* Text size bar */
+.text-size-bar{display:none;position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
+  background:var(--white);border:0.5px solid var(--border);border-radius:10px;padding:8px 14px;
+  z-index:200;align-items:center;gap:12px;font-family:var(--body);font-size:13px;color:var(--night);}
+.text-size-bar.open{display:flex;}
+.tsz-btn{background:none;border:0.5px solid var(--border);border-radius:6px;padding:4px 10px;
+  cursor:pointer;color:var(--night);font-family:var(--body);font-size:14px;transition:background .15s;}
+.tsz-btn:hover{background:var(--gold-pale);}
 
-.text-size-bar { display:none; position:fixed; bottom:70px; left:50%; transform:translateX(-50%); background:var(--white); border:0.5px solid var(--border); border-radius:10px; padding:8px 14px; z-index:200; align-items:center; gap:12px; font-family:var(--body); font-size:13px; color:var(--night); }
-.text-size-bar.open { display:flex; }
-.tsz-btn { background:none; border:0.5px solid var(--border); border-radius:6px; padding:4px 10px; cursor:pointer; color:var(--night); font-family:var(--body); font-size:14px; transition:background .15s; }
-.tsz-btn:hover { background: var(--gold-pale); }
+/* Tabs */
+.tab-row{display:flex;border-bottom:0.5px solid var(--border);background:var(--ivory);flex-shrink:0;}
+.tab{flex:1;padding:10px;text-align:center;font-size:13px;font-family:var(--body);cursor:pointer;
+  color:var(--muted);border-bottom:2px solid transparent;transition:all .15s;background:none;
+  border-top:none;border-left:none;border-right:none;}
+.tab:focus-visible{outline:2px solid var(--gold);outline-offset:-2px;}
+.tab.active{color:var(--night);border-bottom-color:var(--gold);}
+.fav-item{display:flex;align-items:center;gap:10px;padding:11px 16px;
+  border-bottom:0.5px solid var(--border);cursor:pointer;transition:background .1s;
+  background:none;width:100%;text-align:left;border:none;border-bottom:0.5px solid var(--border);}
+.fav-item:hover,.fav-item:focus-visible{background:var(--gold-pale);outline:none;}
+.fav-num{font-size:10px;color:var(--muted);width:22px;font-family:var(--body);}
+.fav-title{font-family:var(--serif);font-size:13.5px;color:var(--night);flex:1;text-align:left;}
+.fav-heart{font-size:14px;color:var(--gold);}
+.note-item{padding:13px 16px;border-bottom:0.5px solid var(--border);cursor:pointer;
+  transition:background .1s;background:none;width:100%;text-align:left;border:none;
+  border-bottom:0.5px solid var(--border);}
+.note-item:hover,.note-item:focus-visible{background:var(--gold-pale);outline:none;}
+.ni-ref{font-size:10px;color:var(--gold);font-family:var(--body);letter-spacing:.06em;margin-bottom:4px;}
+.ni-text{font-size:13px;color:var(--ink);font-family:var(--body);line-height:1.6;font-style:italic;margin-bottom:5px;}
+.ni-date{font-size:10px;color:var(--muted);font-family:var(--body);}
 
-/* Notes/explore shared */
-.tab-row { display:flex; border-bottom:0.5px solid var(--border); background:var(--ivory); flex-shrink:0; }
-.tab { flex:1; padding:10px; text-align:center; font-size:13px; font-family:var(--body); cursor:pointer; color:var(--muted); border-bottom:2px solid transparent; transition:all .15s; background:none; border-top:none; border-left:none; border-right:none; }
-.tab.active { color:var(--night); border-bottom-color:var(--gold); }
-.fav-item { display:flex; align-items:center; gap:10px; padding:11px 16px; border-bottom:0.5px solid var(--border); cursor:pointer; transition:background .1s; }
-.fav-item:hover { background: var(--gold-pale); }
-.fav-num { font-size:10px; color:var(--muted); width:22px; font-family:var(--body); }
-.fav-title { font-family:var(--serif); font-size:13.5px; color:var(--night); flex:1; }
-.fav-heart { font-size:14px; color:var(--gold); }
-.note-item { padding:13px 16px; border-bottom:0.5px solid var(--border); cursor:pointer; transition:background .1s; }
-.note-item:hover { background: var(--gold-pale); }
-.ni-ref { font-size:10px; color:var(--gold); font-family:var(--body); letter-spacing:.06em; margin-bottom:4px; }
-.ni-text { font-size:13px; color:var(--ink); font-family:var(--body); line-height:1.6; font-style:italic; margin-bottom:5px; }
-.ni-date { font-size:10px; color:var(--muted); font-family:var(--body); }
+/* Explore */
+.explore-section{padding:14px 14px 0;}
+.exp-title{font-family:var(--serif);font-size:15px;color:var(--night);margin-bottom:10px;}
+.exp-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.exp-card{background:var(--white);border:0.5px solid var(--border);border-radius:10px;padding:12px;
+  cursor:pointer;transition:border-color .15s;background:none;width:100%;text-align:left;}
+.exp-card:hover,.exp-card:focus-visible{border-color:var(--gold-light);outline:none;}
+.exp-icon{font-size:20px;color:var(--gold);margin-bottom:6px;display:block;}
+.exp-label{font-size:13px;color:var(--night);font-family:var(--body);margin-bottom:2px;}
+.exp-sub{font-size:11px;color:var(--muted);font-family:var(--body);}
+.dest-list,.chron-list{background:var(--white);border:0.5px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:12px;}
+.dest-item,.chron-item{display:flex;align-items:center;gap:10px;padding:10px 14px;
+  border-bottom:0.5px solid var(--border);cursor:pointer;transition:background .1s;
+  background:none;width:100%;text-align:left;border-left:none;border-right:none;border-top:none;
+  border-bottom:0.5px solid var(--border);}
+.dest-item:last-of-type,.chron-item:last-of-type{border-bottom:none;}
+.dest-item:hover,.dest-item:focus-visible,.chron-item:hover,.chron-item:focus-visible{background:var(--gold-pale);outline:none;}
+.dest-name{flex:1;font-size:13px;color:var(--night);font-family:var(--body);}
+.dest-count{font-size:11px;color:var(--muted);font-family:var(--body);flex-shrink:0;}
+.chron-year{font-size:11px;color:var(--gold);font-family:var(--body);width:36px;flex-shrink:0;}
+.chron-info .ct{font-size:13px;color:var(--night);font-family:var(--body);}
+.chron-info .cs{font-size:11px;color:var(--muted);font-family:var(--body);}
+.see-all-btn{padding:9px 14px;text-align:center;cursor:pointer;font-size:12px;color:var(--gold);
+  font-family:var(--body);background:var(--white);border-top:0.5px solid var(--border);
+  width:100%;border-left:none;border-right:none;border-bottom:none;}
+.see-all-btn:hover,.see-all-btn:focus-visible{background:var(--gold-pale);outline:none;}
 
-.explore-section { padding:14px 14px 0; }
-.exp-title { font-family:var(--serif); font-size:15px; color:var(--night); margin-bottom:10px; }
-.exp-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
-.exp-card { background:var(--white); border:0.5px solid var(--border); border-radius:10px; padding:12px; cursor:pointer; transition:border-color .15s; }
-.exp-card:hover { border-color: var(--gold-light); }
-.exp-icon { font-size:20px; color:var(--gold); margin-bottom:6px; display:block; }
-.exp-label { font-size:13px; color:var(--night); font-family:var(--body); margin-bottom:2px; }
-.exp-sub { font-size:11px; color:var(--muted); font-family:var(--body); }
-.dest-list, .chron-list { background:var(--white); border:0.5px solid var(--border); border-radius:10px; overflow:hidden; margin-bottom:12px; }
-.dest-item, .chron-item { display:flex; align-items:center; gap:10px; padding:10px 14px; border-bottom:0.5px solid var(--border); cursor:pointer; transition:background .1s; }
-.dest-item:last-child, .chron-item:last-child { border-bottom:none; }
-.dest-item:hover, .chron-item:hover { background: var(--gold-pale); }
-.dest-name { flex:1; font-size:13px; color:var(--night); font-family:var(--body); }
-.dest-count { font-size:11px; color:var(--muted); font-family:var(--body); flex-shrink:0; }
-.chron-year { font-size:11px; color:var(--gold); font-family:var(--body); width:36px; flex-shrink:0; }
-.chron-info .ct { font-size:13px; color:var(--night); font-family:var(--body); }
-.chron-info .cs { font-size:11px; color:var(--muted); font-family:var(--body); }
-.see-all-row { padding:9px 14px; text-align:center; cursor:pointer; font-size:12px; color:var(--gold); font-family:var(--body); background:var(--white); border-top:0.5px solid var(--border); }
-.see-all-row:hover { background: var(--gold-pale); }
-
-/* Toast */
-.toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(10px); background:var(--night); color:var(--gold); font-family:var(--body); font-size:13px; padding:8px 18px; border-radius:20px; opacity:0; transition:all .25s; pointer-events:none; white-space:nowrap; z-index:9000; }
-.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+/* Toast — aria-live */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(10px);
+  background:var(--night);color:var(--gold);font-family:var(--body);font-size:13px;
+  padding:8px 18px;border-radius:20px;opacity:0;transition:all .25s;pointer-events:none;
+  white-space:nowrap;z-index:9000;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
 /* Loading */
-#loading { position:fixed; inset:0; background:var(--ivory); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; z-index:9999; transition:opacity .3s; }
-#loading.hide { opacity:0; pointer-events:none; }
-.loading-cross { font-size:36px; color:var(--gold); animation:pulse 1.8s ease-in-out infinite; }
-@keyframes pulse { 0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.08)} }
-.loading-text { font-family:var(--serif); font-style:italic; font-size:14px; color:var(--muted); }
+#loading{position:fixed;inset:0;background:var(--ivory);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:16px;z-index:9999;transition:opacity .3s;}
+#loading.hide{opacity:0;pointer-events:none;}
+.loading-cross{font-size:36px;color:var(--gold);animation:pulse 1.8s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}
+.loading-text{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--muted);}
+
+/* Home screen */
+.ldj-card{background:var(--night);margin:12px;border-radius:14px;padding:18px 20px;
+  cursor:pointer;position:relative;overflow:hidden;transition:transform .1s;
+  display:block;width:calc(100% - 24px);text-align:left;border:none;}
+.ldj-card:hover,.ldj-card:focus-visible{transform:translateY(-1px);outline:none;}
+.ldj-card::before{content:'';position:absolute;top:-40px;right:-40px;width:140px;height:140px;
+  border-radius:50%;border:1px solid rgba(201,168,76,.12);pointer-events:none;}
+.ldj-eyebrow{font-size:10px;letter-spacing:.14em;color:var(--gold);font-family:var(--body);
+  text-transform:uppercase;margin-bottom:5px;display:flex;align-items:center;gap:5px;}
+.ldj-num{font-size:11px;color:rgba(255,255,255,.3);font-family:var(--body);margin-bottom:7px;letter-spacing:.04em;}
+.ldj-title{font-family:var(--serif);font-size:17px;color:#fff;margin-bottom:10px;line-height:1.4;}
+.ldj-excerpt{font-family:var(--body);font-size:14px;line-height:1.72;color:rgba(255,255,255,.72);
+  font-style:italic;margin-bottom:6px;}
+.ldj-dest{font-size:11px;color:var(--gold);font-family:var(--body);}
+.ldj-cta{display:inline-flex;align-items:center;gap:6px;margin-top:14px;
+  background:rgba(201,168,76,.18);border:0.5px solid rgba(201,168,76,.4);color:var(--gold);
+  font-size:12px;font-family:var(--body);padding:6px 14px;border-radius:20px;cursor:pointer;
+  letter-spacing:.03em;transition:background .15s;}
+.ldj-cta:hover{background:rgba(201,168,76,.3);}
+.section-head{font-family:var(--serif);font-size:14px;color:var(--night);padding:16px 16px 8px;letter-spacing:.01em;}
+.situations{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 12px 4px;}
+.situ-card{background:var(--white);border:0.5px solid var(--border);border-radius:10px;
+  padding:12px 10px;cursor:pointer;transition:border-color .15s;text-align:left;width:100%;}
+.situ-card:hover,.situ-card:focus-visible{border-color:var(--gold);outline:none;}
+.situ-icon{font-size:20px;color:var(--gold);margin-bottom:6px;display:block;}
+.situ-label{font-size:12.5px;line-height:1.4;color:var(--night);font-family:var(--body);}
+.situ-count{font-size:10px;color:var(--muted);margin-top:3px;font-family:var(--body);}
+.continue-card{margin:4px 12px 16px;background:var(--white);border:0.5px solid var(--border);
+  border-radius:10px;padding:12px 14px;cursor:pointer;display:flex;align-items:center;gap:12px;
+  transition:border-color .15s;width:calc(100% - 24px);}
+.continue-card:hover,.continue-card:focus-visible{border-color:var(--gold-light);outline:none;}
+.cont-thumb{width:38px;height:38px;background:var(--gold-pale);border-radius:7px;display:flex;
+  align-items:center;justify-content:center;flex-shrink:0;font-family:var(--serif);font-size:14px;color:var(--night);}
+.cont-info{flex:1;min-width:0;}
+.cont-title{font-size:13px;color:var(--night);font-family:var(--body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cont-sub{font-size:11px;color:var(--muted);font-family:var(--body);}
+.cont-progress{height:2px;background:var(--border);border-radius:1px;margin-top:6px;}
+.cont-bar{height:2px;background:var(--gold);border-radius:1px;transition:width .3s;}
+.install-banner{display:none;margin:8px 12px 0;background:var(--gold-pale);border:0.5px solid var(--gold-light);
+  border-radius:10px;padding:10px 14px;align-items:center;gap:10px;}
+.install-banner.show{display:flex;}
+.install-banner p{flex:1;font-size:12px;color:var(--night);font-family:var(--body);line-height:1.5;}
+.install-btn{background:var(--night);color:var(--gold);border:none;border-radius:8px;
+  padding:6px 12px;font-size:12px;font-family:var(--body);cursor:pointer;flex-shrink:0;}
+.install-close{background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;padding:2px;flex-shrink:0;}
+
+/* Search result highlight */
+.hl{background:rgba(201,168,76,.3);border-radius:2px;padding:0 1px;}
+
+/* Read progress bar */
+.read-progress{height:2px;background:var(--gold);width:0%;transition:width .2s;flex-shrink:0;}
 
 /* ══════════════════════════════════════════════════════
-   PHONE LAYOUT  (< 768px)
-   Full-screen tabs — one screen visible at a time
+   PHONE LAYOUT (< 768px)
 ══════════════════════════════════════════════════════ */
-#app {
-  width: 100%;
-  height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  background: var(--ivory);
-  overflow: hidden;
-}
+#app{width:100%;height:100dvh;display:flex;flex-direction:column;background:var(--ivory);overflow:hidden;}
 
-/* phone: screens stack, only .active is visible */
-.panel { display:none; flex-direction:column; flex:1; min-height:0; overflow:hidden; }
-.panel.active { display:flex; animation: fadeUp .2s ease; }
-@keyframes fadeUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+.panel{display:none;flex-direction:column;flex:1;min-height:0;overflow:hidden;}
+.panel.active{display:flex;animation:fadeUp .2s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
-/* Phone bottom nav */
-.phone-nav {
-  display: flex;
-  background: var(--ivory);
-  border-top: 0.5px solid var(--border);
-  padding: 4px 0 calc(4px + var(--sat-bot));
-  flex-shrink: 0;
-}
-.pnav-item {
-  flex:1; display:flex; flex-direction:column; align-items:center; gap:2px;
-  cursor:pointer; border:none; background:none; color:var(--muted);
-  font-size:10px; font-family:var(--body); padding:4px 0; transition:color .15s; position:relative;
-}
-.pnav-item.active { color: var(--night); }
-.pnav-item .ti { font-size:22px; }
-.pnav-item::after { content:''; position:absolute; top:0; left:50%; transform:translateX(-50%); width:0; height:2px; background:var(--gold); border-radius:0 0 2px 2px; transition:width .2s; }
-.pnav-item.active::after { width:28px; }
+.phone-nav{display:flex;background:var(--ivory);border-top:0.5px solid var(--border);
+  padding:4px 0 calc(4px + var(--sat-bot));flex-shrink:0;}
+.pnav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;
+  cursor:pointer;border:none;background:none;color:var(--muted);font-size:10px;
+  font-family:var(--body);padding:4px 0;transition:color .15s;position:relative;}
+.pnav-item:focus-visible{outline:2px solid var(--gold);outline-offset:-2px;}
+.pnav-item.active{color:var(--night);}
+.pnav-item .ti{font-size:22px;}
+.pnav-item::after{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:0;height:2px;background:var(--gold);border-radius:0 0 2px 2px;transition:width .2s;}
+.pnav-item.active::after{width:28px;}
 
-/* Phone reader: full-screen overlay */
-#phone-reader {
-  position: fixed;
-  inset: 0;
-  z-index: 500;
-  background: var(--ivory);
-  display: none;
-  flex-direction: column;
-  overflow: hidden;
-}
-#phone-reader.open { display: flex; }
-
-/* Home screen cards */
-.ldj-card {
-  background: var(--night); margin:12px; border-radius:14px; padding:18px 20px;
-  cursor:pointer; position:relative; overflow:hidden; transition:transform .1s;
-}
-.ldj-card:active { transform: scale(.98); }
-.ldj-card::before { content:''; position:absolute; top:-40px; right:-40px; width:140px; height:140px; border-radius:50%; border:1px solid rgba(201,168,76,.12); pointer-events:none; }
-.ldj-eyebrow { font-size:10px; letter-spacing:.14em; color:var(--gold); font-family:var(--body); text-transform:uppercase; margin-bottom:5px; display:flex; align-items:center; gap:5px; }
-.ldj-num { font-size:11px; color:rgba(255,255,255,.3); font-family:var(--body); margin-bottom:7px; letter-spacing:.04em; }
-.ldj-title { font-family:var(--serif); font-size:17px; color:#fff; margin-bottom:10px; line-height:1.4; }
-.ldj-excerpt { font-family:var(--body); font-size:14px; line-height:1.72; color:rgba(255,255,255,.72); font-style:italic; margin-bottom:6px; }
-.ldj-dest { font-size:11px; color:var(--gold); font-family:var(--body); }
-.ldj-cta { display:inline-flex; align-items:center; gap:6px; margin-top:14px; background:rgba(201,168,76,.18); border:0.5px solid rgba(201,168,76,.4); color:var(--gold); font-size:12px; font-family:var(--body); padding:6px 14px; border-radius:20px; cursor:pointer; letter-spacing:.03em; transition:background .15s; }
-.ldj-cta:hover { background: rgba(201,168,76,.3); }
-.section-head { font-family:var(--serif); font-size:14px; color:var(--night); padding:16px 16px 8px; letter-spacing:.01em; }
-.situations { display:grid; grid-template-columns:1fr 1fr; gap:8px; padding:0 12px 4px; }
-.situ-card { background:var(--white); border:0.5px solid var(--border); border-radius:10px; padding:12px 10px; cursor:pointer; transition:border-color .15s; text-align:left; }
-.situ-card:hover { border-color: var(--gold); }
-.situ-icon { font-size:20px; color:var(--gold); margin-bottom:6px; display:block; }
-.situ-label { font-size:12.5px; line-height:1.4; color:var(--night); font-family:var(--body); }
-.situ-count { font-size:10px; color:var(--muted); margin-top:3px; font-family:var(--body); }
-.continue-card { margin:4px 12px 16px; background:var(--white); border:0.5px solid var(--border); border-radius:10px; padding:12px 14px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:border-color .15s; }
-.continue-card:hover { border-color: var(--gold-light); }
-.cont-thumb { width:38px; height:38px; background:var(--gold-pale); border-radius:7px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-family:var(--serif); font-size:14px; color:var(--night); }
-.cont-info { flex:1; min-width:0; }
-.cont-title { font-size:13px; color:var(--night); font-family:var(--body); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.cont-sub { font-size:11px; color:var(--muted); font-family:var(--body); }
-.cont-progress { height:2px; background:var(--border); border-radius:1px; margin-top:6px; }
-.cont-bar { height:2px; background:var(--gold); border-radius:1px; }
-.install-banner { display:none; margin:8px 12px 0; background:var(--gold-pale); border:0.5px solid var(--gold-light); border-radius:10px; padding:10px 14px; align-items:center; gap:10px; }
-.install-banner.show { display:flex; }
-.install-banner p { flex:1; font-size:12px; color:var(--night); font-family:var(--body); line-height:1.5; }
-.install-btn { background:var(--night); color:var(--gold); border:none; border-radius:8px; padding:6px 12px; font-size:12px; font-family:var(--body); cursor:pointer; flex-shrink:0; }
-.install-close { background:none; border:none; cursor:pointer; color:var(--muted); font-size:16px; padding:2px; flex-shrink:0; }
+#phone-reader{position:fixed;inset:0;z-index:500;background:var(--ivory);
+  display:none;flex-direction:column;overflow:hidden;}
+#phone-reader.open{display:flex;}
 
 /* ══════════════════════════════════════════════════════
-   TABLET LAYOUT  (768px – 1199px)
-   Sidebar icon-nav + list panel + reader panel
+   TABLET LAYOUT (≥ 768px)
 ══════════════════════════════════════════════════════ */
-@media (min-width: 768px) {
-  body { overflow: hidden; }
+@media(min-width:768px){
+  .phone-nav{display:none!important;}
+  #phone-reader{display:none!important;position:relative!important;}
 
-  #app {
-    flex-direction: row;
-    height: 100dvh;
-    max-width: 100%;
-    overflow: hidden;
-  }
+  #app{flex-direction:row;}
 
-  /* Hide phone-only UI */
-  .phone-nav { display: none !important; }
-  #phone-reader { display: none !important; position: relative !important; }
+  #sidebar{display:flex;flex-direction:column;align-items:center;width:var(--sidebar-w);
+    background:var(--night);border-right:0.5px solid rgba(255,255,255,.06);
+    padding:calc(16px + var(--sat-top)) 0 12px;flex-shrink:0;gap:4px;}
+  .sidebar-logo{width:38px;height:38px;margin-bottom:16px;border-radius:10px;overflow:hidden;flex-shrink:0;}
+  .sidebar-logo img{width:100%;height:100%;object-fit:cover;}
+  .snav-item{display:flex;flex-direction:column;align-items:center;gap:3px;width:52px;
+    padding:8px 4px;border-radius:10px;cursor:pointer;border:none;background:none;
+    color:rgba(255,255,255,.45);font-size:9px;font-family:var(--body);transition:all .15s;letter-spacing:.03em;}
+  .snav-item .ti{font-size:22px;}
+  .snav-item:hover,.snav-item:focus-visible{background:rgba(255,255,255,.08);color:rgba(255,255,255,.85);outline:none;}
+  .snav-item.active{background:rgba(201,168,76,.18);color:var(--gold);}
+  .sidebar-bottom{margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:4px;}
 
-  /* Sidebar icon nav */
-  #sidebar {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: var(--sidebar-w);
-    background: var(--night);
-    border-right: 0.5px solid rgba(255,255,255,.06);
-    padding: 16px 0 12px;
-    flex-shrink: 0;
-    gap: 4px;
-    padding-top: calc(16px + var(--sat-top));
-  }
-  .sidebar-logo {
-    width: 38px; height: 38px; margin-bottom: 16px;
-    border-radius: 10px; overflow: hidden; flex-shrink: 0;
-  }
-  .sidebar-logo img { width: 100%; height: 100%; object-fit: cover; }
-  .snav-item {
-    display: flex; flex-direction: column; align-items: center; gap: 3px;
-    width: 52px; padding: 8px 4px; border-radius: 10px; cursor: pointer;
-    border: none; background: none; color: rgba(255,255,255,.45);
-    font-size: 9px; font-family: var(--body); transition: all .15s; letter-spacing: .03em;
-  }
-  .snav-item .ti { font-size: 22px; }
-  .snav-item:hover { background: rgba(255,255,255,.08); color: rgba(255,255,255,.85); }
-  .snav-item.active { background: rgba(201,168,76,.18); color: var(--gold); }
-  .snav-item.active .ti { color: var(--gold); }
-  .sidebar-bottom { margin-top: auto; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  #left-panel{width:var(--list-w);display:flex;flex-direction:column;
+    border-right:0.5px solid var(--border);background:var(--ivory);overflow:hidden;flex-shrink:0;}
+  .panel{display:none;flex-direction:column;flex:1;min-height:0;overflow:hidden;}
+  .panel.active{display:flex;}
 
-  /* Left panel: list/search/explore/notes */
-  #left-panel {
-    width: var(--list-w);
-    display: flex;
-    flex-direction: column;
-    border-right: 0.5px solid var(--border);
-    background: var(--ivory);
-    overflow: hidden;
-    flex-shrink: 0;
-  }
-  /* All panels share the left column */
-  .panel {
-    display: none;
-    flex-direction: column;
-    flex: 1;
-    min-height: 0;
-    overflow: hidden;
-  }
-  .panel.active { display: flex; }
+  #right-panel{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--ivory);}
 
-  /* Right panel: reader always visible */
-  #right-panel {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    background: var(--ivory);
-  }
+  #wide-reader{display:flex;flex-direction:column;height:100%;overflow:hidden;}
+  #wide-reader-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+  #wide-reader-scroll::-webkit-scrollbar{width:4px;}
+  #wide-reader-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
 
-  /* Reader back button hidden on tablet (no navigation needed) */
-  .reader-back-row { display: none; }
-
-  /* Reader fills right panel */
-  #wide-reader {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    overflow: hidden;
-  }
-  #wide-reader-scroll {
-    flex: 1;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-  #wide-reader-scroll::-webkit-scrollbar { width: 4px; }
-  #wide-reader-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
-  /* Empty reader state */
-  #reader-empty {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    color: var(--muted);
-    padding: 40px;
-    text-align: center;
-  }
-  #reader-empty .ti { font-size: 40px; opacity: .2; }
-  #reader-empty p { font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--muted); line-height: 1.6; }
-  #reader-empty small { font-family: var(--body); font-size: 12px; color: var(--muted); opacity: .7; }
-
-  /* Sticky filter on tablet */
-  .filter-row { top: 0; position: sticky; z-index: 5; }
-  .tab-row { position: sticky; top: 48px; z-index: 4; }
+  #reader-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:12px;color:var(--muted);padding:40px;text-align:center;}
+  #reader-empty .ti{font-size:40px;opacity:.2;}
+  #reader-empty p{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--muted);line-height:1.6;}
+  #reader-empty small{font-family:var(--body);font-size:12px;color:var(--muted);opacity:.7;}
 }
 
 /* ══════════════════════════════════════════════════════
-   DESKTOP LAYOUT  (≥ 1200px)
-   Wider sidebar + wider list + reader with max-width
+   DESKTOP (≥ 1200px)
 ══════════════════════════════════════════════════════ */
-@media (min-width: 1200px) {
-  :root { --sidebar-w: 88px; --list-w: 360px; }
-  .snav-item { font-size: 10px; width: 60px; }
-  .lh-title { font-size: 24px; }
-  .dp { line-height: 1.85; }
-  #wide-reader-scroll { padding: 0 40px 0 0; }
-  .letter-header { padding: 28px 32px 14px; }
-  .lh-divider { margin: 0 32px 20px; }
-  .letter-body { padding: 0 32px 8px; }
-  .trust-panel { margin: 16px 24px 32px; }
+@media(min-width:1200px){
+  :root{--sidebar-w:88px;--list-w:360px;}
+  .snav-item{font-size:10px;width:60px;}
+  .lh-title{font-size:24px;}
+  .dp{line-height:1.85;}
+  .letter-header{padding:28px 32px 14px;}
+  .lh-divider{margin:0 32px 20px;}
+  .letter-body{padding:0 32px 8px;}
+  .trust-panel{margin:16px 24px 32px;}
 }
 </style>
 </head>
 <body>
 
-<div id="loading">
-  <div class="loading-cross">✦</div>
+<div id="loading" role="status" aria-label="Chargement…">
+  <div class="loading-cross" aria-hidden="true">✦</div>
   <div class="loading-text">Chargement du corpus…</div>
 </div>
-<div class="toast" id="toast"></div>
-<div class="text-size-bar" id="text-size-bar">
-  <button class="tsz-btn" onclick="adjustSize(-1.5)">A−</button>
-  <span id="tsz-label">16px</span>
-  <button class="tsz-btn" onclick="adjustSize(+1.5)">A+</button>
-  <button class="tsz-btn" onclick="closeTextBar()" style="border:none;color:var(--muted);padding:4px 6px">✕</button>
+
+<!-- Toast: aria-live so screen readers announce it -->
+<div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+<div class="text-size-bar" id="text-size-bar" role="toolbar" aria-label="Taille du texte">
+  <button class="tsz-btn" onclick="adjustSize(-1.5)" aria-label="Réduire">A−</button>
+  <span id="tsz-label" aria-live="polite">16px</span>
+  <button class="tsz-btn" onclick="adjustSize(+1.5)" aria-label="Agrandir">A+</button>
+  <button class="tsz-btn" onclick="closeTextBar()" aria-label="Fermer" style="border:none;color:var(--muted)">✕</button>
 </div>
 
 <div id="app">
 
-  <!-- ═══ TABLET/DESKTOP SIDEBAR ═══ -->
+  <!-- ═══ SIDEBAR (tablet/desktop) ═══ -->
   <nav id="sidebar" aria-label="Navigation principale" style="display:none">
-    <div class="sidebar-logo"><img src="icons/icon-192.png" alt="Luisa"></div>
+    <div class="sidebar-logo"><img src="icons/icon-192.png" alt="Luisa Piccarreta"></div>
     <button class="snav-item active" onclick="switchPanel('p-home')" id="snav-home" aria-label="Accueil"><i class="ti ti-home" aria-hidden="true"></i>Accueil</button>
     <button class="snav-item" onclick="switchPanel('p-list')" id="snav-list" aria-label="Corpus"><i class="ti ti-books" aria-hidden="true"></i>Corpus</button>
     <button class="snav-item" onclick="switchPanel('p-search')" id="snav-search" aria-label="Recherche"><i class="ti ti-search" aria-hidden="true"></i>Recherche</button>
     <button class="snav-item" onclick="switchPanel('p-explore')" id="snav-explore" aria-label="Explorer"><i class="ti ti-layout-grid" aria-hidden="true"></i>Explorer</button>
     <button class="snav-item" onclick="switchPanel('p-notes')" id="snav-notes" aria-label="Notes"><i class="ti ti-bookmark" aria-hidden="true"></i>Notes</button>
     <div class="sidebar-bottom">
-      <button class="snav-item" onclick="toggleDark()" aria-label="Mode sombre"><i class="ti ti-moon" aria-hidden="true"></i>Mode</button>
+      <button class="snav-item" onclick="cycleTheme()" id="snav-theme" aria-label="Thème"><i class="ti ti-moon" aria-hidden="true"></i>Thème</button>
     </div>
   </nav>
 
-  <!-- ═══ LEFT PANEL (shared by all views on tablet+) ═══ -->
+  <!-- ═══ LEFT PANEL ═══ -->
   <div id="left-panel">
 
-    <!-- HOME panel -->
+    <!-- HOME -->
     <div class="panel active" id="p-home">
       <div class="top-bar">
         <span class="title">Lettres de Luisa</span>
-        <button class="btn-icon" onclick="toggleDark()" aria-label="Mode sombre" style="display:block" id="home-dark-btn"><i class="ti ti-moon" aria-hidden="true"></i></button>
+        <button class="btn-icon" onclick="cycleTheme()" aria-label="Thème" id="home-theme-btn"><i class="ti ti-moon" aria-hidden="true"></i></button>
       </div>
       <div class="scroll" id="home-scroll">
-        <div class="install-banner" id="install-banner">
-          <p>Installez l'app pour un accès hors-ligne complet.</p>
+        <div class="install-banner" id="install-banner" role="banner">
+          <p>Installez l'app pour un accès hors-ligne.</p>
           <button class="install-btn" onclick="doInstall()">Installer</button>
           <button class="install-close" onclick="dismissInstall()" aria-label="Fermer">✕</button>
         </div>
-        <div class="ldj-card" id="ldj-card" onclick="openLetterFromHome()">
-          <div class="ldj-eyebrow"><i class="ti ti-sun" aria-hidden="true" style="font-size:11px"></i> Lettre du jour</div>
-          <div class="ldj-num" id="ldj-id">LP.LETTER.034</div>
-          <div class="ldj-title" id="ldj-title">…</div>
-          <div class="ldj-excerpt" id="ldj-excerpt">…</div>
-          <div class="ldj-dest" id="ldj-dest">…</div>
-          <button class="ldj-cta"><i class="ti ti-book-open" aria-hidden="true" style="font-size:12px"></i> Lire la lettre</button>
-        </div>
+        <button class="ldj-card" id="ldj-card" aria-label="Ouvrir la lettre du jour">
+          <div class="ldj-eyebrow" aria-hidden="true"><i class="ti ti-sun"></i> Lettre du jour</div>
+          <div class="ldj-num" id="ldj-id"></div>
+          <div class="ldj-title" id="ldj-title"></div>
+          <div class="ldj-excerpt" id="ldj-excerpt"></div>
+          <div class="ldj-dest" id="ldj-dest"></div>
+          <span class="ldj-cta" aria-hidden="true"><i class="ti ti-book-open" style="font-size:12px"></i> Lire la lettre</span>
+        </button>
         <div class="section-head">Je cherche une lettre pour…</div>
-        <div class="situations" id="situ-grid"></div>
+        <div class="situations" id="situ-grid" role="list"></div>
         <div class="section-head" id="continue-head" style="display:none">Continuer la lecture</div>
-        <div class="continue-card" id="continue-card" style="display:none" onclick="resumeReading()">
-          <div class="cont-thumb" id="cont-num"></div>
+        <button class="continue-card" id="continue-card" style="display:none" onclick="resumeReading()">
+          <div class="cont-thumb" id="cont-num" aria-hidden="true"></div>
           <div class="cont-info">
             <div class="cont-title" id="cont-title"></div>
             <div class="cont-sub" id="cont-sub"></div>
             <div class="cont-progress"><div class="cont-bar" id="cont-bar"></div></div>
           </div>
           <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:16px;color:var(--muted)"></i>
-        </div>
+        </button>
         <div style="height:12px"></div>
       </div>
     </div>
 
-    <!-- LIST panel -->
+    <!-- LIST -->
     <div class="panel" id="p-list">
       <div class="top-bar">
         <span class="title" id="list-title">136 Lettres</span>
-        <button class="btn-icon" onclick="resetFilter()" aria-label="Réinitialiser"><i class="ti ti-filter-off" aria-hidden="true"></i></button>
+        <button class="btn-icon" onclick="resetFilter()" aria-label="Réinitialiser le filtre"><i class="ti ti-filter-off" aria-hidden="true"></i></button>
       </div>
-      <div class="filter-row" id="filter-row"></div>
-      <div class="scroll" id="letter-list"></div>
+      <div class="filter-row" id="filter-row" role="toolbar" aria-label="Filtres"></div>
+      <div class="scroll" id="letter-list" role="list"></div>
     </div>
 
-    <!-- SEARCH panel -->
+    <!-- SEARCH -->
     <div class="panel" id="p-search">
       <div class="top-bar"><span class="title">Recherche</span></div>
-      <div class="search-bar">
+      <div class="search-bar" role="search">
         <i class="ti ti-search" aria-hidden="true"></i>
-        <input type="text" id="search-input" placeholder="Mots-clés, thème, destinataire…" oninput="doSearch()" autocomplete="off" spellcheck="false">
-        <button class="clear-btn" onclick="clearSearch()" aria-label="Effacer"><i class="ti ti-x" aria-hidden="true"></i></button>
+        <input type="search" id="search-input" placeholder="Mots-clés, thème, destinataire…"
+          oninput="doSearch()" autocomplete="off" spellcheck="false" aria-label="Rechercher dans les lettres">
+        <button class="clear-btn" onclick="clearSearch()" aria-label="Effacer la recherche"><i class="ti ti-x" aria-hidden="true"></i></button>
       </div>
       <div id="search-hint" style="padding:12px 16px;font-size:13px;color:var(--muted);font-family:var(--body);line-height:1.65">
         <div>Recherchez par mots-clés, thème, destinataire ou numéro.</div>
         <div style="margin-top:8px">
-          <span class="search-suggestion" onclick="searchFor('paix')">paix</span>
-          <span class="search-suggestion" onclick="searchFor('abandon')">abandon</span>
-          <span class="search-suggestion" onclick="searchFor('Fiat')">Fiat</span>
-          <span class="search-suggestion" onclick="searchFor('croix')">croix</span>
-          <span class="search-suggestion" onclick="searchFor('prêtres')">prêtres</span>
-          <span class="search-suggestion" onclick="searchFor('deuil')">deuil</span>
-          <span class="search-suggestion" onclick="searchFor('Cecilia')">Cecilia</span>
+          <button class="search-suggestion" onclick="searchFor('paix')">paix</button>
+          <button class="search-suggestion" onclick="searchFor('abandon')">abandon</button>
+          <button class="search-suggestion" onclick="searchFor('Fiat')">Fiat</button>
+          <button class="search-suggestion" onclick="searchFor('croix')">croix</button>
+          <button class="search-suggestion" onclick="searchFor('prêtres')">prêtres</button>
+          <button class="search-suggestion" onclick="searchFor('deuil')">deuil</button>
+          <button class="search-suggestion" onclick="searchFor('Cecilia')">Cecilia</button>
         </div>
       </div>
-      <div class="scroll" id="search-results"></div>
+      <div class="scroll" id="search-results" role="list" aria-label="Résultats de recherche"></div>
     </div>
 
-    <!-- EXPLORE panel -->
+    <!-- EXPLORE -->
     <div class="panel" id="p-explore">
       <div class="top-bar"><span class="title">Explorer</span></div>
       <div class="scroll">
         <div class="explore-section">
           <div class="exp-title">Par situation</div>
-          <div class="exp-grid" id="exp-situ-grid"></div>
+          <div class="exp-grid" id="exp-situ-grid" role="list"></div>
         </div>
         <div class="explore-section">
           <div class="exp-title">Par destinataire</div>
-          <div class="dest-list" id="dest-list"></div>
+          <div class="dest-list" id="dest-list" role="list"></div>
         </div>
         <div class="explore-section">
           <div class="exp-title">Chronologie</div>
-          <div class="chron-list" id="chron-list"></div>
+          <div class="chron-list" id="chron-list" role="list"></div>
         </div>
         <div style="height:16px"></div>
       </div>
     </div>
 
-    <!-- NOTES panel -->
+    <!-- NOTES -->
     <div class="panel" id="p-notes">
       <div class="top-bar"><span class="title">Mon espace</span></div>
-      <div class="tab-row">
-        <button class="tab active" onclick="setTab(this,'t-favs')">Favoris</button>
-        <button class="tab" onclick="setTab(this,'t-notes')">Notes</button>
-        <button class="tab" onclick="setTab(this,'t-relire')">À relire</button>
+      <div class="tab-row" role="tablist">
+        <button class="tab active" onclick="setTab(this,'t-favs')" role="tab" aria-selected="true">Favoris</button>
+        <button class="tab" onclick="setTab(this,'t-notes')" role="tab" aria-selected="false">Notes</button>
+        <button class="tab" onclick="setTab(this,'t-relire')" role="tab" aria-selected="false">À relire</button>
       </div>
       <div class="scroll" id="notes-scroll">
-        <div id="t-favs"></div>
-        <div id="t-notes" style="display:none"></div>
-        <div id="t-relire" style="display:none"></div>
+        <div id="t-favs" role="tabpanel"></div>
+        <div id="t-notes" style="display:none" role="tabpanel"></div>
+        <div id="t-relire" style="display:none" role="tabpanel"></div>
       </div>
     </div>
 
   </div><!-- #left-panel -->
 
-  <!-- ═══ RIGHT PANEL — persistent reader on tablet/desktop ═══ -->
+  <!-- ═══ RIGHT PANEL (tablet/desktop reader) ═══ -->
   <div id="right-panel" style="display:none">
     <div id="reader-empty">
       <i class="ti ti-book-open" aria-hidden="true"></i>
       <p>Sélectionnez une lettre<br>pour commencer la lecture</p>
       <small>136 lettres de Luisa Piccarreta</small>
     </div>
-    <div id="wide-reader" style="display:none;flex-direction:column;height:100%;overflow:hidden">
+    <div id="wide-reader" style="display:none;flex-direction:column;height:100%;overflow:hidden" role="main" aria-label="Lecteur">
+      <div class="read-progress" id="wr-progress"></div>
       <div class="reader-top">
-        <div style="display:flex;align-items:center;gap:6px">
-          <div style="font-size:10px;color:var(--gold);font-family:var(--body);letter-spacing:.06em" id="wr-num"></div>
-        </div>
+        <div style="font-size:10px;color:var(--gold);font-family:var(--body);letter-spacing:.06em" id="wr-num" aria-hidden="true"></div>
         <div class="reader-counter">
-          <button class="nav-btn" id="wr-btn-prev" onclick="prevLetter()" aria-label="Précédente"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
-          <span id="wr-pos" style="min-width:50px;text-align:center;font-size:12px;color:var(--muted);font-family:var(--body)">— / 136</span>
-          <button class="nav-btn" id="wr-btn-next" onclick="nextLetter()" aria-label="Suivante"><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
+          <button class="nav-btn" id="wr-btn-prev" onclick="prevLetter()" aria-label="Lettre précédente"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
+          <span id="wr-pos" style="min-width:50px;text-align:center;font-size:12px;color:var(--muted);font-family:var(--body)" aria-live="polite">— / 136</span>
+          <button class="nav-btn" id="wr-btn-next" onclick="nextLetter()" aria-label="Lettre suivante"><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
         </div>
       </div>
-      <div id="wide-reader-scroll" class="scroll">
+      <div id="wide-reader-scroll" class="scroll" onscroll="updateReadProgress('wr')">
         <div class="letter-header">
           <div class="lh-num" id="wr-id"></div>
           <div class="lh-title" id="wr-title"></div>
@@ -623,45 +546,48 @@ body {
         </div>
         <div class="lh-divider"></div>
         <div class="letter-body" id="wr-body"></div>
-        <div class="trust-panel" id="wr-trust">
-          <div class="trust-head" onclick="toggleTrust('wr-trust')" role="button">
+        <button class="trust-panel" id="wr-trust" onclick="toggleTrust('wr-trust')"
+          style="display:block;width:100%;padding:0;background:none;border:0.5px solid var(--border);border-radius:10px;margin:16px 16px 24px;overflow:hidden;cursor:default">
+          <div class="trust-head" role="button" aria-expanded="false" id="wr-trust-head" tabindex="0"
+            onkeydown="if(event.key==='Enter'||event.key===' '){toggleTrust('wr-trust');event.preventDefault()}">
             <span><i class="ti ti-shield-check" aria-hidden="true"></i> Source et validation</span>
             <i class="ti ti-chevron-down trust-chevron" aria-hidden="true"></i>
           </div>
           <div class="trust-body" id="wr-trust-body"></div>
-        </div>
+        </button>
         <div style="height:24px"></div>
       </div>
-      <div class="action-bar">
-        <button class="action-btn" id="wr-fav-btn" onclick="toggleFav()" aria-label="Favori"><i class="ti ti-heart" aria-hidden="true"></i><span>Favori</span></button>
-        <button class="action-btn" onclick="addNote()" aria-label="Note"><i class="ti ti-pencil" aria-hidden="true"></i><span>Note</span></button>
+      <div class="action-bar" role="toolbar" aria-label="Actions">
+        <button class="action-btn" id="wr-fav-btn" onclick="toggleFav()" aria-label="Ajouter aux favoris"><i class="ti ti-heart" aria-hidden="true"></i><span>Favori</span></button>
+        <button class="action-btn" id="wr-relire-btn" onclick="toggleRelire()" aria-label="Marquer à relire"><i class="ti ti-bookmark" aria-hidden="true"></i><span>Relire</span></button>
+        <button class="action-btn" onclick="addNote()" aria-label="Ajouter une note"><i class="ti ti-pencil" aria-hidden="true"></i><span>Note</span></button>
         <button class="action-btn" onclick="shareLetter()" aria-label="Partager"><i class="ti ti-share" aria-hidden="true"></i><span>Partager</span></button>
-        <button class="action-btn" onclick="toggleTrust('wr-trust')" aria-label="Source"><i class="ti ti-shield-check" aria-hidden="true"></i><span>Source</span></button>
-        <button class="action-btn" onclick="openTextBar()" aria-label="Texte"><i class="ti ti-typography" aria-hidden="true"></i><span>Texte</span></button>
+        <button class="action-btn" onclick="openTextBar()" aria-label="Taille du texte"><i class="ti ti-typography" aria-hidden="true"></i><span>Texte</span></button>
       </div>
     </div>
   </div>
 
-  <!-- ═══ PHONE BOTTOM NAV (mobile only) ═══ -->
+  <!-- ═══ PHONE BOTTOM NAV ═══ -->
   <nav class="phone-nav" aria-label="Navigation principale">
-    <button class="pnav-item active" onclick="phoneNav('p-home','home')" id="pnav-home"><i class="ti ti-home" aria-hidden="true"></i><span>Accueil</span></button>
-    <button class="pnav-item" onclick="phoneNav('p-list','list')" id="pnav-list"><i class="ti ti-books" aria-hidden="true"></i><span>Corpus</span></button>
-    <button class="pnav-item" onclick="phoneNav('p-search','search')" id="pnav-search"><i class="ti ti-search" aria-hidden="true"></i><span>Recherche</span></button>
-    <button class="pnav-item" onclick="phoneNav('p-notes','notes')" id="pnav-notes"><i class="ti ti-bookmark" aria-hidden="true"></i><span>Notes</span></button>
-    <button class="pnav-item" onclick="phoneNav('p-explore','explore')" id="pnav-explore"><i class="ti ti-layout-grid" aria-hidden="true"></i><span>Explorer</span></button>
+    <button class="pnav-item active" onclick="phoneNav('p-home','home')" id="pnav-home" aria-label="Accueil" aria-current="page"><i class="ti ti-home" aria-hidden="true"></i><span>Accueil</span></button>
+    <button class="pnav-item" onclick="phoneNav('p-list','list')" id="pnav-list" aria-label="Corpus"><i class="ti ti-books" aria-hidden="true"></i><span>Corpus</span></button>
+    <button class="pnav-item" onclick="phoneNav('p-search','search')" id="pnav-search" aria-label="Recherche"><i class="ti ti-search" aria-hidden="true"></i><span>Recherche</span></button>
+    <button class="pnav-item" onclick="phoneNav('p-notes','notes')" id="pnav-notes" aria-label="Notes"><i class="ti ti-bookmark" aria-hidden="true"></i><span>Notes</span></button>
+    <button class="pnav-item" onclick="phoneNav('p-explore','explore')" id="pnav-explore" aria-label="Explorer"><i class="ti ti-layout-grid" aria-hidden="true"></i><span>Explorer</span></button>
   </nav>
 
-  <!-- ═══ PHONE READER (mobile only, full-screen overlay) ═══ -->
-  <div id="phone-reader">
+  <!-- ═══ PHONE READER (full-screen overlay) ═══ -->
+  <div id="phone-reader" role="main" aria-label="Lecteur">
+    <div class="read-progress" id="pr-progress"></div>
     <div class="reader-top">
-      <button class="btn-back" onclick="closePhoneReader()" aria-label="Retour"><i class="ti ti-arrow-left" aria-hidden="true" style="font-size:17px"></i> Retour</button>
+      <button class="btn-back" onclick="closePhoneReader()" aria-label="Retour à la liste"><i class="ti ti-arrow-left" aria-hidden="true" style="font-size:17px"></i> Retour</button>
       <div class="reader-counter">
-        <button class="nav-btn" id="pr-btn-prev" onclick="prevLetter()" aria-label="Précédente"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
-        <span id="pr-pos" style="min-width:50px;text-align:center">— / 136</span>
-        <button class="nav-btn" id="pr-btn-next" onclick="nextLetter()" aria-label="Suivante"><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
+        <button class="nav-btn" id="pr-btn-prev" onclick="prevLetter()" aria-label="Lettre précédente"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
+        <span id="pr-pos" style="min-width:50px;text-align:center" aria-live="polite">— / 136</span>
+        <button class="nav-btn" id="pr-btn-next" onclick="nextLetter()" aria-label="Lettre suivante"><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
       </div>
     </div>
-    <div class="scroll" id="phone-reader-scroll" style="flex:1">
+    <div class="scroll" id="phone-reader-scroll" style="flex:1" onscroll="updateReadProgress('pr')">
       <div class="letter-header">
         <div class="lh-num" id="pr-id"></div>
         <div class="lh-title" id="pr-title"></div>
@@ -670,20 +596,22 @@ body {
       </div>
       <div class="lh-divider"></div>
       <div class="letter-body" id="pr-body"></div>
-      <div class="trust-panel" id="pr-trust" style="margin:16px 12px 24px">
-        <div class="trust-head" onclick="toggleTrust('pr-trust')" role="button">
+      <button class="trust-panel" id="pr-trust" onclick="toggleTrust('pr-trust')"
+        style="display:block;width:100%;padding:0;background:none;border:0.5px solid var(--border);border-radius:10px;margin:16px 12px 24px;overflow:hidden;cursor:default">
+        <div class="trust-head" role="button" aria-expanded="false" id="pr-trust-head" tabindex="0"
+          onkeydown="if(event.key==='Enter'||event.key===' '){toggleTrust('pr-trust');event.preventDefault()}">
           <span><i class="ti ti-shield-check" aria-hidden="true"></i> Source et validation</span>
           <i class="ti ti-chevron-down trust-chevron" aria-hidden="true"></i>
         </div>
         <div class="trust-body" id="pr-trust-body"></div>
-      </div>
+      </button>
     </div>
-    <div class="action-bar">
-      <button class="action-btn" id="pr-fav-btn" onclick="toggleFav()" aria-label="Favori"><i class="ti ti-heart" aria-hidden="true"></i><span>Favori</span></button>
-      <button class="action-btn" onclick="addNote()" aria-label="Note"><i class="ti ti-pencil" aria-hidden="true"></i><span>Note</span></button>
+    <div class="action-bar" role="toolbar" aria-label="Actions">
+      <button class="action-btn" id="pr-fav-btn" onclick="toggleFav()" aria-label="Ajouter aux favoris"><i class="ti ti-heart" aria-hidden="true"></i><span>Favori</span></button>
+      <button class="action-btn" id="pr-relire-btn" onclick="toggleRelire()" aria-label="Marquer à relire"><i class="ti ti-bookmark" aria-hidden="true"></i><span>Relire</span></button>
+      <button class="action-btn" onclick="addNote()" aria-label="Ajouter une note"><i class="ti ti-pencil" aria-hidden="true"></i><span>Note</span></button>
       <button class="action-btn" onclick="shareLetter()" aria-label="Partager"><i class="ti ti-share" aria-hidden="true"></i><span>Partager</span></button>
-      <button class="action-btn" onclick="toggleTrust('pr-trust')" aria-label="Source"><i class="ti ti-shield-check" aria-hidden="true"></i><span>Source</span></button>
-      <button class="action-btn" onclick="openTextBar()" aria-label="Texte"><i class="ti ti-typography" aria-hidden="true"></i><span>Texte</span></button>
+      <button class="action-btn" onclick="openTextBar()" aria-label="Taille du texte"><i class="ti ti-typography" aria-hidden="true"></i><span>Texte</span></button>
     </div>
   </div>
 
@@ -692,7 +620,36 @@ body {
 <script>
 'use strict';
 
-/* ════ STATE ════ */
+/* ════════════════════════════════════════
+   CONSTANTS
+════════════════════════════════════════ */
+const EXCL_LDJ = new Set([
+  'signature','signature_or_postscript','signature_or_date','closing_signature_or_date',
+  'opening_formula','initial_formula','devotional_opening','devotional_header','salutation',
+  'before_closing_or_signature'
+]);
+const SIG_REASONS = new Set([
+  'signature','signature_or_postscript','signature_or_date','closing_signature_or_date'
+]);
+const SIG_REGEX = /petite fille|Luisa Piccarreta|Votre.*dévou|Corato,\s*\d/i;
+const SAL_REASONS = new Set([
+  'salutation','initial_formula','devotional_opening','opening_formula','devotional_header'
+]);
+
+const SITUATIONS = [
+  {label:'Je manque de paix',          topic:'Paix',                         icon:'ti-wave-sine',       count:12},
+  {label:'Je suis découragé',           topic:'Confiance',                    icon:'ti-shield-heart',    count:10},
+  {label:'Je souffre',                  topic:'Maladie et souffrance',        icon:'ti-heart-handshake', count:8 },
+  {label:'Vivre dans la Divine Volonté',topic:'Vivre dans la Divine Volonté', icon:'ti-star',            count:8 },
+  {label:'Je prie pour un prêtre',      topic:'Prêtres',                      icon:'ti-candle',          count:4 },
+  {label:'Je suis en deuil',            topic:'Deuil',                        icon:'ti-flower',          count:3 },
+  {label:'Faire connaître les écrits',  topic:'Propagation des écrits',       icon:'ti-send',            count:14},
+  {label:'Vivre dans le Fiat',          topic:'Divine Volonté',               icon:'ti-arrow-forward',   count:17},
+];
+
+/* ════════════════════════════════════════
+   STATE
+════════════════════════════════════════ */
 let CORPUS = [], TOPICS_INDEX = {}, RECIPIENTS_INDEX = {};
 let currentLetterIdx = -1;
 let currentFilter = 'all';
@@ -700,506 +657,798 @@ let readerSize = 16;
 let deferredInstall = null;
 let prevPhonePanel = 'p-home';
 
-const SITUATIONS = [
-  { label:'Je manque de paix',           topic:'Paix',                        icon:'ti-wave-sine',       count:12 },
-  { label:'Je suis découragé',            topic:'Confiance',                   icon:'ti-shield-heart',    count:10 },
-  { label:'Je souffre',                   topic:'Maladie et souffrance',       icon:'ti-heart-handshake', count:8  },
-  { label:'Vivre dans la Divine Volonté', topic:'Vivre dans la Divine Volonté',icon:'ti-star',            count:8  },
-  { label:'Je prie pour un prêtre',       topic:'Prêtres',                     icon:'ti-candle',          count:4  },
-  { label:'Je suis en deuil',             topic:'Deuil',                       icon:'ti-flower',          count:3  },
-  { label:'Faire connaître les écrits',   topic:'Propagation des écrits',      icon:'ti-send',            count:14 },
-  { label:'Vivre dans le Fiat',           topic:'Divine Volonté',              icon:'ti-arrow-forward',   count:17 },
-];
-
-/* ════ PERSISTENCE ════ */
 function loadState() {
   try {
     return {
-      favs: new Set(JSON.parse(localStorage.getItem('lp_favs')||'[]')),
-      relire: new Set(JSON.parse(localStorage.getItem('lp_relire')||'[]')),
-      notes: JSON.parse(localStorage.getItem('lp_notes')||'[]'),
-      lastRead: JSON.parse(localStorage.getItem('lp_last')||'null'),
-      readerSize: parseFloat(localStorage.getItem('lp_size')||'16'),
+      favs:   new Set(JSON.parse(localStorage.getItem('lp_favs')  || '[]')),
+      relire: new Set(JSON.parse(localStorage.getItem('lp_relire')|| '[]')),
+      notes:  JSON.parse(localStorage.getItem('lp_notes') || '[]'),
+      lastRead: JSON.parse(localStorage.getItem('lp_last') || 'null'),
+      readerSize: parseFloat(localStorage.getItem('lp_size') || '16'),
+      theme: localStorage.getItem('lp_theme') || 'system',
     };
-  } catch(e) { return {favs:new Set(),relire:new Set(),notes:[],lastRead:null,readerSize:16}; }
+  } catch { return {favs:new Set(),relire:new Set(),notes:[],lastRead:null,readerSize:16,theme:'system'}; }
 }
 function saveState() {
   try {
-    localStorage.setItem('lp_favs', JSON.stringify([...STATE.favs]));
+    localStorage.setItem('lp_favs',   JSON.stringify([...STATE.favs]));
     localStorage.setItem('lp_relire', JSON.stringify([...STATE.relire]));
-    localStorage.setItem('lp_notes', JSON.stringify(STATE.notes));
+    localStorage.setItem('lp_notes',  JSON.stringify(STATE.notes));
     if (STATE.lastRead) localStorage.setItem('lp_last', JSON.stringify(STATE.lastRead));
-    localStorage.setItem('lp_size', String(readerSize));
-  } catch(e) {}
+    localStorage.setItem('lp_size',   String(readerSize));
+    localStorage.setItem('lp_theme',  STATE.theme);
+  } catch {}
 }
 const STATE = loadState();
 readerSize = STATE.readerSize;
 
-/* ════ RESPONSIVE DETECTION ════ */
+/* ════════════════════════════════════════
+   THEME — P0 fix: real CSS data-theme attr
+════════════════════════════════════════ */
+const THEMES = ['system','light','dark'];
+const THEME_ICONS = {system:'ti-circle-half-2', light:'ti-sun', dark:'ti-moon'};
+function applyTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  STATE.theme = t;
+  const icon = THEME_ICONS[t] || 'ti-moon';
+  ['snav-theme','home-theme-btn'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.querySelector('.ti').className = `ti ${icon}`;
+  });
+  saveState();
+}
+function cycleTheme() {
+  const next = THEMES[(THEMES.indexOf(STATE.theme) + 1) % THEMES.length];
+  applyTheme(next);
+  showToast({system:'Thème système',light:'Mode clair',dark:'Mode sombre'}[next]);
+}
+applyTheme(STATE.theme);
+
+/* ════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════ */
 function isWide() { return window.innerWidth >= 768; }
 
-/* ════ CORPUS ════ */
+/* ════════════════════════════════════════
+   CORPUS LOAD — P0 fix: clear error state
+════════════════════════════════════════ */
 async function loadCorpus() {
   try {
     const r = await fetch('./corpus.json');
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
     const d = await r.json();
-    CORPUS = d.letters || [];
+    if (d.error || !d.letters?.length) throw new Error('empty_corpus');
+    CORPUS = d.letters;
     TOPICS_INDEX = d.topics_index || {};
     RECIPIENTS_INDEX = d.recipients_index || {};
-  } catch(e) { CORPUS = []; }
+  } catch (e) {
+    console.error('[Luisa] Corpus load failed:', e);
+    showFatalError();
+    return;
+  }
   initApp();
 }
 
-/* ════ INIT ════ */
-function initApp() {
-  setTimeout(() => { const l=document.getElementById('loading'); l.classList.add('hide'); setTimeout(()=>l.remove(),350); }, 400);
+function showFatalError() {
+  const ld = document.getElementById('loading');
+  ld.classList.add('hide');
+  setTimeout(() => ld.remove(), 350);
+  // Show error in active panel
+  const target = document.getElementById('home-scroll') || document.body;
+  target.innerHTML = `<div class="error-state">
+    <i class="ti ti-wifi-off" aria-hidden="true"></i>
+    <p>Le corpus des lettres n'a pas pu être chargé.<br>
+    Vérifiez votre connexion ou rechargez l'application.</p>
+    <button onclick="location.reload()">Recharger</button>
+  </div>`;
+}
 
-  // Show correct layout
+/* ════════════════════════════════════════
+   INIT
+════════════════════════════════════════ */
+function initApp() {
+  const ld = document.getElementById('loading');
+  ld.classList.add('hide');
+  setTimeout(() => ld.remove(), 350);
+
   if (isWide()) {
     document.getElementById('sidebar').style.display = 'flex';
     document.getElementById('right-panel').style.display = 'flex';
-    document.getElementById('home-dark-btn').style.display = 'none';
+    document.getElementById('home-theme-btn').style.display = 'none';
   }
+  window.addEventListener('resize', onResize);
 
-  // Lettre du jour
-  if (CORPUS.length) {
-    const doy = Math.floor(Date.now()/86400000) % CORPUS.length;
-    const ldj = CORPUS[doy];
-    document.getElementById('ldj-id').textContent = ldj.letter_id;
-    document.getElementById('ldj-title').textContent = ldj.title_fr;
-    document.getElementById('ldj-dest').textContent = ldj.recipient_display_fr;
-    const fb = (ldj.display_paragraphs||[]).find(d=>d.split_reason==='body'||d.split_reason==='natural_reading_split');
-    if (fb) document.getElementById('ldj-excerpt').textContent = '« ' + fb.text_fr.slice(0,160) + (fb.text_fr.length>160?'…':'') + ' »';
-    document.getElementById('ldj-card').dataset.n = ldj.canonical_number;
+  // Lettre du jour — P0 fix: robust excerpt selection
+  const doy = Math.floor(Date.now() / 86400000) % CORPUS.length;
+  const ldj = CORPUS[doy];
+  document.getElementById('ldj-id').textContent    = ldj.letter_id;
+  document.getElementById('ldj-title').textContent = ldj.title_fr;
+  document.getElementById('ldj-dest').textContent  = ldj.recipient_display_fr;
+  document.getElementById('ldj-card').onclick = openLetterFromHome;
+
+  const dps = ldj.display_paragraphs || [];
+  const excerptDp =
+    dps.find(dp => dp.text_fr && !dp.is_signature && !EXCL_LDJ.has(dp.split_reason)) ||
+    dps.find(dp => dp.text_fr && !dp.is_signature) ||
+    dps.find(dp => dp.text_fr) ||
+    null;
+  if (excerptDp) {
+    const raw = excerptDp.text_fr;
+    document.getElementById('ldj-excerpt').textContent =
+      '« ' + (raw.length > 180 ? raw.slice(0, 180) + '…' : raw) + ' »';
   }
+  document.getElementById('ldj-card').dataset.n = ldj.canonical_number;
 
-  // Situations grid
+  // Situations
   document.getElementById('situ-grid').innerHTML = SITUATIONS.map(s => {
     const c = getTopicLetters(s.topic).length || s.count;
-    return `<div class="situ-card" onclick="filterByTopic('${esc(s.topic)}')"><span class="situ-icon"><i class="ti ${s.icon}" aria-hidden="true"></i></span><div class="situ-label">${esc(s.label)}</div><div class="situ-count">${c} lettre${c>1?'s':''}</div></div>`;
+    return `<button class="situ-card" onclick="filterByTopic(${JSON.stringify(s.topic)})" role="listitem">
+      <span class="situ-icon" aria-hidden="true"><i class="ti ${s.icon}"></i></span>
+      <div class="situ-label">${esc(s.label)}</div>
+      <div class="situ-count">${c} lettre${c>1?'s':''}</div>
+    </button>`;
   }).join('');
 
-  // Continue reading
   updateContinueCard();
   buildFilterChips();
   buildExplore();
   renderList();
 
-  // URL param
   const sp = new URLSearchParams(location.search).get('screen');
-  if (sp === 'search') { isWide() ? switchPanel('p-search') : phoneNav('p-search','search'); }
+  if (sp) { isWide() ? switchPanel('p-'+sp) : phoneNav('p-'+sp, sp); }
 
-  // Install prompt
   window.addEventListener('beforeinstallprompt', e => {
     e.preventDefault(); deferredInstall = e;
-    if (!localStorage.getItem('lp_install_dismissed')) document.getElementById('install-banner').classList.add('show');
+    if (!localStorage.getItem('lp_install_dismissed'))
+      document.getElementById('install-banner').classList.add('show');
   });
+}
 
-  // Resize: re-apply layout
-  window.addEventListener('resize', () => {
-    const wide = isWide();
-    document.getElementById('sidebar').style.display = wide ? 'flex' : 'none';
-    document.getElementById('right-panel').style.display = wide ? 'flex' : 'none';
-    document.getElementById('home-dark-btn').style.display = wide ? 'none' : 'block';
-  });
+function onResize() {
+  const wide = isWide();
+  document.getElementById('sidebar').style.display = wide ? 'flex' : 'none';
+  document.getElementById('right-panel').style.display = wide ? 'flex' : 'none';
+  document.getElementById('home-theme-btn').style.display = wide ? 'none' : 'block';
 }
 
 function getTopicLetters(topic) {
-  return CORPUS.filter(l => (l.topics_fr||[]).some(t=>t.toLowerCase().includes(topic.toLowerCase())));
+  return CORPUS.filter(l => (l.topics_fr||[]).some(t => t.toLowerCase().includes(topic.toLowerCase())));
 }
 
+/* ════════════════════════════════════════
+   CONTINUE CARD
+════════════════════════════════════════ */
 function updateContinueCard() {
   const last = STATE.lastRead;
   if (!last || !CORPUS.length) return;
-  const l = CORPUS.find(x=>x.canonical_number===last.n);
+  const l = CORPUS.find(x => x.canonical_number === last.n);
   if (!l) return;
-  document.getElementById('continue-head').style.display='';
-  document.getElementById('continue-card').style.display='flex';
-  document.getElementById('cont-num').textContent=l.canonical_number;
-  document.getElementById('cont-title').textContent=l.title_fr;
-  document.getElementById('cont-sub').textContent=l.recipient_display_fr;
-  document.getElementById('cont-bar').style.width=Math.max(5,Math.min(100,last.scroll||20))+'%';
+  document.getElementById('continue-head').style.display = '';
+  document.getElementById('continue-card').style.display = 'flex';
+  document.getElementById('cont-num').textContent   = l.canonical_number;
+  document.getElementById('cont-title').textContent = l.title_fr;
+  document.getElementById('cont-sub').textContent   = l.recipient_display_fr;
+  document.getElementById('cont-bar').style.width   = Math.max(5, Math.min(100, last.scroll||5)) + '%';
 }
+function resumeReading() { if (STATE.lastRead) openLetter(STATE.lastRead.n); }
 
-/* ════ PANEL SWITCHING ════ */
-// Tablet/desktop: switch left panel
+/* ════════════════════════════════════════
+   NAVIGATION
+════════════════════════════════════════ */
 function switchPanel(id) {
-  document.querySelectorAll('#left-panel .panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  // Update sidebar highlights
-  const map = {'p-home':'home','p-list':'list','p-search':'search','p-explore':'explore','p-notes':'notes'};
-  document.querySelectorAll('.snav-item').forEach(b=>b.classList.remove('active'));
-  const key = map[id];
-  if (key) { const el=document.getElementById('snav-'+key); if(el) el.classList.add('active'); }
-  if (id==='p-list') renderList();
-  if (id==='p-notes') renderNotes();
+  document.querySelectorAll('#left-panel .panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(id)?.classList.add('active');
+  const MAP = {
+    'p-home':'home','p-list':'list','p-search':'search',
+    'p-explore':'explore','p-notes':'notes'
+  };
+  document.querySelectorAll('.snav-item').forEach(b => b.classList.remove('active'));
+  const key = MAP[id];
+  if (key) document.getElementById('snav-'+key)?.classList.add('active');
+  if (id==='p-list')    renderList();
+  if (id==='p-notes')   renderNotes();
   if (id==='p-explore') buildExplore();
-  if (id==='p-search') setTimeout(()=>document.getElementById('search-input').focus(),150);
+  if (id==='p-search')  setTimeout(() => document.getElementById('search-input').focus(), 150);
 }
 
-// Phone: switch bottom panel
 function phoneNav(panelId, navKey) {
-  // Close reader if open
   document.getElementById('phone-reader').classList.remove('open');
-  document.querySelectorAll('#left-panel .panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById(panelId).classList.add('active');
-  document.querySelectorAll('.pnav-item').forEach(b=>b.classList.remove('active'));
-  const el=document.getElementById('pnav-'+navKey); if(el) el.classList.add('active');
+  document.querySelectorAll('#left-panel .panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(panelId)?.classList.add('active');
+  document.querySelectorAll('.pnav-item').forEach(b => {
+    b.classList.remove('active');
+    b.removeAttribute('aria-current');
+  });
+  const btn = document.getElementById('pnav-'+navKey);
+  if (btn) { btn.classList.add('active'); btn.setAttribute('aria-current','page'); }
   prevPhonePanel = panelId;
-  if (panelId==='p-list') renderList();
-  if (panelId==='p-notes') renderNotes();
+  if (panelId==='p-list')    renderList();
+  if (panelId==='p-notes')   renderNotes();
   if (panelId==='p-explore') buildExplore();
-  if (panelId==='p-search') setTimeout(()=>document.getElementById('search-input').focus(),150);
+  if (panelId==='p-search')  setTimeout(() => document.getElementById('search-input').focus(), 150);
 }
 
-/* ════ LETTER OPENING ════ */
+/* ════════════════════════════════════════
+   LETTER OPENING
+════════════════════════════════════════ */
 function openLetterFromHome() {
-  const n = parseInt(document.getElementById('ldj-card').dataset.n||'1');
-  openLetter(n);
+  openLetter(parseInt(document.getElementById('ldj-card').dataset.n || '1'));
 }
-function resumeReading() { if(STATE.lastRead) openLetter(STATE.lastRead.n); }
 
 function openLetter(n) {
-  const idx = CORPUS.findIndex(l=>l.canonical_number===n);
-  if (idx<0) { showToast('Lettre introuvable'); return; }
+  const idx = CORPUS.findIndex(l => l.canonical_number === n);
+  if (idx < 0) { showToast('Lettre introuvable'); return; }
   currentLetterIdx = idx;
   const l = CORPUS[idx];
-
   if (isWide()) {
     renderWideReader(l);
-    // Highlight in list
-    document.querySelectorAll('.letter-item').forEach(el=>el.classList.remove('selected'));
-    const sel=document.querySelector(`.letter-item[data-n="${n}"]`); if(sel) sel.classList.add('selected');
+    // Highlight selected row
+    document.querySelectorAll('.letter-item').forEach(el => {
+      el.classList.toggle('selected', parseInt(el.dataset.n) === n);
+    });
   } else {
     renderPhoneReader(l);
     document.getElementById('phone-reader').classList.add('open');
   }
-
-  STATE.lastRead = {n, scroll:10};
+  STATE.lastRead = { n, scroll: STATE.lastRead?.n === n ? (STATE.lastRead.scroll||5) : 5 };
   saveState();
   updateContinueCard();
 }
 
-/* ════ RENDER READER (shared data layer) ════ */
-const SIG_REASONS = new Set(['signature','signature_or_postscript','signature_or_date','closing_signature_or_date']);
-const SIG_REGEX = /petite fille|Luisa Piccarreta|Votre.*dévou|Corato,\s+\d/i;
-const SAL_REASONS = new Set(['salutation','initial_formula','devotional_opening','opening_formula','devotional_header']);
+function closePhoneReader() {
+  document.getElementById('phone-reader').classList.remove('open');
+}
 
+/* ════════════════════════════════════════
+   RENDER HELPERS — P0 fix: esc() all text
+════════════════════════════════════════ */
 function buildDPs(l) {
-  const dps = (l.display_paragraphs||[]).slice().sort((a,b)=>(a.display_order||0)-(b.display_order||0));
-  return dps.map(dp=>{
-    let cls='dp';
-    const r=dp.split_reason||'';
-    if (SAL_REASONS.has(r)) cls+=' salutation';
-    else if (dp.is_signature||SIG_REASONS.has(r)||SIG_REGEX.test(dp.text_fr||'')) cls+=' signature';
-    return `<p class="${cls}">${(dp.text_fr||'').replace(/\n/g,'<br>')}</p>`;
+  const dps = (l.display_paragraphs||[]).slice().sort((a,b) => (a.display_order||0)-(b.display_order||0));
+  return dps.map(dp => {
+    let cls = 'dp';
+    const r = dp.split_reason || '';
+    if (SAL_REASONS.has(r))
+      cls += ' salutation';
+    else if (dp.is_signature || SIG_REASONS.has(r) || SIG_REGEX.test(dp.text_fr||''))
+      cls += ' signature';
+    // P0: escape text before inserting — then allow <br> only
+    const safe = esc(dp.text_fr || '').replace(/\n/g, '<br>');
+    return `<p class="${cls}">${safe}</p>`;
   }).join('');
 }
+
 function buildMeta(l) {
-  let m=`<span class="lh-meta-item"><i class="ti ti-user" aria-hidden="true"></i>${esc(l.recipient_display_fr)}</span>`;
-  if (l.date_text_fr) m+=`<span class="lh-meta-item"><i class="ti ti-calendar" aria-hidden="true"></i>${esc(l.date_text_fr)}</span>`;
-  else m+=`<span class="lh-meta-item"><i class="ti ti-calendar-off" aria-hidden="true"></i>Date inconnue</span>`;
-  if (l.place) m+=`<span class="lh-meta-item"><i class="ti ti-map-pin" aria-hidden="true"></i>${esc(l.place)}</span>`;
+  let m = `<span class="lh-meta-item"><i class="ti ti-user" aria-hidden="true"></i>${esc(l.recipient_display_fr)}</span>`;
+  if (l.date_text_fr)
+    m += `<span class="lh-meta-item"><i class="ti ti-calendar" aria-hidden="true"></i>${esc(l.date_text_fr)}</span>`;
+  else
+    m += `<span class="lh-meta-item"><i class="ti ti-calendar-off" aria-hidden="true"></i>Date inconnue</span>`;
+  if (l.place)
+    m += `<span class="lh-meta-item"><i class="ti ti-map-pin" aria-hidden="true"></i>${esc(l.place)}</span>`;
   return m;
 }
+
 function buildTopics(l) {
-  return (l.topics_fr||[]).map(t=>`<span class="topic-pill">${esc(t)}</span>`).join('');
+  return (l.topics_fr||[]).map(t => `<span class="topic-pill">${esc(t)}</span>`).join('');
 }
+
 function buildTrust(l) {
-  return `<div class="trust-row"><span class="k">Identifiant</span><span class="v" style="font-size:10px;font-family:monospace">${l.letter_id}</span></div>
-<div class="trust-row"><span class="k">Base traduction</span><span class="v">Version anglaise</span></div>
-<div class="trust-row"><span class="k">Parallèle français</span><span class="v">${l.french_parallel_status==='FR_PARALLEL_RELIABLE'?'✓ Fiable':l.french_parallel_status||'—'}</span></div>
-<div class="trust-row"><span class="k">Terminologie</span><span class="v pass">${l.terminology_status==='harmonized'?'✓ Harmonisée':l.terminology_status||'—'}</span></div>
-<div class="trust-row"><span class="k">Qualité</span><span class="v pass">${l.quality_status==='validated'?'✓ Validé':l.quality_status||'—'}</span></div>
-${l.fingerprint_sha256?`<div class="trust-row"><span class="k">Empreinte</span><span class="v" style="font-size:9px;font-family:monospace">${l.fingerprint_sha256.slice(0,24)}…</span></div>`:''}`;
+  return [
+    ['Identifiant', `<span style="font-size:10px;font-family:monospace">${l.letter_id}</span>`],
+    ['Base traduction', 'Version anglaise'],
+    ['Parallèle français', l.french_parallel_status==='FR_PARALLEL_RELIABLE' ? '<span class="pass">✓ Fiable</span>' : esc(l.french_parallel_status||'—')],
+    ['Terminologie', l.terminology_status==='harmonized' ? '<span class="pass">✓ Harmonisée</span>' : esc(l.terminology_status||'—')],
+    ['Qualité', l.quality_status==='validated' ? '<span class="pass">✓ Validé</span>' : esc(l.quality_status||'—')],
+    l.fingerprint_sha256 ? ['Empreinte', `<span style="font-size:9px;font-family:monospace">${l.fingerprint_sha256.slice(0,24)}…</span>`] : null,
+  ].filter(Boolean).map(([k,v]) =>
+    `<div class="trust-row"><span class="k">${k}</span><span class="v">${v}</span></div>`
+  ).join('');
+}
+
+function applyReaderSize(bodyEl) {
+  bodyEl.style.setProperty('--reader-size', readerSize + 'px');
+  bodyEl.querySelectorAll('.dp').forEach(p => p.style.fontSize = readerSize + 'px');
 }
 
 function renderWideReader(l) {
-  document.getElementById('reader-empty').style.display='none';
-  const wr=document.getElementById('wide-reader');
-  wr.style.display='flex';
-
-  document.getElementById('wr-num').textContent=l.letter_id;
-  document.getElementById('wr-id').textContent=l.letter_id;
-  document.getElementById('wr-title').textContent=l.title_fr;
-  document.getElementById('wr-meta').innerHTML=buildMeta(l);
-  document.getElementById('wr-topics').innerHTML=buildTopics(l);
-  document.getElementById('wr-body').innerHTML=buildDPs(l);
-  document.getElementById('wr-body').style.setProperty('--reader-size',readerSize+'px');
-  document.getElementById('wr-trust-body').innerHTML=buildTrust(l);
-  document.getElementById('wr-pos').textContent=`${l.canonical_number} / ${CORPUS.length}`;
-  document.getElementById('wr-btn-prev').disabled=currentLetterIdx===0;
-  document.getElementById('wr-btn-next').disabled=currentLetterIdx===CORPUS.length-1;
-  updateFavBtns(l.canonical_number);
+  document.getElementById('reader-empty').style.display = 'none';
+  const wr = document.getElementById('wide-reader');
+  wr.style.display = 'flex';
+  document.getElementById('wr-num').textContent   = l.letter_id;
+  document.getElementById('wr-id').textContent    = l.letter_id;
+  document.getElementById('wr-title').textContent = l.title_fr;
+  document.getElementById('wr-meta').innerHTML    = buildMeta(l);
+  document.getElementById('wr-topics').innerHTML  = buildTopics(l);
+  const body = document.getElementById('wr-body');
+  body.innerHTML = buildDPs(l);
+  applyReaderSize(body);
+  document.getElementById('wr-trust-body').innerHTML = buildTrust(l);
+  document.getElementById('wr-pos').textContent   = `${l.canonical_number} / ${CORPUS.length}`;
+  document.getElementById('wr-btn-prev').disabled = currentLetterIdx === 0;
+  document.getElementById('wr-btn-next').disabled = currentLetterIdx === CORPUS.length - 1;
   document.getElementById('wr-trust').classList.remove('open');
-  document.getElementById('wide-reader-scroll').scrollTop=0;
+  document.getElementById('wr-trust-head').setAttribute('aria-expanded','false');
+  document.getElementById('wide-reader-scroll').scrollTop = 0;
+  document.getElementById('wr-progress').style.width = '0%';
+  updateFavBtns(l.canonical_number);
+  updateRelireBtns(l.canonical_number);
 }
 
 function renderPhoneReader(l) {
-  document.getElementById('pr-id').textContent=l.letter_id;
-  document.getElementById('pr-title').textContent=l.title_fr;
-  document.getElementById('pr-meta').innerHTML=buildMeta(l);
-  document.getElementById('pr-topics').innerHTML=buildTopics(l);
-  document.getElementById('pr-body').innerHTML=buildDPs(l);
-  document.getElementById('pr-body').style.setProperty('--reader-size',readerSize+'px');
-  document.getElementById('pr-trust-body').innerHTML=buildTrust(l);
-  document.getElementById('pr-pos').textContent=`${l.canonical_number} / ${CORPUS.length}`;
-  document.getElementById('pr-btn-prev').disabled=currentLetterIdx===0;
-  document.getElementById('pr-btn-next').disabled=currentLetterIdx===CORPUS.length-1;
-  updateFavBtns(l.canonical_number);
+  document.getElementById('pr-id').textContent    = l.letter_id;
+  document.getElementById('pr-title').textContent = l.title_fr;
+  document.getElementById('pr-meta').innerHTML    = buildMeta(l);
+  document.getElementById('pr-topics').innerHTML  = buildTopics(l);
+  const body = document.getElementById('pr-body');
+  body.innerHTML = buildDPs(l);
+  applyReaderSize(body);
+  document.getElementById('pr-trust-body').innerHTML = buildTrust(l);
+  document.getElementById('pr-pos').textContent   = `${l.canonical_number} / ${CORPUS.length}`;
+  document.getElementById('pr-btn-prev').disabled = currentLetterIdx === 0;
+  document.getElementById('pr-btn-next').disabled = currentLetterIdx === CORPUS.length - 1;
   document.getElementById('pr-trust').classList.remove('open');
-  document.getElementById('phone-reader-scroll').scrollTop=0;
+  document.getElementById('pr-trust-head').setAttribute('aria-expanded','false');
+  document.getElementById('phone-reader-scroll').scrollTop = 0;
+  document.getElementById('pr-progress').style.width = '0%';
+  updateFavBtns(l.canonical_number);
+  updateRelireBtns(l.canonical_number);
 }
 
-function closePhoneReader() { document.getElementById('phone-reader').classList.remove('open'); }
+function prevLetter() { if (currentLetterIdx>0){ currentLetterIdx--; openLetter(CORPUS[currentLetterIdx].canonical_number); } }
+function nextLetter() { if (currentLetterIdx<CORPUS.length-1){ currentLetterIdx++; openLetter(CORPUS[currentLetterIdx].canonical_number); } }
 
-function prevLetter() { if(currentLetterIdx>0){currentLetterIdx--;openLetter(CORPUS[currentLetterIdx].canonical_number);} }
-function nextLetter() { if(currentLetterIdx<CORPUS.length-1){currentLetterIdx++;openLetter(CORPUS[currentLetterIdx].canonical_number);} }
+/* ════════════════════════════════════════
+   READ PROGRESS — real scroll position
+════════════════════════════════════════ */
+const _progressDebounce = {};
+function updateReadProgress(prefix) {
+  clearTimeout(_progressDebounce[prefix]);
+  _progressDebounce[prefix] = setTimeout(() => {
+    const scrollEl = document.getElementById(prefix === 'wr' ? 'wide-reader-scroll' : 'phone-reader-scroll');
+    const progEl   = document.getElementById(prefix + '-progress');
+    if (!scrollEl || !progEl) return;
+    const { scrollTop, scrollHeight, clientHeight } = scrollEl;
+    const pct = scrollHeight <= clientHeight ? 100 : Math.round(scrollTop / (scrollHeight - clientHeight) * 100);
+    progEl.style.width = pct + '%';
+    // Save real scroll progress
+    if (STATE.lastRead && currentLetterIdx >= 0 && CORPUS[currentLetterIdx]) {
+      const n = CORPUS[currentLetterIdx].canonical_number;
+      if (STATE.lastRead.n === n) {
+        STATE.lastRead.scroll = pct;
+        saveState();
+        document.getElementById('cont-bar').style.width = Math.max(5, pct) + '%';
+      }
+    }
+  }, 150);
+}
 
+/* ════════════════════════════════════════
+   TRUST PANEL
+════════════════════════════════════════ */
+function toggleTrust(panelId) {
+  const tp = document.getElementById(panelId);
+  tp.classList.toggle('open');
+  const headId = panelId.replace('-trust', '-trust-head');
+  const head = document.getElementById(headId);
+  if (head) head.setAttribute('aria-expanded', tp.classList.contains('open') ? 'true' : 'false');
+}
+
+/* ════════════════════════════════════════
+   FAV + RELIRE
+════════════════════════════════════════ */
 function updateFavBtns(n) {
-  const active=STATE.favs.has(n);
-  ['wr-fav-btn','pr-fav-btn'].forEach(id=>{
-    const el=document.getElementById(id); if(!el) return;
-    if(active) el.classList.add('fav-active'); else el.classList.remove('fav-active');
+  const active = STATE.favs.has(n);
+  ['wr-fav-btn','pr-fav-btn'].forEach(id => {
+    const el = document.getElementById(id); if (!el) return;
+    el.classList.toggle('fav-active', active);
+    el.setAttribute('aria-label', active ? 'Retirer des favoris' : 'Ajouter aux favoris');
+  });
+}
+function updateRelireBtns(n) {
+  const active = STATE.relire.has(n);
+  ['wr-relire-btn','pr-relire-btn'].forEach(id => {
+    const el = document.getElementById(id); if (!el) return;
+    el.classList.toggle('relire-active', active);
+    el.setAttribute('aria-label', active ? 'Retirer de À relire' : 'Marquer à relire');
   });
 }
 
-function toggleTrust(panelId) {
-  document.getElementById(panelId).classList.toggle('open');
-}
-
 function toggleFav() {
-  const l=CORPUS[currentLetterIdx]; if(!l) return;
-  if(STATE.favs.has(l.canonical_number)) STATE.favs.delete(l.canonical_number);
-  else STATE.favs.add(l.canonical_number);
-  updateFavBtns(l.canonical_number);
+  const l = CORPUS[currentLetterIdx]; if (!l) return;
+  const n = l.canonical_number;
+  if (STATE.favs.has(n)) STATE.favs.delete(n); else STATE.favs.add(n);
+  updateFavBtns(n);
   saveState();
-  showToast(STATE.favs.has(l.canonical_number)?'♥ Ajouté aux favoris':'Retiré des favoris');
-  // Refresh list marker
-  const el=document.querySelector(`.letter-item[data-n="${l.canonical_number}"] .li-num`);
-  if(el) el.classList.toggle('is-fav', STATE.favs.has(l.canonical_number));
+  showToast(STATE.favs.has(n) ? '♥ Ajouté aux favoris' : 'Retiré des favoris');
+  const el = document.querySelector(`.letter-item[data-n="${n}"] .li-num`);
+  if (el) el.classList.toggle('is-fav', STATE.favs.has(n));
 }
 
+function toggleRelire() {
+  const l = CORPUS[currentLetterIdx]; if (!l) return;
+  const n = l.canonical_number;
+  if (STATE.relire.has(n)) STATE.relire.delete(n); else STATE.relire.add(n);
+  updateRelireBtns(n);
+  saveState();
+  showToast(STATE.relire.has(n) ? 'Ajouté à «\u202fÀ relire\u202f»' : 'Retiré de «\u202fÀ relire\u202f»');
+}
+
+/* ════════════════════════════════════════
+   NOTES
+════════════════════════════════════════ */
 function addNote() {
-  const l=CORPUS[currentLetterIdx]; if(!l) return;
-  const txt=prompt(`Note pour ${l.letter_id} :`);
-  if(txt&&txt.trim()){
-    STATE.notes.unshift({letter_id:l.letter_id,n:l.canonical_number,text:txt.trim(),date:new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'})});
+  const l = CORPUS[currentLetterIdx]; if (!l) return;
+  const txt = prompt(`Note pour ${l.letter_id} :`);
+  if (txt?.trim()) {
+    STATE.notes.unshift({
+      letter_id: l.letter_id, n: l.canonical_number, text: txt.trim(),
+      date: new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'})
+    });
     saveState(); showToast('Note enregistrée');
   }
 }
 
+/* ════════════════════════════════════════
+   SHARE
+════════════════════════════════════════ */
 function shareLetter() {
-  const l=CORPUS[currentLetterIdx]; if(!l) return;
-  const text=`${l.title_fr}\n${l.letter_id}\n\nLettres de Luisa Piccarreta`;
-  if(navigator.share) navigator.share({title:l.title_fr,text}).catch(()=>{});
+  const l = CORPUS[currentLetterIdx]; if (!l) return;
+  const text = `${l.title_fr}\n${l.letter_id}\n\nLettres de Luisa Piccarreta`;
+  if (navigator.share) navigator.share({title: l.title_fr, text}).catch(()=>{});
   else navigator.clipboard?.writeText(l.letter_id).then(()=>showToast('Référence copiée'));
 }
 
-/* ════ TEXT SIZE ════ */
-function openTextBar(){document.getElementById('text-size-bar').classList.add('open');document.getElementById('tsz-label').textContent=readerSize+'px';}
-function closeTextBar(){document.getElementById('text-size-bar').classList.remove('open');}
-function adjustSize(delta){
-  readerSize=Math.min(22,Math.max(13,readerSize+delta));
-  document.getElementById('tsz-label').textContent=readerSize+'px';
-  document.querySelectorAll('.dp').forEach(p=>p.style.fontSize=readerSize+'px');
+/* ════════════════════════════════════════
+   TEXT SIZE
+════════════════════════════════════════ */
+function openTextBar() {
+  document.getElementById('text-size-bar').classList.add('open');
+  document.getElementById('tsz-label').textContent = readerSize + 'px';
+}
+function closeTextBar() { document.getElementById('text-size-bar').classList.remove('open'); }
+function adjustSize(delta) {
+  readerSize = Math.min(22, Math.max(13, readerSize + delta));
+  document.getElementById('tsz-label').textContent = readerSize + 'px';
+  document.querySelectorAll('.dp').forEach(p => p.style.fontSize = readerSize + 'px');
   saveState();
 }
 
-/* ════ LIST ════ */
-const FILTER_CHIPS=[
-  {id:'all',label:'Toutes'},{id:'fav',label:'♥ Favoris'},
-  {id:'Divine Volonté',label:'Divine Volonté'},{id:'Croix',label:'Croix'},
-  {id:'Paix',label:'Paix'},{id:'Prêtres',label:'Prêtres'},
-  {id:'Deuil',label:'Deuil'},{id:'Abandon',label:'Abandon'},
+/* ════════════════════════════════════════
+   LIST & FILTERS
+════════════════════════════════════════ */
+const FILTER_CHIPS = [
+  {id:'all',         label:'Toutes'},
+  {id:'fav',         label:'♥ Favoris'},
+  {id:'Divine Volonté',        label:'Divine Volonté'},
+  {id:'Croix',                 label:'Croix'},
+  {id:'Paix',                  label:'Paix'},
+  {id:'Prêtres',               label:'Prêtres'},
+  {id:'Deuil',                 label:'Deuil'},
+  {id:'Abandon',               label:'Abandon'},
   {id:'Propagation des écrits',label:'Propagation'},
 ];
-function buildFilterChips(){
-  document.getElementById('filter-row').innerHTML=FILTER_CHIPS.map(c=>
-    `<div class="chip${c.id===currentFilter?' active':''}" onclick="setFilter('${c.id}',this)">${c.label}</div>`
+function buildFilterChips() {
+  document.getElementById('filter-row').innerHTML = FILTER_CHIPS.map(c =>
+    `<button class="chip${c.id===currentFilter?' active':''}" onclick="setFilter(${JSON.stringify(c.id)},this)">${esc(c.label)}</button>`
   ).join('');
 }
-function setFilter(val,el){
-  currentFilter=val;
+function setFilter(val, el) {
+  currentFilter = val;
   document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
   if(el) el.classList.add('active');
   renderList();
 }
-function resetFilter(){currentFilter='all';buildFilterChips();renderList();}
-function filterByTopic(topic){
-  currentFilter=topic;
-  if(isWide()) switchPanel('p-list'); else phoneNav('p-list','list');
+function resetFilter() { currentFilter='all'; buildFilterChips(); renderList(); }
+function filterByTopic(topic) {
+  currentFilter = topic;
+  if (isWide()) switchPanel('p-list'); else phoneNav('p-list','list');
   buildFilterChips();
   renderList();
 }
 
-function renderList(){
+function renderList() {
   let items;
-  if(currentFilter==='all') items=CORPUS;
-  else if(currentFilter==='fav') items=CORPUS.filter(l=>STATE.favs.has(l.canonical_number));
-  else items=CORPUS.filter(l=>(l.topics_fr||[]).some(t=>t.toLowerCase().includes(currentFilter.toLowerCase())));
+  if (currentFilter==='all') items = CORPUS;
+  else if (currentFilter==='fav') items = CORPUS.filter(l=>STATE.favs.has(l.canonical_number));
+  else items = CORPUS.filter(l=>(l.topics_fr||[]).some(t=>t.toLowerCase().includes(currentFilter.toLowerCase())));
 
-  document.getElementById('list-title').textContent=
-    currentFilter==='all'?`${CORPUS.length} Lettres`:
-    currentFilter==='fav'?'Favoris':
+  document.getElementById('list-title').textContent =
+    currentFilter==='all' ? `${CORPUS.length} Lettres` :
+    currentFilter==='fav' ? 'Favoris' :
     `${currentFilter} (${items.length})`;
 
-  if(!items.length){
-    document.getElementById('letter-list').innerHTML=`<div class="empty-state"><i class="ti ti-letter-case" aria-hidden="true"></i>Aucune lettre pour ce filtre.</div>`;
+  if (!items.length) {
+    document.getElementById('letter-list').innerHTML =
+      `<div class="empty-state" role="status"><i class="ti ti-letter-case" aria-hidden="true"></i>Aucune lettre pour ce filtre.</div>`;
     return;
   }
-  document.getElementById('letter-list').innerHTML=items.map(l=>`
-    <div class="letter-item${currentLetterIdx>=0&&CORPUS[currentLetterIdx]?.canonical_number===l.canonical_number?' selected':''}" data-n="${l.canonical_number}" onclick="openLetter(${l.canonical_number})">
-      <div class="li-num${STATE.favs.has(l.canonical_number)?' is-fav':''}">${l.canonical_number}</div>
+  const cur = currentLetterIdx >= 0 ? CORPUS[currentLetterIdx]?.canonical_number : -1;
+  document.getElementById('letter-list').innerHTML = items.map(l =>
+    `<button class="letter-item${l.canonical_number===cur?' selected':''}" data-n="${l.canonical_number}"
+      onclick="openLetter(${l.canonical_number})" role="listitem" aria-label="${esc(l.title_fr)}">
+      <div class="li-num${STATE.favs.has(l.canonical_number)?' is-fav':''}" aria-hidden="true">${l.canonical_number}</div>
       <div class="li-body">
         <div class="li-title">${esc(l.title_fr)}</div>
-        <div class="li-dest">${esc(l.recipient_display_fr)}${l.date_text_fr?' · '+l.date_text_fr:''}</div>
-        <div class="li-topics">${(l.topics_fr||[]).slice(0,4).map(t=>`<span class="topic-pill">${esc(t)}</span>`).join('')}</div>
+        <div class="li-dest">${esc(l.recipient_display_fr)}${l.date_text_fr?' · '+esc(l.date_text_fr):''}</div>
+        <div class="li-topics" aria-hidden="true">${(l.topics_fr||[]).slice(0,4).map(t=>`<span class="topic-pill">${esc(t)}</span>`).join('')}</div>
       </div>
-    </div>`).join('');
+    </button>`
+  ).join('');
 }
 
-/* ════ SEARCH ════ */
-function searchFor(q){document.getElementById('search-input').value=q;doSearch();}
-function doSearch(){
-  const q=document.getElementById('search-input').value.trim().toLowerCase();
-  const hint=document.getElementById('search-hint'),res=document.getElementById('search-results');
-  if(!q){hint.style.display='';res.innerHTML='';return;}
-  hint.style.display='none';
-  const matches=CORPUS.filter(l=>
-    l.title_fr.toLowerCase().includes(q)||
-    l.recipient_display_fr.toLowerCase().includes(q)||
-    (l.topics_fr||[]).some(t=>t.toLowerCase().includes(q))||
-    (l.display_paragraphs||[]).some(dp=>dp.text_fr.toLowerCase().includes(q))||
-    String(l.canonical_number)===q
-  );
-  if(!matches.length){res.innerHTML=`<div class="empty-state"><i class="ti ti-search-off" aria-hidden="true"></i>Aucun résultat pour « ${esc(q)} »</div>`;return;}
-  res.innerHTML=`<div class="search-count">${matches.length} résultat${matches.length>1?'s':''}</div>`+
-    matches.map(l=>`<div class="letter-item" data-n="${l.canonical_number}" onclick="openLetter(${l.canonical_number})">
-      <div class="li-num${STATE.favs.has(l.canonical_number)?' is-fav':''}">${l.canonical_number}</div>
-      <div class="li-body"><div class="li-title">${esc(l.title_fr)}</div><div class="li-dest">${esc(l.recipient_display_fr)}</div>
-      <div class="li-topics">${(l.topics_fr||[]).slice(0,3).map(t=>`<span class="topic-pill">${esc(t)}</span>`).join('')}</div></div>
-    </div>`).join('');
+/* ════════════════════════════════════════
+   SEARCH — paragraph-level with highlight
+════════════════════════════════════════ */
+function searchFor(q) { document.getElementById('search-input').value=q; doSearch(); }
+function clearSearch() {
+  document.getElementById('search-input').value='';
+  document.getElementById('search-results').innerHTML='';
+  document.getElementById('search-hint').style.display='';
 }
-function clearSearch(){document.getElementById('search-input').value='';document.getElementById('search-results').innerHTML='';document.getElementById('search-hint').style.display='';}
 
-/* ════ EXPLORE ════ */
-function buildExplore(){
-  document.getElementById('exp-situ-grid').innerHTML=SITUATIONS.slice(0,4).map(s=>{
-    const c=getTopicLetters(s.topic).length||s.count;
-    return `<div class="exp-card" onclick="filterByTopic('${esc(s.topic)}')"><span class="exp-icon"><i class="ti ${s.icon}" aria-hidden="true"></i></span><div class="exp-label">${esc(s.label)}</div><div class="exp-sub">${c} lettre${c>1?'s':''}</div></div>`;
+function doSearch() {
+  const raw = document.getElementById('search-input').value.trim();
+  const q   = raw.toLowerCase();
+  const hint = document.getElementById('search-hint');
+  const res  = document.getElementById('search-results');
+  if (!q) { hint.style.display=''; res.innerHTML=''; return; }
+  hint.style.display = 'none';
+
+  // Collect paragraph-level matches
+  const letterHits = new Map(); // canonical_number → [{dp, score}]
+  for (const l of CORPUS) {
+    const hits = [];
+    const numMatch = String(l.canonical_number) === q;
+    const titleMatch = l.title_fr.toLowerCase().includes(q);
+    const destMatch  = l.recipient_display_fr.toLowerCase().includes(q);
+    const topicMatch = (l.topics_fr||[]).some(t=>t.toLowerCase().includes(q));
+    for (const dp of (l.display_paragraphs||[])) {
+      if (dp.text_fr.toLowerCase().includes(q)) {
+        hits.push(dp);
+      }
+    }
+    if (numMatch||titleMatch||destMatch||topicMatch||hits.length) {
+      letterHits.set(l.canonical_number, {l, hits, numMatch, titleMatch, destMatch});
+    }
+  }
+
+  if (!letterHits.size) {
+    res.innerHTML=`<div class="empty-state" role="status"><i class="ti ti-search-off" aria-hidden="true"></i>Aucun résultat pour « ${esc(raw)} »</div>`;
+    return;
+  }
+
+  res.innerHTML = `<div class="search-count" role="status" aria-live="polite">${letterHits.size} lettre${letterHits.size>1?'s':''}</div>` +
+    [...letterHits.values()].map(({l, hits}) => {
+      // Show best matching paragraph as excerpt
+      const excerpt = hits[0]
+        ? highlight(hits[0].text_fr.slice(0,200)+(hits[0].text_fr.length>200?'…':''), raw)
+        : '';
+      return `<button class="letter-item" data-n="${l.canonical_number}"
+        onclick="openLetter(${l.canonical_number})" role="listitem" aria-label="${esc(l.title_fr)}">
+        <div class="li-num${STATE.favs.has(l.canonical_number)?' is-fav':''}" aria-hidden="true">${l.canonical_number}</div>
+        <div class="li-body">
+          <div class="li-title">${highlight(l.title_fr, raw)}</div>
+          <div class="li-dest">${esc(l.recipient_display_fr)}</div>
+          ${excerpt ? `<div style="font-size:12px;color:var(--muted);font-family:var(--body);font-style:italic;margin-top:4px;line-height:1.55">${excerpt}</div>` : ''}
+          <div class="li-topics" aria-hidden="true">${(l.topics_fr||[]).slice(0,3).map(t=>`<span class="topic-pill">${esc(t)}</span>`).join('')}</div>
+        </div>
+      </button>`;
+    }).join('');
+}
+
+function highlight(text, query) {
+  if (!query) return esc(text);
+  const safe = esc(text);
+  const safeQ = esc(query).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  return safe.replace(new RegExp(safeQ, 'gi'), m => `<mark class="hl">${m}</mark>`);
+}
+
+/* ════════════════════════════════════════
+   EXPLORE
+════════════════════════════════════════ */
+function buildExplore() {
+  document.getElementById('exp-situ-grid').innerHTML = SITUATIONS.slice(0,4).map(s => {
+    const c = getTopicLetters(s.topic).length||s.count;
+    return `<button class="exp-card" onclick="filterByTopic(${JSON.stringify(s.topic)})" role="listitem">
+      <span class="exp-icon" aria-hidden="true"><i class="ti ${s.icon}"></i></span>
+      <div class="exp-label">${esc(s.label)}</div>
+      <div class="exp-sub">${c} lettre${c>1?'s':''}</div>
+    </button>`;
   }).join('');
 
-  const rKeys=Object.keys(RECIPIENTS_INDEX).length?Object.keys(RECIPIENTS_INDEX):[...new Map(CORPUS.map(l=>[l.recipient_normalized,l])).keys()];
-  const recData=rKeys.map(k=>{
-    if(RECIPIENTS_INDEX[k]) return RECIPIENTS_INDEX[k];
-    const ls=CORPUS.filter(l=>l.recipient_normalized===k);
-    return{display_fr:ls[0]?.recipient_display_fr||k,count:ls.length,letters:ls.map(l=>l.canonical_number)};
+  const rKeys = Object.keys(RECIPIENTS_INDEX).length
+    ? Object.keys(RECIPIENTS_INDEX)
+    : [...new Map(CORPUS.map(l=>[l.recipient_normalized||l.recipient_display_fr,l])).keys()];
+  const recData = rKeys.map(k => {
+    if (RECIPIENTS_INDEX[k]) return RECIPIENTS_INDEX[k];
+    const ls = CORPUS.filter(l=>(l.recipient_normalized||l.recipient_display_fr)===k);
+    return {display_fr:ls[0]?.recipient_display_fr||k, count:ls.length};
   }).sort((a,b)=>b.count-a.count);
 
-  document.getElementById('dest-list').innerHTML=recData.slice(0,5).map(r=>
-    `<div class="dest-item" onclick="filterByRecipient('${esc(r.display_fr)}')">
-      <div class="dest-name">${esc(r.display_fr)}</div>
-      <div class="dest-count">${r.count} lettre${r.count>1?'s':''}</div>
-      <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:13px;color:var(--muted)"></i>
-    </div>`
-  ).join('')+`<div class="see-all-row" onclick="filterByTopic('all')">Voir toutes →</div>`;
+  document.getElementById('dest-list').innerHTML =
+    recData.slice(0,5).map(r =>
+      `<button class="dest-item" onclick="filterByRecipient(${JSON.stringify(r.display_fr)})" role="listitem">
+        <div class="dest-name">${esc(r.display_fr)}</div>
+        <div class="dest-count">${r.count} lettre${r.count>1?'s':''}</div>
+        <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:13px;color:var(--muted)"></i>
+      </button>`
+    ).join('') +
+    `<button class="see-all-btn" onclick="filterByTopic('all')">Voir toutes les lettres →</button>`;
 
-  const dated=CORPUS.filter(l=>l.date_iso).sort((a,b)=>a.date_iso>b.date_iso?1:-1);
-  document.getElementById('chron-list').innerHTML=dated.slice(0,5).map(l=>
-    `<div class="chron-item" onclick="openLetter(${l.canonical_number})">
-      <div class="chron-year">${l.date_iso.slice(0,4)}</div>
-      <div class="chron-info"><div class="ct">${esc(l.title_fr)}</div><div class="cs">${esc(l.recipient_display_fr)}</div></div>
-      <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:13px;color:var(--muted)"></i>
-    </div>`
-  ).join('')+`<div class="see-all-row" onclick="filterByDate()">Toutes les lettres datées →</div>`;
+  const dated = CORPUS.filter(l=>l.date_iso).sort((a,b)=>a.date_iso>b.date_iso?1:-1);
+  document.getElementById('chron-list').innerHTML =
+    dated.slice(0,6).map(l =>
+      `<button class="chron-item" onclick="openLetter(${l.canonical_number})" role="listitem">
+        <div class="chron-year">${l.date_iso.slice(0,4)}</div>
+        <div class="chron-info"><div class="ct">${esc(l.title_fr)}</div><div class="cs">${esc(l.recipient_display_fr)}</div></div>
+        <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:13px;color:var(--muted)"></i>
+      </button>`
+    ).join('') +
+    `<button class="see-all-btn" onclick="filterByDate()">Toutes les lettres datées →</button>`;
 }
 
-function filterByRecipient(name){
-  const items=CORPUS.filter(l=>l.recipient_display_fr===name||l.recipient_normalized===name);
-  if(!items.length) return;
-  document.getElementById('letter-list').innerHTML=items.map(l=>`
-    <div class="letter-item" data-n="${l.canonical_number}" onclick="openLetter(${l.canonical_number})">
-      <div class="li-num${STATE.favs.has(l.canonical_number)?' is-fav':''}">${l.canonical_number}</div>
-      <div class="li-body"><div class="li-title">${esc(l.title_fr)}</div><div class="li-dest">${l.date_text_fr||'Date inconnue'}</div>
-      <div class="li-topics">${(l.topics_fr||[]).slice(0,3).map(t=>`<span class="topic-pill">${esc(t)}</span>`).join('')}</div></div>
-    </div>`).join('');
-  document.getElementById('list-title').textContent=`${name} (${items.length})`;
-  if(isWide()) switchPanel('p-list'); else phoneNav('p-list','list');
+function filterByRecipient(name) {
+  const items = CORPUS.filter(l => l.recipient_display_fr===name);
+  if (!items.length) return;
+  document.getElementById('letter-list').innerHTML = items.map(l =>
+    `<button class="letter-item" data-n="${l.canonical_number}" onclick="openLetter(${l.canonical_number})" role="listitem" aria-label="${esc(l.title_fr)}">
+      <div class="li-num${STATE.favs.has(l.canonical_number)?' is-fav':''}" aria-hidden="true">${l.canonical_number}</div>
+      <div class="li-body">
+        <div class="li-title">${esc(l.title_fr)}</div>
+        <div class="li-dest">${l.date_text_fr ? esc(l.date_text_fr) : 'Date inconnue'}</div>
+      </div>
+    </button>`
+  ).join('');
+  document.getElementById('list-title').textContent = `${name} (${items.length})`;
+  if (isWide()) switchPanel('p-list'); else phoneNav('p-list','list');
 }
 
-function filterByDate(){
-  const dated=CORPUS.filter(l=>l.date_iso).sort((a,b)=>a.date_iso>b.date_iso?1:-1);
-  document.getElementById('letter-list').innerHTML=dated.map(l=>`
-    <div class="letter-item" data-n="${l.canonical_number}" onclick="openLetter(${l.canonical_number})">
-      <div class="li-num${STATE.favs.has(l.canonical_number)?' is-fav':''}">${l.canonical_number}</div>
-      <div class="li-body"><div class="li-title">${esc(l.title_fr)}</div><div class="li-dest">${esc(l.recipient_display_fr)} · ${l.date_text_fr}</div>
-      <div class="li-topics">${(l.topics_fr||[]).slice(0,3).map(t=>`<span class="topic-pill">${esc(t)}</span>`).join('')}</div></div>
-    </div>`).join('');
-  document.getElementById('list-title').textContent=`Chronologie (${dated.length})`;
-  if(isWide()) switchPanel('p-list'); else phoneNav('p-list','list');
+function filterByDate() {
+  const dated = CORPUS.filter(l=>l.date_iso).sort((a,b)=>a.date_iso>b.date_iso?1:-1);
+  document.getElementById('letter-list').innerHTML = dated.map(l =>
+    `<button class="letter-item" data-n="${l.canonical_number}" onclick="openLetter(${l.canonical_number})" role="listitem" aria-label="${esc(l.title_fr)}">
+      <div class="li-num${STATE.favs.has(l.canonical_number)?' is-fav':''}" aria-hidden="true">${l.canonical_number}</div>
+      <div class="li-body">
+        <div class="li-title">${esc(l.title_fr)}</div>
+        <div class="li-dest">${esc(l.recipient_display_fr)} · ${esc(l.date_text_fr)}</div>
+      </div>
+    </button>`
+  ).join('');
+  document.getElementById('list-title').textContent = `Chronologie (${dated.length})`;
+  if (isWide()) switchPanel('p-list'); else phoneNav('p-list','list');
 }
 
-/* ════ NOTES ════ */
-function renderNotes(){
-  const favEl=document.getElementById('t-favs');
-  favEl.innerHTML=!STATE.favs.size
-    ?`<div class="empty-state"><i class="ti ti-heart" aria-hidden="true"></i>Appuyez sur ♥ dans une lettre pour l'ajouter ici.</div>`
-    :[...STATE.favs].map(n=>{const l=CORPUS.find(x=>x.canonical_number===n);return l?`<div class="fav-item" onclick="openLetter(${l.canonical_number})"><div class="fav-num">${l.canonical_number}</div><div class="fav-title">${esc(l.title_fr)}</div><span class="fav-heart">♥</span></div>`:''}).join('');
+/* ════════════════════════════════════════
+   NOTES PANEL
+════════════════════════════════════════ */
+function renderNotes() {
+  const favEl = document.getElementById('t-favs');
+  favEl.innerHTML = !STATE.favs.size
+    ? `<div class="empty-state"><i class="ti ti-heart" aria-hidden="true"></i>Appuyez sur ♥ dans une lettre pour l'ajouter ici.</div>`
+    : [...STATE.favs].map(n => {
+        const l = CORPUS.find(x=>x.canonical_number===n);
+        return l ? `<button class="fav-item" onclick="openLetter(${l.canonical_number})" aria-label="${esc(l.title_fr)}">
+          <div class="fav-num" aria-hidden="true">${l.canonical_number}</div>
+          <div class="fav-title">${esc(l.title_fr)}</div>
+          <span class="fav-heart" aria-hidden="true">♥</span>
+        </button>` : '';
+      }).join('');
 
-  const notEl=document.getElementById('t-notes');
-  notEl.innerHTML=!STATE.notes.length
-    ?`<div class="empty-state"><i class="ti ti-pencil" aria-hidden="true"></i>Aucune note pour l'instant.</div>`
-    :STATE.notes.map((n,i)=>`<div class="note-item" onclick="openLetter(${n.n})"><div class="ni-ref">${n.letter_id}</div><div class="ni-text">« ${esc(n.text)} »</div><div class="ni-date">${n.date} <span style="float:right;cursor:pointer;color:var(--muted)" onclick="deleteNote(event,${i})"><i class="ti ti-trash" aria-hidden="true" style="font-size:12px"></i></span></div></div>`).join('');
+  const notEl = document.getElementById('t-notes');
+  notEl.innerHTML = !STATE.notes.length
+    ? `<div class="empty-state"><i class="ti ti-pencil" aria-hidden="true"></i>Ajoutez des notes depuis le lecteur.</div>`
+    : STATE.notes.map((n,i) =>
+        `<button class="note-item" onclick="openLetter(${n.n})" aria-label="Note sur ${n.letter_id}">
+          <div class="ni-ref">${esc(n.letter_id)}</div>
+          <div class="ni-text">« ${esc(n.text)} »</div>
+          <div class="ni-date">${esc(n.date)}
+            <span onclick="deleteNote(event,${i})" aria-label="Supprimer la note" role="button" tabindex="0"
+              style="float:right;cursor:pointer;color:var(--muted);padding:0 4px"
+              onkeydown="if(event.key==='Enter'){deleteNote(event,${i})}">
+              <i class="ti ti-trash" aria-hidden="true" style="font-size:12px"></i>
+            </span>
+          </div>
+        </button>`
+      ).join('');
 
-  const relEl=document.getElementById('t-relire');
-  relEl.innerHTML=!STATE.relire.size
-    ?`<div class="empty-state"><i class="ti ti-bookmark" aria-hidden="true"></i>Aucune lettre marquée à relire.</div>`
-    :[...STATE.relire].map(n=>{const l=CORPUS.find(x=>x.canonical_number===n);return l?`<div class="fav-item" onclick="openLetter(${l.canonical_number})"><div class="fav-num">${l.canonical_number}</div><div class="fav-title">${esc(l.title_fr)}</div><i class="ti ti-bookmark" aria-hidden="true" style="color:var(--gold);font-size:16px"></i></div>`:''}).join('');
+  const relEl = document.getElementById('t-relire');
+  relEl.innerHTML = !STATE.relire.size
+    ? `<div class="empty-state"><i class="ti ti-bookmark" aria-hidden="true"></i>Appuyez sur «\u202fRelire\u202f» dans une lettre.</div>`
+    : [...STATE.relire].map(n => {
+        const l = CORPUS.find(x=>x.canonical_number===n);
+        return l ? `<button class="fav-item" onclick="openLetter(${l.canonical_number})" aria-label="${esc(l.title_fr)}">
+          <div class="fav-num" aria-hidden="true">${l.canonical_number}</div>
+          <div class="fav-title">${esc(l.title_fr)}</div>
+          <i class="ti ti-bookmark" aria-hidden="true" style="color:var(--gold);font-size:16px"></i>
+        </button>` : '';
+      }).join('');
 }
 
-function setTab(el,target){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); el.classList.add('active');
-  ['t-favs','t-notes','t-relire'].forEach(id=>document.getElementById(id).style.display='none');
+function setTab(el, target) {
+  document.querySelectorAll('.tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
+  el.classList.add('active'); el.setAttribute('aria-selected','true');
+  ['t-favs','t-notes','t-relire'].forEach(id => document.getElementById(id).style.display='none');
   document.getElementById(target).style.display='';
 }
-function deleteNote(e,idx){e.stopPropagation();STATE.notes.splice(idx,1);saveState();renderNotes();}
-
-/* ════ DARK MODE ════ */
-function toggleDark(){
-  document.documentElement.classList.toggle('forced-dark');
-  localStorage.setItem('lp_dark',document.documentElement.classList.contains('forced-dark')?'true':'false');
+function deleteNote(e, idx) {
+  e.stopPropagation();
+  STATE.notes.splice(idx,1); saveState(); renderNotes();
 }
 
-/* ════ INSTALL ════ */
-function doInstall(){if(!deferredInstall)return;deferredInstall.prompt();deferredInstall.userChoice.then(()=>{deferredInstall=null;});document.getElementById('install-banner').classList.remove('show');}
-function dismissInstall(){document.getElementById('install-banner').classList.remove('show');localStorage.setItem('lp_install_dismissed','1');}
+/* ════════════════════════════════════════
+   INSTALL
+════════════════════════════════════════ */
+function doInstall() {
+  if (!deferredInstall) return;
+  deferredInstall.prompt();
+  deferredInstall.userChoice.then(()=>{ deferredInstall=null; });
+  document.getElementById('install-banner').classList.remove('show');
+}
+function dismissInstall() {
+  document.getElementById('install-banner').classList.remove('show');
+  localStorage.setItem('lp_install_dismissed','1');
+}
 
-/* ════ UTILS ════ */
-function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+/* ════════════════════════════════════════
+   UTILS
+════════════════════════════════════════ */
+function esc(s) {
+  if (!s) return '';
+  return String(s)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
 
-/* ════ KEYBOARD ════ */
-document.addEventListener('keydown',e=>{
-  if(currentLetterIdx<0) return;
-  if(e.key==='ArrowLeft') prevLetter();
-  if(e.key==='ArrowRight') nextLetter();
-  if(e.key==='Escape'&&!isWide()) closePhoneReader();
+/* ════════════════════════════════════════
+   KEYBOARD
+════════════════════════════════════════ */
+document.addEventListener('keydown', e => {
+  if (currentLetterIdx < 0) return;
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 'ArrowLeft')  { e.preventDefault(); prevLetter(); }
+  if (e.key === 'ArrowRight') { e.preventDefault(); nextLetter(); }
+  if (e.key === 'Escape' && !isWide()) closePhoneReader();
 });
 
-/* ════ SWIPE (phone reader) ════ */
-let touchStartX=0;
-document.getElementById('phone-reader').addEventListener('touchstart',e=>{touchStartX=e.touches[0].clientX;},{passive:true});
-document.getElementById('phone-reader').addEventListener('touchend',e=>{
-  const dx=e.changedTouches[0].clientX-touchStartX;
-  if(Math.abs(dx)>60){if(dx>0)prevLetter();else nextLetter();}
-},{passive:true});
+/* ════════════════════════════════════════
+   SWIPE (phone reader)
+════════════════════════════════════════ */
+let _touchX = 0;
+document.getElementById('phone-reader').addEventListener('touchstart', e => {
+  _touchX = e.touches[0].clientX;
+}, {passive:true});
+document.getElementById('phone-reader').addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - _touchX;
+  if (Math.abs(dx) > 70) { if (dx>0) prevLetter(); else nextLetter(); }
+}, {passive:true});
 
-/* ════ SERVICE WORKER ════ */
-if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{});});
+/* ════════════════════════════════════════
+   SERVICE WORKER
+════════════════════════════════════════ */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').then(reg => {
+      reg.addEventListener('updatefound', () => {
+        reg.installing?.addEventListener('statechange', function() {
+          if (this.state==='installed' && navigator.serviceWorker.controller)
+            showToast('Mise à jour disponible — rechargez');
+        });
+      });
+    }).catch(() => {});
+  });
 }
 
+/* ════════════════════════════════════════
+   BOOT
+════════════════════════════════════════ */
 loadCorpus();
 </script>
 </body>

@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: QA + Deploy to GitHub Pages
 
 on:
   push:
@@ -15,23 +15,107 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  validate:
+    runs-on: ubuntu-latest
+    name: Corpus & App QA
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate corpus.json
+        run: |
+          python3 << 'EOF'
+          import json, sys, re
+
+          with open('corpus.json') as f:
+              corpus = json.load(f)
+
+          errors = []
+          letters = corpus.get('letters', [])
+
+          # 1. Letter count
+          if len(letters) != 136:
+              errors.append(f"Expected 136 letters, got {len(letters)}")
+
+          # 2. No missing canonical numbers
+          nums = set(l['canonical_number'] for l in letters)
+          missing = [n for n in range(1,137) if n not in nums]
+          if missing:
+              errors.append(f"Missing canonical numbers: {missing}")
+
+          # 3. No duplicates
+          seen = {}
+          for l in letters:
+              n = l['canonical_number']
+              if n in seen: errors.append(f"Duplicate: {n}")
+              seen[n] = True
+
+          # 4. Required fields
+          for l in letters:
+              n = l['canonical_number']
+              if not l.get('body_fr'):
+                  errors.append(f"L{n}: empty body_fr")
+              if not l.get('display_paragraphs'):
+                  errors.append(f"L{n}: no display_paragraphs")
+              if l.get('translation_base') != 'english_source':
+                  errors.append(f"L{n}: translation_base={l.get('translation_base')}")
+              if l.get('quality_status') != 'validated':
+                  errors.append(f"L{n}: quality_status={l.get('quality_status')}")
+
+          # 5. No empty display_paragraphs
+          for l in letters:
+              for dp in l.get('display_paragraphs', []):
+                  if not dp.get('text_fr','').strip():
+                      errors.append(f"L{l['canonical_number']}: empty DP {dp.get('display_paragraph_id','?')}")
+
+          # 6. No Volition residues (forbidden term)
+          for l in letters:
+              text = l.get('body_fr','') + ' '.join(dp.get('text_fr','') for dp in l.get('display_paragraphs',[]))
+              if re.search(r'\b[Vv]olition\b', text):
+                  errors.append(f"L{l['canonical_number']}: contains forbidden term 'Volition'")
+
+          # 7. SW version check
+          with open('sw.js') as f:
+              sw = f.read()
+          if 'luisa-v1.0.0' in sw or 'luisa-corpus-v1.0.0' in sw:
+              errors.append("sw.js still uses stale v1.0.0 cache name")
+
+          # 8. Manifest icons present
+          import os
+          for icon in ['icons/icon-192.png','icons/icon-512.png','icons/apple-touch-icon.png']:
+              if not os.path.exists(icon):
+                  errors.append(f"Missing icon: {icon}")
+
+          if errors:
+              print(f"QA FAILED — {len(errors)} error(s):")
+              for e in errors:
+                  print(f"  ✗ {e}")
+              sys.exit(1)
+          else:
+              print(f"QA PASS — 136 letters, {len(letters)} validated")
+              print(f"  Fingerprint: {corpus.get('global_fingerprint_sha256','—')[:16]}…")
+          EOF
+
+      - name: Validate HTML syntax
+        run: python3 -c "
+          with open('index.html') as f: html = f.read()
+          assert '<script>' in html or '<script ' in html, 'No script tag found'
+          assert 'loadCorpus' in html, 'loadCorpus function missing'
+          assert 'sw.js' in html, 'Service worker registration missing'
+          assert 'manifest.json' in html, 'Manifest link missing'
+          print('HTML basic validation PASS')
+          "
+
   deploy:
+    needs: validate
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v4
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: '.'
-
-      - name: Deploy to GitHub Pages
-        id: deployment
+      - id: deployment
         uses: actions/deploy-pages@v4
