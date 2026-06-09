@@ -4,8 +4,8 @@
    - corpus.json → network-first, cache fallback
    - Google Fonts / CDN → stale-while-revalidate, never in install precache
 */
-const CACHE_VERSION = 'luisa-v1.1.2';
-const CORPUS_CACHE  = 'luisa-corpus-v1.1.2';
+const CACHE_VERSION = 'luisa-v1.1.3';
+const CORPUS_CACHE  = 'luisa-corpus-v1.1.3';
 
 // ONLY local files — no external URLs that can fail install
 const APP_SHELL = [

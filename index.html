@@ -428,6 +428,7 @@ html[data-theme="dark"] .topic-pill,[data-theme="system"] .topic-pill{color:inhe
     <button class="snav-item" onclick="switchPanel('p-notes')" id="snav-notes" aria-label="Notes"><i class="ti ti-bookmark" aria-hidden="true"></i>Notes</button>
     <div class="sidebar-bottom">
       <button class="snav-item" onclick="cycleTheme()" id="snav-theme" aria-label="Thème"><i class="ti ti-moon" aria-hidden="true"></i>Thème</button>
+      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v1.1.3</div>
     </div>
   </nav>
 
@@ -467,6 +468,7 @@ html[data-theme="dark"] .topic-pill,[data-theme="system"] .topic-pill{color:inhe
           <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:16px;color:var(--muted)"></i>
         </button>
         <div style="height:12px"></div>
+        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v1.1.3</div>
       </div>
     </div>
 
@@ -567,15 +569,16 @@ html[data-theme="dark"] .topic-pill,[data-theme="system"] .topic-pill{color:inhe
         </div>
         <div class="lh-divider"></div>
         <div class="letter-body" id="wr-body"></div>
-        <button class="trust-panel" id="wr-trust" onclick="toggleTrust('wr-trust')"
-          style="display:block;width:100%;padding:0;background:none;border:0.5px solid var(--border);border-radius:10px;margin:16px 16px 24px;overflow:hidden;cursor:default">
+        <div class="trust-panel" id="wr-trust"
+          style="border:0.5px solid var(--border);border-radius:10px;margin:16px 16px 24px;overflow:hidden;">
           <div class="trust-head" role="button" aria-expanded="false" id="wr-trust-head" tabindex="0"
+            onclick="toggleTrust('wr-trust')"
             onkeydown="if(event.key==='Enter'||event.key===' '){toggleTrust('wr-trust');event.preventDefault()}">
             <span><i class="ti ti-shield-check" aria-hidden="true"></i> Source et validation</span>
             <i class="ti ti-chevron-down trust-chevron" aria-hidden="true"></i>
           </div>
           <div class="trust-body" id="wr-trust-body"></div>
-        </button>
+        </div>
         <div style="height:24px"></div>
       </div>
       <div class="action-bar" role="toolbar" aria-label="Actions">
@@ -617,15 +620,16 @@ html[data-theme="dark"] .topic-pill,[data-theme="system"] .topic-pill{color:inhe
       </div>
       <div class="lh-divider"></div>
       <div class="letter-body" id="pr-body"></div>
-      <button class="trust-panel" id="pr-trust" onclick="toggleTrust('pr-trust')"
-        style="display:block;width:100%;padding:0;background:none;border:0.5px solid var(--border);border-radius:10px;margin:16px 12px 24px;overflow:hidden;cursor:default">
+      <div class="trust-panel" id="pr-trust"
+        style="border:0.5px solid var(--border);border-radius:10px;margin:16px 12px 24px;overflow:hidden;">
         <div class="trust-head" role="button" aria-expanded="false" id="pr-trust-head" tabindex="0"
+          onclick="toggleTrust('pr-trust')"
           onkeydown="if(event.key==='Enter'||event.key===' '){toggleTrust('pr-trust');event.preventDefault()}">
           <span><i class="ti ti-shield-check" aria-hidden="true"></i> Source et validation</span>
           <i class="ti ti-chevron-down trust-chevron" aria-hidden="true"></i>
         </div>
         <div class="trust-body" id="pr-trust-body"></div>
-      </button>
+      </div>
     </div>
     <div class="action-bar" role="toolbar" aria-label="Actions">
       <button class="action-btn" id="pr-fav-btn" onclick="toggleFav()" aria-label="Ajouter aux favoris"><i class="ti ti-heart" aria-hidden="true"></i><span>Favori</span></button>
