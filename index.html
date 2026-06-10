@@ -912,6 +912,10 @@ function onResize() {
         // Switching to phone: render phone reader, re-open it
         renderPhoneReader(l);
         document.getElementById('phone-reader').classList.add('open');
+        // Restore selected highlight in the list (same as wide branch)
+        document.querySelectorAll('.letter-item').forEach(function(el) {
+          el.classList.toggle('selected', parseInt(el.dataset.n) === n);
+        });
       }
 
       // Restore scroll after layout has fully settled (rAF × 2 = after paint)
