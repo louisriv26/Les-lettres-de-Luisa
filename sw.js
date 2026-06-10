@@ -1,11 +1,12 @@
-/* Luisa Piccarreta PWA — Service Worker v1.1.5
+/* Luisa Piccarreta PWA — Service Worker v1.1.6
    Strategy:
-   - App shell (HTML, icons, manifest) → cache-first, local files only
+   - index.html → network-first, cache fallback (ensures updates propagate)
    - corpus.json → network-first, cache fallback
+   - Icons / manifest → cache-first (static assets, versioned by cache name)
    - Google Fonts / CDN → stale-while-revalidate, never in install precache
 */
-const CACHE_VERSION = 'luisa-v1.1.5';
-const CORPUS_CACHE  = 'luisa-corpus-v1.1.5';
+const CACHE_VERSION = 'luisa-v1.1.6';
+const CORPUS_CACHE  = 'luisa-corpus-v1.1.6';
 
 // ONLY local files — no external URLs that can fail install
 const APP_SHELL = [
@@ -85,10 +86,10 @@ async function networkFirstCorpus(request) {
       cache.put(request, response.clone());
     }
     return response;
-  } catch {
+  } catch(e) {
+    console.warn('[SW] networkFirstCorpus failed:', e);
     const cached = await caches.match(request);
     if (cached) return cached;
-    // Return minimal error response
     return new Response(
       JSON.stringify({ error: 'corpus_unavailable', letters: [] }),
       { status: 503, headers: { 'Content-Type': 'application/json' } }
@@ -106,7 +107,8 @@ async function cacheFirst(request) {
       cache.put(request, response.clone());
     }
     return response;
-  } catch {
+  } catch(e) {
+    console.warn('[SW] networkFirst failed:', e);
     return new Response('Offline — ressource non disponible', { status: 503 });
   }
 }
@@ -119,7 +121,8 @@ async function networkFirstShell(request) {
       cache.put(request, response.clone());
     }
     return response;
-  } catch {
+  } catch(e) {
+    console.warn('[SW] networkFirstShell failed:', e);
     const cached = await caches.match(request);
     if (cached) return cached;
     return new Response('Offline', { status: 503 });

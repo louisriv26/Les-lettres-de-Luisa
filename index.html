@@ -448,7 +448,7 @@ html[data-theme="dark"] .topic-pill,[data-theme="system"] .topic-pill{color:inhe
     <button class="snav-item" onclick="switchPanel('p-notes')" id="snav-notes" aria-label="Notes"><i class="ti ti-bookmark" aria-hidden="true"></i>Notes</button>
     <div class="sidebar-bottom">
       <button class="snav-item" onclick="cycleTheme()" id="snav-theme" aria-label="Thème"><i class="ti ti-moon" aria-hidden="true"></i>Thème</button>
-      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v1.1.5</div>
+      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v1.1.6</div>
     </div>
   </nav>
 
@@ -488,7 +488,7 @@ html[data-theme="dark"] .topic-pill,[data-theme="system"] .topic-pill{color:inhe
           <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:16px;color:var(--muted)"></i>
         </button>
         <div style="height:12px"></div>
-        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v1.1.5</div>
+        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v1.1.6</div>
       </div>
     </div>
 
@@ -998,6 +998,9 @@ function openLetterAtDP(n, dpId) {
 
 function closePhoneReader() {
   document.getElementById('phone-reader').classList.remove('open');
+  // Refresh list so read/unread state and progress bar update immediately
+  if (prevPhonePanel === 'p-list') renderList();
+  updateContinueCard();
 }
 
 /* ════════════════════════════════════════
@@ -1493,17 +1496,19 @@ function renderNotes() {
   notEl.innerHTML = !STATE.notes.length
     ? `<div class="empty-state"><i class="ti ti-pencil" aria-hidden="true"></i>Ajoutez des notes depuis le lecteur.</div>`
     : STATE.notes.map((n,i) =>
-        `<button class="note-item" onclick="openLetter(${n.n})" aria-label="Note sur ${n.letter_id}">
-          <div class="ni-ref">${esc(n.letter_id)}</div>
-          <div class="ni-text">« ${esc(n.text)} »</div>
-          <div class="ni-date">${esc(n.date)}
-            <span onclick="deleteNote(event,${i})" aria-label="Supprimer la note" tabindex="0"
-              style="float:right;cursor:pointer;color:var(--muted);padding:0 4px"
-              onkeydown="if(event.key==='Enter'){deleteNote(event,${i})}">
-              <i class="ti ti-trash" aria-hidden="true" style="font-size:12px"></i>
-            </span>
-          </div>
-        </button>`
+        `<div class="note-item" style="display:flex;align-items:flex-start;gap:8px;padding:0">
+          <button onclick="openLetter(${n.n})" aria-label="Ouvrir ${esc(n.letter_id)}"
+            style="flex:1;text-align:left;background:none;border:none;cursor:pointer;padding:13px 0 13px 16px">
+            <div class="ni-ref">${esc(n.letter_id)}</div>
+            <div class="ni-text">« ${esc(n.text)} »</div>
+            <div class="ni-date">${esc(n.date)}</div>
+          </button>
+          <button onclick="deleteNote(event,${i})" aria-label="Supprimer la note"
+            style="padding:13px 14px 13px 4px;background:none;border:none;cursor:pointer;color:var(--muted);flex-shrink:0"
+            onkeydown="if(event.key==='Enter'){deleteNote(event,${i})}">
+            <i class="ti ti-trash" aria-hidden="true" style="font-size:14px"></i>
+          </button>
+        </div>`
       ).join('');
 
   const relEl = document.getElementById('t-relire');

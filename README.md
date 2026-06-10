@@ -6,7 +6,7 @@ Application de référence pour les Lettres de Luisa Piccarreta.
 ---
 
 
-## v1.1.2 — iOS/Safari Emergency Patch (2026-06-09)
+## v1.1.6 — iOS/Safari Emergency Patch (2026-06-09)
 
 ### What was fixed
 - **P0** — Optional chaining `?.` removed from all JS (was breaking iOS Safari < 15)
@@ -16,7 +16,7 @@ Application de référence pour les Lettres de Luisa Piccarreta.
 - **P0** — `#app` height: full iOS fallback chain (`100vh → -webkit-fill-available → 100svh → 100dvh`)
 - **P0** — iOS `@media` safety net with `position:fixed` bottom nav
 - **P1** — `index.html` switched to network-first in service worker (no stale cache on update)
-- **P1** — Cache version bumped to `luisa-v1.1.2` (forces cache purge on next load)
+- **P1** — Cache version bumped to `luisa-v1.1.6` (forces cache purge on next load)
 - **P1** — `?screen=` parameter whitelisted (security + stability)
 - **P1** — "Continuer" now restores actual scroll position
 - **P1** — Search results open at the matching paragraph (scroll + brief highlight)
@@ -126,4 +126,4 @@ L'app sera disponible sur `https://TON-USERNAME.github.io/TON-REPO/`
 
 ---
 
-*Corpus v1.1.0 · PATCH v1.1.2 — iOS/Safari emergency fix · Juin 2026*
+*Corpus v1.1.0 · PATCH v1.1.6 — iOS/Safari emergency fix · Juin 2026*
