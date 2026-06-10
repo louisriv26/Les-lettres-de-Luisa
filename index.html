@@ -509,7 +509,7 @@ html[data-layout="wide"] #reader-empty small{font-family:var(--body);font-size:1
     <button class="snav-item" onclick="switchPanel('p-notes')" id="snav-notes" aria-label="Notes"><i class="ti ti-bookmark" aria-hidden="true"></i>Notes</button>
     <div class="sidebar-bottom">
       <button class="snav-item" onclick="cycleTheme()" id="snav-theme" aria-label="Thème"><i class="ti ti-moon" aria-hidden="true"></i>Thème</button>
-      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v1.2.1 · 2026-06-10 06:00 UTC</div>
+      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v1.2.2 · 2026-06-10 07:51 UTC</div>
     </div>
   </nav>
 
@@ -549,7 +549,7 @@ html[data-layout="wide"] #reader-empty small{font-family:var(--body);font-size:1
           <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:16px;color:var(--muted)"></i>
         </button>
         <div style="height:12px"></div>
-        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v1.2.1 · 2026-06-10 06:00 UTC</div>
+        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v1.2.2 · 2026-06-10 07:51 UTC</div>
       </div>
     </div>
 
@@ -1245,7 +1245,7 @@ function renderWideReader(l, skipScrollReset) {
   setupHighlightListener('wide-reader-scroll');
 }
 
-function renderPhoneReader(l) {
+function renderPhoneReader(l, skipScrollReset) {
   document.getElementById('pr-id').textContent    = l.letter_id;
   document.getElementById('pr-title').textContent = l.title_fr;
   document.getElementById('pr-meta').innerHTML    = buildMeta(l);
@@ -1259,7 +1259,7 @@ function renderPhoneReader(l) {
   document.getElementById('pr-btn-next').disabled = currentLetterIdx === CORPUS.length - 1;
   document.getElementById('pr-trust').classList.remove('open');
   document.getElementById('pr-trust-head').setAttribute('aria-expanded','false');
-  document.getElementById('phone-reader-scroll').scrollTop = 0;
+  if (!skipScrollReset) document.getElementById('phone-reader-scroll').scrollTop = 0;
   document.getElementById('pr-progress').style.width = '0%';
   updateFavBtns(l.canonical_number);
   updateRelireBtns(l.canonical_number);
@@ -1808,12 +1808,18 @@ function hideHlPopup() {
 function positionHlPopup(rect) {
   var popup = document.getElementById('hl-popup');
   popup.classList.add('show');
-  var pw = 220, ph = 80;
-  var top = rect.bottom + window.scrollY + 8;
-  var left = Math.max(8, Math.min(rect.left + window.scrollX, window.innerWidth - pw - 8));
-  if (top + ph > window.innerHeight + window.scrollY - 20) {
-    top = rect.top + window.scrollY - ph - 8;
+  var pw = 220, ph = 82;
+  // Always try above first — iOS native toolbar (Copy/Translate) appears below selection,
+  // so positioning above avoids the collision entirely.
+  var top = rect.top + window.scrollY - ph - 12;
+  if (top < window.scrollY + 8) {
+    // Not enough space above — go below the selection + extra clearance for iOS toolbar
+    top = rect.bottom + window.scrollY + 52;
   }
+  var left = Math.max(8, Math.min(
+    rect.left + window.scrollX + (rect.width / 2) - pw / 2,
+    window.innerWidth - pw - 8
+  ));
   popup.style.top = top + 'px';
   popup.style.left = left + 'px';
 }
@@ -1880,10 +1886,20 @@ function confirmHighlight() {
   saveState();
   hideHlPopup();
   showToast('Passage surligné');
-  // Re-render the current letter to show the mark
+  // Re-render to show the mark, preserving scroll position
   if (currentLetterIdx >= 0 && CORPUS[currentLetterIdx]) {
+    var scrollerId = isWide() ? 'wide-reader-scroll' : 'phone-reader-scroll';
+    var scroller = document.getElementById(scrollerId);
+    var savedScroll = scroller ? scroller.scrollTop : 0;
     if (isWide()) renderWideReader(CORPUS[currentLetterIdx], true);
-    else renderPhoneReader(CORPUS[currentLetterIdx]);
+    else renderPhoneReader(CORPUS[currentLetterIdx], true);
+    // Restore scroll after paint — rAF×2 ensures layout is stable
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        var s = document.getElementById(scrollerId);
+        if (s) s.scrollTop = savedScroll;
+      });
+    });
   }
 }
 
@@ -1896,8 +1912,17 @@ function hlClick(e, hlId) {
     saveState();
     showToast('Surlignage supprimé');
     if (currentLetterIdx >= 0 && CORPUS[currentLetterIdx]) {
+      var scrollerId = isWide() ? 'wide-reader-scroll' : 'phone-reader-scroll';
+      var scroller = document.getElementById(scrollerId);
+      var savedScroll = scroller ? scroller.scrollTop : 0;
       if (isWide()) renderWideReader(CORPUS[currentLetterIdx], true);
-      else renderPhoneReader(CORPUS[currentLetterIdx]);
+      else renderPhoneReader(CORPUS[currentLetterIdx], true);
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          var s = document.getElementById(scrollerId);
+          if (s) s.scrollTop = savedScroll;
+        });
+      });
     }
   }
 }
