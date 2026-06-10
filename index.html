@@ -70,9 +70,12 @@ body{overflow:hidden;}
 .li-num{font-size:10px;color:var(--muted);font-family:var(--body);letter-spacing:.04em;
   width:28px;flex-shrink:0;text-align:right;margin-top:3px;position:relative;}
 .li-num.is-fav::after{content:'♥';font-size:7px;color:var(--gold);position:absolute;top:-3px;right:-1px;}
+.li-num.is-unread::before{content:'';width:6px;height:6px;border-radius:50%;
+  background:var(--gold);position:absolute;top:-2px;left:-2px;}
 .li-body{flex:1;min-width:0;}
 .li-title{font-family:var(--serif);font-size:14px;color:var(--night);line-height:1.35;margin-bottom:3px;}
 .li-read{opacity:.55;}
+.action-btn.read-active{color:var(--gold);}
 .li-dest{font-size:11px;color:var(--muted);font-family:var(--body);margin-bottom:5px;}
 .li-topics{display:flex;flex-wrap:wrap;gap:4px;}
 .topic-pill{font-size:10px;padding:2px 7px;border-radius:10px;background:var(--gold-pale);
@@ -88,7 +91,7 @@ html[data-theme="dark"] .topic-pill,[data-theme="system"] .topic-pill{color:inhe
   cursor:pointer;border:0.5px solid var(--border);background:var(--white);color:var(--muted);
   transition:all .15s;}
 .chip:hover,.chip:focus-visible{border-color:var(--gold-light);color:var(--night);outline:none;}
-.chip.active{background:var(--night);color:var(--gold);border-color:var(--night);}
+.chip.active{background:#1A2A4A;color:var(--gold);border-color:#1A2A4A;}
 
 /* Empty / error states */
 .empty-state{padding:40px 20px;text-align:center;color:var(--muted);font-family:var(--body);
@@ -98,7 +101,7 @@ html[data-theme="dark"] .topic-pill,[data-theme="system"] .topic-pill{color:inhe
   border-radius:12px;border:0.5px solid var(--border);}
 .error-state .ti{font-size:32px;color:var(--gold);display:block;margin-bottom:10px;}
 .error-state p{font-family:var(--body);font-size:13.5px;color:var(--ink);line-height:1.65;margin-bottom:12px;}
-.error-state button{background:var(--night);color:var(--gold);border:none;border-radius:8px;
+.error-state button{background:#1A2A4A;color:var(--gold);border:none;border-radius:8px;
   padding:8px 18px;font-size:13px;font-family:var(--body);cursor:pointer;}
 
 /* Search */
@@ -163,7 +166,7 @@ mark.hl:hover{opacity:.7;}
 .hl-color-btn.hc-green{background:rgba(80,180,120,.6);}
 .hl-color-btn.hc-blue{background:rgba(80,140,220,.6);}
 .hl-confirm-btn{flex:1;padding:5px 8px;border:none;border-radius:7px;
-  background:var(--night);color:var(--gold);font-family:var(--body);
+  background:#1A2A4A;color:var(--gold);font-family:var(--body);
   font-size:12px;cursor:pointer;}
 .hl-remove-btn{padding:5px 8px;border:0.5px solid var(--border);border-radius:7px;
   background:none;color:var(--muted);font-family:var(--body);font-size:12px;cursor:pointer;}
@@ -201,14 +204,15 @@ mark.hl:hover{opacity:.7;}
 
 /* Action bar */
 .action-bar{display:flex;border-top:0.5px solid var(--border);background:var(--ivory);
-  padding:8px 0;flex-shrink:0;}
-.action-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;
-  border:none;cursor:pointer;color:var(--muted);font-size:10px;font-family:var(--body);
-  padding:4px 2px;transition:color .15s;border-radius:6px;}
+  padding:6px 0;flex-shrink:0;}
+.action-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;background:none;
+  border:none;cursor:pointer;color:var(--muted);font-size:9px;font-family:var(--body);
+  padding:4px 1px;transition:color .15s;border-radius:6px;min-width:0;}
 .action-btn:hover,.action-btn:focus-visible{color:var(--night);outline:none;}
-.action-btn .ti{font-size:20px;}
+.action-btn .ti{font-size:18px;}
 .action-btn.fav-active{color:var(--gold);}
 .action-btn.relire-active{color:var(--gold);}
+.action-btn.read-active{color:var(--gold);}
 
 /* Text size bar */
 .text-size-bar{display:none;position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
@@ -270,7 +274,7 @@ mark.hl:hover{opacity:.7;}
 
 /* Toast — aria-live */
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(10px);
-  background:var(--night);color:var(--gold);font-family:var(--body);font-size:13px;
+  background:#1A2A4A;color:var(--gold);font-family:var(--body);font-size:13px;
   padding:8px 18px;border-radius:20px;opacity:0;transition:all .25s;pointer-events:none;
   white-space:nowrap;z-index:9000;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
@@ -325,7 +329,7 @@ mark.hl:hover{opacity:.7;}
   border-radius:10px;padding:10px 14px;align-items:center;gap:10px;}
 .install-banner.show{display:flex;}
 .install-banner p{flex:1;font-size:12px;color:var(--night);font-family:var(--body);line-height:1.5;}
-.install-btn{background:var(--night);color:var(--gold);border:none;border-radius:8px;
+.install-btn{background:#1A2A4A;color:var(--gold);border:none;border-radius:8px;
   padding:6px 12px;font-size:12px;font-family:var(--body);cursor:pointer;flex-shrink:0;}
 .install-close{background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;padding:2px;flex-shrink:0;}
 
@@ -373,7 +377,7 @@ html[data-layout="wide"] #phone-reader{display:none!important;position:relative!
 html[data-layout="wide"] #app{flex-direction:row;}
 
 html[data-layout="wide"] #sidebar{display:flex;flex-direction:column;align-items:center;width:var(--sidebar-w);
-    background:var(--night);border-right:0.5px solid rgba(255,255,255,.06);
+    background:#1A2A4A;border-right:0.5px solid rgba(255,255,255,.06);
     padding:calc(16px + var(--sat-top)) 0 12px;flex-shrink:0;gap:4px;}
 html[data-layout="wide"] .sidebar-logo{width:38px;height:38px;margin-bottom:16px;border-radius:10px;overflow:hidden;flex-shrink:0;}
 html[data-layout="wide"] .sidebar-logo img{width:100%;height:100%;object-fit:cover;}
@@ -486,7 +490,7 @@ html[data-layout="wide"] #reader-empty small{font-family:var(--body);font-size:1
   <textarea id="note-input" rows="4" placeholder="Votre note…" style="width:100%;border:0.5px solid var(--border);border-radius:8px;padding:10px 12px;font-family:var(--body);font-size:14px;color:var(--ink);background:var(--white);resize:none;outline:none;line-height:1.6"></textarea>
   <div style="display:flex;gap:8px;margin-top:12px">
     <button onclick="closeNoteSheet()" style="flex:1;padding:10px;border:0.5px solid var(--border);border-radius:8px;background:none;font-family:var(--body);font-size:13px;color:var(--muted);cursor:pointer">Annuler</button>
-    <button onclick="saveNoteSheet()" style="flex:2;padding:10px;border:none;border-radius:8px;background:var(--night);font-family:var(--body);font-size:13px;color:var(--gold);cursor:pointer;font-weight:500">Enregistrer</button>
+    <button onclick="saveNoteSheet()" style="flex:2;padding:10px;border:none;border-radius:8px;background:#1A2A4A;font-family:var(--body);font-size:13px;color:var(--gold);cursor:pointer;font-weight:500">Enregistrer</button>
   </div>
 </div>
 
@@ -499,7 +503,7 @@ html[data-layout="wide"] #reader-empty small{font-family:var(--body);font-size:1
 
 <!-- Update banner -->
 <div id="update-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:800;
-  background:var(--night);color:var(--gold);font-family:var(--body);font-size:13px;
+  background:#1A2A4A;color:var(--gold);font-family:var(--body);font-size:13px;
   padding:10px 16px;display:none;align-items:center;gap:10px;justify-content:space-between;
   box-shadow:0 2px 12px rgba(0,0,0,.25);">
   <span>✦ Nouvelle version disponible</span>
@@ -520,7 +524,7 @@ html[data-layout="wide"] #reader-empty small{font-family:var(--body);font-size:1
     <button class="snav-item" onclick="switchPanel('p-notes')" id="snav-notes" aria-label="Notes"><i class="ti ti-bookmark" aria-hidden="true"></i>Notes</button>
     <div class="sidebar-bottom">
       <button class="snav-item" onclick="cycleTheme()" id="snav-theme" aria-label="Thème"><i class="ti ti-moon" aria-hidden="true"></i>Thème</button>
-      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v1.2.3 · 2026-06-10 08:06 UTC</div>
+      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v1.2.5 · 2026-06-10 15:49 UTC</div>
     </div>
   </nav>
 
@@ -560,7 +564,7 @@ html[data-layout="wide"] #reader-empty small{font-family:var(--body);font-size:1
           <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:16px;color:var(--muted)"></i>
         </button>
         <div style="height:12px"></div>
-        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v1.2.3 · 2026-06-10 08:06 UTC</div>
+        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v1.2.5 · 2026-06-10 15:49 UTC</div>
       </div>
     </div>
 
@@ -687,6 +691,7 @@ html[data-layout="wide"] #reader-empty small{font-family:var(--body);font-size:1
       </div>
       <div class="action-bar" role="toolbar" aria-label="Actions">
         <button class="action-btn" id="wr-fav-btn" onclick="toggleFav()" aria-label="Ajouter aux favoris"><i class="ti ti-heart" aria-hidden="true"></i><span>Favori</span></button>
+        <button class="action-btn" id="wr-read-btn" onclick="toggleRead()" aria-label="Marquer comme lu"><i class="ti ti-check" aria-hidden="true"></i><span>Lu</span></button>
         <button class="action-btn" id="wr-relire-btn" onclick="toggleRelire()" aria-label="Marquer à relire"><i class="ti ti-bookmark" aria-hidden="true"></i><span>Relire</span></button>
         <button class="action-btn" onclick="addNote()" aria-label="Ajouter une note"><i class="ti ti-pencil" aria-hidden="true"></i><span>Note</span></button>
         <button class="action-btn" onclick="shareLetter()" aria-label="Partager"><i class="ti ti-share" aria-hidden="true"></i><span>Partager</span></button>
@@ -737,6 +742,7 @@ html[data-layout="wide"] #reader-empty small{font-family:var(--body);font-size:1
     </div>
     <div class="action-bar" role="toolbar" aria-label="Actions">
       <button class="action-btn" id="pr-fav-btn" onclick="toggleFav()" aria-label="Ajouter aux favoris"><i class="ti ti-heart" aria-hidden="true"></i><span>Favori</span></button>
+      <button class="action-btn" id="pr-read-btn" onclick="toggleRead()" aria-label="Marquer comme lu"><i class="ti ti-check" aria-hidden="true"></i><span>Lu</span></button>
       <button class="action-btn" id="pr-relire-btn" onclick="toggleRelire()" aria-label="Marquer à relire"><i class="ti ti-bookmark" aria-hidden="true"></i><span>Relire</span></button>
       <button class="action-btn" onclick="addNote()" aria-label="Ajouter une note"><i class="ti ti-pencil" aria-hidden="true"></i><span>Note</span></button>
       <button class="action-btn" onclick="shareLetter()" aria-label="Partager"><i class="ti ti-share" aria-hidden="true"></i><span>Partager</span></button>
@@ -1299,10 +1305,7 @@ function updateReadProgress(prefix) {
       STATE.positions[n] = pct;
       // Update lastRead
       STATE.lastRead = { n: n, scroll: pct };
-      // Mark as read if scrolled past 80%
-      if (pct >= 80 && !STATE.readSet.has(n)) {
-        STATE.readSet.add(n);
-      }
+      // Reading tracked manually via "Lu" button — no auto-mark
       saveState();
       document.getElementById('cont-bar').style.width = Math.max(5, pct) + '%';
     }
@@ -1330,7 +1333,35 @@ function updateFavBtns(n) {
     el.classList.toggle('fav-active', active);
     el.setAttribute('aria-label', active ? 'Retirer des favoris' : 'Ajouter aux favoris');
   });
+  updateReadBtn(n); // Always sync read button when fav buttons update
 }
+function updateReadBtn(n) {
+  var isRead = STATE.readSet.has(n);
+  ['wr-read-btn','pr-read-btn'].forEach(function(id) {
+    var btn = document.getElementById(id);
+    if (!btn) return;
+    btn.classList.toggle('read-active', isRead);
+    btn.setAttribute('aria-label', isRead ? 'Marquer comme non lu' : 'Marquer comme lu');
+    btn.querySelector('span').textContent = isRead ? 'Lu ✓' : 'Lu';
+  });
+}
+
+function toggleRead() {
+  var l = CORPUS[currentLetterIdx]; if (!l) return;
+  var n = l.canonical_number;
+  if (STATE.readSet.has(n)) {
+    STATE.readSet.delete(n);
+    showToast('Marqué comme non lu');
+  } else {
+    STATE.readSet.add(n);
+    showToast('Marqué comme lu ✓');
+  }
+  saveState();
+  updateReadBtn(n);
+  // Refresh list if visible so dot updates immediately
+  if (isWide() || prevPhonePanel === 'p-list') renderList();
+}
+
 function updateRelireBtns(n) {
   const active = STATE.relire.has(n);
   ['wr-relire-btn','pr-relire-btn'].forEach(id => {
@@ -1496,7 +1527,7 @@ function renderList() {
     var isRead = STATE.readSet.has(l.canonical_number);
     return `<button class="letter-item${l.canonical_number===cur?' selected':''}" data-n="${l.canonical_number}"
       onclick="openLetter(${l.canonical_number})" role="listitem" aria-label="${esc(l.title_fr)}">
-      <div class="li-num${STATE.favs.has(l.canonical_number)?' is-fav':''}" aria-hidden="true">${l.canonical_number}</div>
+      <div class="li-num${STATE.favs.has(l.canonical_number)?' is-fav':''}${!isRead?' is-unread':''}" aria-hidden="true">${l.canonical_number}</div>
       <div class="li-body">
         <div class="li-title${isRead?' li-read':''}">${esc(l.title_fr)}</div>
         <div class="li-dest">${esc(l.recipient_display_fr)}${l.date_text_fr?' · '+esc(l.date_text_fr):''}</div>
