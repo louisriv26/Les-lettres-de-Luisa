@@ -380,6 +380,13 @@ html[data-theme="dark"] .topic-pill,[data-theme="system"] .topic-pill{color:inhe
 }
 
 /* ══════════════════════════════════════════════════════
+   TABLET PORTRAIT (768–1023px wide) — narrower list, more reader space
+══════════════════════════════════════════════════════ */
+@media(min-width:768px) and (max-width:1023px){
+  :root{--list-w:250px;}
+}
+
+/* ══════════════════════════════════════════════════════
    iOS/Safari scroll fallback — if internal flex scroll fails
 ══════════════════════════════════════════════════════ */
 @supports not (height: 100dvh) {
@@ -448,7 +455,7 @@ html[data-theme="dark"] .topic-pill,[data-theme="system"] .topic-pill{color:inhe
     <button class="snav-item" onclick="switchPanel('p-notes')" id="snav-notes" aria-label="Notes"><i class="ti ti-bookmark" aria-hidden="true"></i>Notes</button>
     <div class="sidebar-bottom">
       <button class="snav-item" onclick="cycleTheme()" id="snav-theme" aria-label="Thème"><i class="ti ti-moon" aria-hidden="true"></i>Thème</button>
-      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v1.1.6</div>
+      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v1.1.7</div>
     </div>
   </nav>
 
@@ -488,7 +495,7 @@ html[data-theme="dark"] .topic-pill,[data-theme="system"] .topic-pill{color:inhe
           <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:16px;color:var(--muted)"></i>
         </button>
         <div style="height:12px"></div>
-        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v1.1.6</div>
+        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v1.1.7</div>
       </div>
     </div>
 
@@ -766,7 +773,15 @@ applyTheme(STATE.theme);
 /* ════════════════════════════════════════
    RESPONSIVE
 ════════════════════════════════════════ */
-function isWide() { return window.innerWidth >= 768; }
+// Detect true phone vs tablet.
+// Uses the SMALLER screen dimension (min of width/height) as device class.
+// A phone in landscape has a small short-side (330–430px).
+// A tablet in portrait has a large short-side (744px+).
+// This prevents iPhone landscape (short-side ~390px) from being treated as tablet.
+function isWide() {
+  var shortSide = Math.min(window.screen.width, window.screen.height);
+  return shortSide >= 680;
+}
 
 /* ════════════════════════════════════════
    CORPUS LOAD — P0 fix: clear error state
@@ -864,11 +879,57 @@ function initApp() {
   });
 }
 
+var _resizeTimer = null;
 function onResize() {
-  const wide = isWide();
-  document.getElementById('sidebar').style.display = wide ? 'flex' : 'none';
-  document.getElementById('right-panel').style.display = wide ? 'flex' : 'none';
-  document.getElementById('home-theme-btn').style.display = wide ? 'none' : 'block';
+  clearTimeout(_resizeTimer);
+  _resizeTimer = setTimeout(function() {
+    var wide = isWide();
+    document.getElementById('sidebar').style.display = wide ? 'flex' : 'none';
+    document.getElementById('right-panel').style.display = wide ? 'flex' : 'none';
+    document.getElementById('home-theme-btn').style.display = wide ? 'none' : 'block';
+
+    // Migrate reader state: re-open the current letter in the correct reader
+    if (currentLetterIdx >= 0 && CORPUS[currentLetterIdx]) {
+      var l = CORPUS[currentLetterIdx];
+      var n = l.canonical_number;
+      // Capture scroll position from whichever reader was active
+      var prevScroller = wide
+        ? document.getElementById('phone-reader-scroll')   // was phone, now going wide
+        : document.getElementById('wide-reader-scroll');    // was wide, now going phone
+      if (prevScroller && prevScroller.scrollHeight > prevScroller.clientHeight) {
+        var pct = Math.round(prevScroller.scrollTop / (prevScroller.scrollHeight - prevScroller.clientHeight) * 100);
+        if (pct > 0) STATE.positions[n] = pct;
+      }
+
+      if (wide) {
+        // Switching to tablet: render wide reader, hide phone reader
+        document.getElementById('phone-reader').classList.remove('open');
+        renderWideReader(l, true); // skipScrollReset=true — we restore below
+        document.querySelectorAll('.letter-item').forEach(function(el) {
+          el.classList.toggle('selected', parseInt(el.dataset.n) === n);
+        });
+      } else {
+        // Switching to phone: render phone reader, re-open it
+        renderPhoneReader(l);
+        document.getElementById('phone-reader').classList.add('open');
+      }
+
+      // Restore scroll after layout has fully settled (rAF × 2 = after paint)
+      var savedPct = STATE.positions[n] || 0;
+      if (savedPct > 2) {
+        requestAnimationFrame(function() {
+          requestAnimationFrame(function() {
+            var scroller = wide
+              ? document.getElementById('wide-reader-scroll')
+              : document.getElementById('phone-reader-scroll');
+            if (!scroller) return;
+            var max = scroller.scrollHeight - scroller.clientHeight;
+            if (max > 0) scroller.scrollTop = Math.round(savedPct / 100 * max);
+          });
+        });
+      }
+    }
+  }, 180); // debounce: ignore intermediate frames during rotation animation
 }
 
 function getTopicLetters(topic) {
@@ -1055,7 +1116,7 @@ function applyReaderSize(bodyEl) {
   bodyEl.querySelectorAll('.dp').forEach(p => p.style.fontSize = readerSize + 'px');
 }
 
-function renderWideReader(l) {
+function renderWideReader(l, skipScrollReset) {
   document.getElementById('reader-empty').style.display = 'none';
   const wr = document.getElementById('wide-reader');
   wr.style.display = 'flex';
@@ -1073,7 +1134,7 @@ function renderWideReader(l) {
   document.getElementById('wr-btn-next').disabled = currentLetterIdx === CORPUS.length - 1;
   document.getElementById('wr-trust').classList.remove('open');
   document.getElementById('wr-trust-head').setAttribute('aria-expanded','false');
-  document.getElementById('wide-reader-scroll').scrollTop = 0;
+  if (!skipScrollReset) document.getElementById('wide-reader-scroll').scrollTop = 0;
   document.getElementById('wr-progress').style.width = '0%';
   updateFavBtns(l.canonical_number);
   updateRelireBtns(l.canonical_number);
