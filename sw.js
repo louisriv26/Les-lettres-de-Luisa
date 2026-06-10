@@ -1,12 +1,12 @@
-/* Luisa Piccarreta PWA — Service Worker v1.2.2
+/* Luisa Piccarreta PWA — Service Worker v1.2.3
    Strategy:
    - index.html → network-first, cache fallback (ensures updates propagate)
    - corpus.json → network-first, cache fallback
    - Icons / manifest → cache-first (static assets, versioned by cache name)
    - Google Fonts / CDN → stale-while-revalidate, never in install precache
 */
-const CACHE_VERSION = 'luisa-v1.2.2';
-const CORPUS_CACHE  = 'luisa-corpus-v1.2.2';
+const CACHE_VERSION = 'luisa-v1.2.3';
+const CORPUS_CACHE  = 'luisa-corpus-v1.2.3';
 
 // ONLY local files — no external URLs that can fail install
 const APP_SHELL = [
@@ -24,8 +24,8 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_VERSION)
       .then(cache => cache.addAll(APP_SHELL))
-      .then(() => self.skipWaiting())
       .catch(err => console.error('[SW] Install failed:', err))
+    // No skipWaiting here — wait for explicit user action via SKIP_WAITING message
   );
 });
 
