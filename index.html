@@ -139,6 +139,43 @@ html[data-theme="dark"] .topic-pill,[data-theme="system"] .topic-pill{color:inhe
 
 .letter-body{padding:0 24px 8px;}
 .dp{font-family:var(--body);font-size:var(--reader-size);line-height:1.82;color:var(--ink);margin-bottom:1.3em;}
+
+/* Highlights */
+mark.hl{border-radius:3px;padding:0 1px;cursor:pointer;transition:opacity .15s;}
+mark.hl-gold{background:rgba(201,168,76,.35);color:inherit;}
+mark.hl-pink{background:rgba(236,100,120,.28);color:inherit;}
+mark.hl-green{background:rgba(80,180,120,.28);color:inherit;}
+mark.hl-blue{background:rgba(80,140,220,.28);color:inherit;}
+mark.hl:hover{opacity:.7;}
+
+/* Selection popup */
+#hl-popup{position:fixed;z-index:700;background:var(--ivory);border:0.5px solid var(--border);
+  border-radius:12px;padding:8px 10px;box-shadow:0 4px 20px rgba(0,0,0,.18);
+  display:none;flex-direction:column;gap:8px;min-width:200px;}
+#hl-popup.show{display:flex;}
+.hl-popup-row{display:flex;align-items:center;gap:6px;}
+.hl-popup-label{font-family:var(--body);font-size:11px;color:var(--muted);white-space:nowrap;}
+.hl-color-btn{width:22px;height:22px;border-radius:50%;border:2px solid transparent;
+  cursor:pointer;transition:transform .1s;flex-shrink:0;}
+.hl-color-btn:hover,.hl-color-btn.selected{transform:scale(1.2);border-color:var(--ink);}
+.hl-color-btn.hc-gold{background:rgba(201,168,76,.7);}
+.hl-color-btn.hc-pink{background:rgba(236,100,120,.6);}
+.hl-color-btn.hc-green{background:rgba(80,180,120,.6);}
+.hl-color-btn.hc-blue{background:rgba(80,140,220,.6);}
+.hl-confirm-btn{flex:1;padding:5px 8px;border:none;border-radius:7px;
+  background:var(--night);color:var(--gold);font-family:var(--body);
+  font-size:12px;cursor:pointer;}
+.hl-remove-btn{padding:5px 8px;border:0.5px solid var(--border);border-radius:7px;
+  background:none;color:var(--muted);font-family:var(--body);font-size:12px;cursor:pointer;}
+
+/* Highlight items in Notes tab */
+.hl-item{display:flex;align-items:flex-start;gap:8px;padding:0;}
+.hl-item-body{flex:1;text-align:left;background:none;border:none;cursor:pointer;
+  padding:12px 0 12px 16px;}
+.hl-swatch{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.hl-text{font-family:var(--serif);font-style:italic;font-size:13px;color:var(--ink);
+  line-height:1.5;margin-bottom:3px;}
+.hl-ref{font-family:var(--body);font-size:10px;color:var(--muted);}
 .dp.salutation{font-style:italic;color:var(--night);font-size:calc(var(--reader-size) - 1px);margin-bottom:1.5em;opacity:.9;}
 .dp.signature{font-style:italic;font-size:calc(var(--reader-size) - 2px);color:var(--muted);
   border-top:0.5px solid var(--border);padding-top:14px;margin-top:1em;margin-bottom:0;text-align:center;}
@@ -427,6 +464,21 @@ html[data-layout="wide"] #reader-empty small{font-family:var(--body);font-size:1
 <!-- Toast: aria-live so screen readers announce it -->
 <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
+<!-- Highlight selection popup -->
+<div id="hl-popup" role="dialog" aria-label="Surligner le texte sélectionné">
+  <div class="hl-popup-row">
+    <span class="hl-popup-label">Surligner :</span>
+    <button class="hl-color-btn hc-gold selected" data-color="gold" onclick="selectHlColor(this)" aria-label="Or"></button>
+    <button class="hl-color-btn hc-pink" data-color="pink" onclick="selectHlColor(this)" aria-label="Rose"></button>
+    <button class="hl-color-btn hc-green" data-color="green" onclick="selectHlColor(this)" aria-label="Vert"></button>
+    <button class="hl-color-btn hc-blue" data-color="blue" onclick="selectHlColor(this)" aria-label="Bleu"></button>
+  </div>
+  <div class="hl-popup-row">
+    <button class="hl-confirm-btn" onclick="confirmHighlight()">Surligner</button>
+    <button class="hl-remove-btn" onclick="hideHlPopup()">Annuler</button>
+  </div>
+</div>
+
 <!-- Note bottom sheet (replaces prompt()) -->
 <div id="note-overlay" onclick="closeNoteSheet()" style="display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.45)"></div>
 <div id="note-sheet" role="dialog" aria-modal="true" aria-label="Ajouter une note" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:601;background:var(--ivory);border-radius:16px 16px 0 0;padding:20px 16px calc(20px + env(safe-area-inset-bottom));box-shadow:0 -4px 24px rgba(0,0,0,.18)">
@@ -457,7 +509,7 @@ html[data-layout="wide"] #reader-empty small{font-family:var(--body);font-size:1
     <button class="snav-item" onclick="switchPanel('p-notes')" id="snav-notes" aria-label="Notes"><i class="ti ti-bookmark" aria-hidden="true"></i>Notes</button>
     <div class="sidebar-bottom">
       <button class="snav-item" onclick="cycleTheme()" id="snav-theme" aria-label="Thème"><i class="ti ti-moon" aria-hidden="true"></i>Thème</button>
-      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v1.2.0 · 2026-06-10 05:26 UTC</div>
+      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v1.2.1 · 2026-06-10 06:00 UTC</div>
     </div>
   </nav>
 
@@ -497,7 +549,7 @@ html[data-layout="wide"] #reader-empty small{font-family:var(--body);font-size:1
           <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:16px;color:var(--muted)"></i>
         </button>
         <div style="height:12px"></div>
-        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v1.2.0 · 2026-06-10 05:26 UTC</div>
+        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v1.2.1 · 2026-06-10 06:00 UTC</div>
       </div>
     </div>
 
@@ -572,11 +624,13 @@ html[data-layout="wide"] #reader-empty small{font-family:var(--body);font-size:1
         <button class="tab active" onclick="setTab(this,'t-favs')" role="tab" aria-selected="true">Favoris</button>
         <button class="tab" onclick="setTab(this,'t-notes')" role="tab" aria-selected="false">Notes</button>
         <button class="tab" onclick="setTab(this,'t-relire')" role="tab" aria-selected="false">À relire</button>
+        <button class="tab" onclick="setTab(this,'t-highlights')" role="tab" aria-selected="false">Surlignages</button>
       </div>
       <div class="scroll" id="notes-scroll">
         <div id="t-favs" role="tabpanel"></div>
         <div id="t-notes" style="display:none" role="tabpanel"></div>
         <div id="t-relire" style="display:none" role="tabpanel"></div>
+        <div id="t-highlights" style="display:none" role="tabpanel"></div>
       </div>
     </div>
 
@@ -732,8 +786,9 @@ function loadState() {
       theme: localStorage.getItem('lp_theme') || 'system',
       positions: JSON.parse(localStorage.getItem('lp_positions') || '{}'),
       readSet: new Set(JSON.parse(localStorage.getItem('lp_read') || '[]')),
+      highlights: JSON.parse(localStorage.getItem('lp_highlights') || '[]'),
     };
-  } catch(e) { console.warn('[Luisa] loadState error:', e); return {favs:new Set(),relire:new Set(),notes:[],lastRead:null,readerSize:16,theme:'system',positions:{},readSet:new Set()}; }
+  } catch(e) { console.warn('[Luisa] loadState error:', e); return {favs:new Set(),relire:new Set(),notes:[],lastRead:null,readerSize:16,theme:'system',positions:{},readSet:new Set(),highlights:[]}; }
 }
 function saveState() {
   try {
@@ -745,6 +800,7 @@ function saveState() {
     localStorage.setItem('lp_theme',     STATE.theme);
     localStorage.setItem('lp_positions', JSON.stringify(STATE.positions));
     localStorage.setItem('lp_read',      JSON.stringify([...STATE.readSet]));
+    localStorage.setItem('lp_highlights',JSON.stringify(STATE.highlights));
   } catch(e) { console.warn('[Luisa] saveState error:', e); }
 }
 const STATE = loadState();
@@ -1101,18 +1157,33 @@ function closePhoneReader() {
    RENDER HELPERS — P0 fix: esc() all text
 ════════════════════════════════════════ */
 function buildDPs(l) {
-  const dps = (l.display_paragraphs||[]).slice().sort((a,b) => (a.display_order||0)-(b.display_order||0));
-  return dps.map(dp => {
-    let cls = 'dp';
-    const dpAttr = dp.display_paragraph_id ? ' data-dp-id="'+esc(dp.display_paragraph_id)+'"' : '';
-    const r = dp.split_reason || '';
-    if (SAL_REASONS.has(r))
-      cls += ' salutation';
-    else if (dp.is_signature || SIG_REASONS.has(r) || SIG_REGEX.test(dp.text_fr||''))
-      cls += ' signature';
-    // P0: escape text before inserting — then allow <br> only
-    const safe = esc(dp.text_fr || '').replace(/\n/g, '<br>');
-    return `<p class="${cls}"${dpAttr}>${safe}</p>`;
+  var dps = (l.display_paragraphs||[]).slice().sort(function(a,b){return (a.display_order||0)-(b.display_order||0);});
+  var hlMap = {};
+  STATE.highlights.forEach(function(h) {
+    if (h.n === l.canonical_number) {
+      if (!hlMap[h.dp_id]) hlMap[h.dp_id] = [];
+      hlMap[h.dp_id].push(h);
+    }
+  });
+  return dps.map(function(dp) {
+    var cls = 'dp';
+    var dpAttr = dp.display_paragraph_id ? ' data-dp-id="' + esc(dp.display_paragraph_id) + '"' : '';
+    var r = dp.split_reason || '';
+    if (SAL_REASONS.has(r)) cls += ' salutation';
+    else if (dp.is_signature || SIG_REASONS.has(r) || SIG_REGEX.test(dp.text_fr||'')) cls += ' signature';
+    var safe = esc(dp.text_fr || '').replace(/\n/g, '<br>');
+    var dpHls = hlMap[dp.display_paragraph_id] || [];
+    dpHls.forEach(function(h) {
+      var et = esc(h.text);
+      var idx = safe.indexOf(et);
+      if (idx >= 0) {
+        safe = safe.slice(0, idx)
+          + '<mark class="hl hl-' + h.color + '" data-hl-id="' + h.id + '" onclick="hlClick(event,&quot;' + h.id + '&quot;)">'
+          + et + '</mark>'
+          + safe.slice(idx + et.length);
+      }
+    });
+    return '<p class="' + cls + '"' + dpAttr + '>' + safe + '</p>';
   }).join('');
 }
 
@@ -1171,6 +1242,7 @@ function renderWideReader(l, skipScrollReset) {
   document.getElementById('wr-progress').style.width = '0%';
   updateFavBtns(l.canonical_number);
   updateRelireBtns(l.canonical_number);
+  setupHighlightListener('wide-reader-scroll');
 }
 
 function renderPhoneReader(l) {
@@ -1191,6 +1263,7 @@ function renderPhoneReader(l) {
   document.getElementById('pr-progress').style.width = '0%';
   updateFavBtns(l.canonical_number);
   updateRelireBtns(l.canonical_number);
+  setupHighlightListener('phone-reader-scroll');
 }
 
 function prevLetter() { if (currentLetterIdx>0){ currentLetterIdx--; openLetter(CORPUS[currentLetterIdx].canonical_number); } }
@@ -1641,10 +1714,13 @@ function renderNotes() {
 }
 
 function setTab(el, target) {
-  document.querySelectorAll('.tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
   el.classList.add('active'); el.setAttribute('aria-selected','true');
-  ['t-favs','t-notes','t-relire'].forEach(id => document.getElementById(id).style.display='none');
+  ['t-favs','t-notes','t-relire','t-highlights'].forEach(function(id) {
+    document.getElementById(id).style.display='none';
+  });
   document.getElementById(target).style.display='';
+  if (target === 't-highlights') renderHighlights();
 }
 function deleteNote(e, idx) {
   e.stopPropagation();
@@ -1683,6 +1759,14 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2200);
 }
 
+// Close highlight popup when clicking outside it
+document.addEventListener('mousedown', function(e) {
+  var popup = document.getElementById('hl-popup');
+  if (popup.classList.contains('show') && !popup.contains(e.target)) {
+    hideHlPopup();
+  }
+});
+
 /* ════════════════════════════════════════
    DELEGATED CLICK HANDLER
    Handles all data-action buttons generated via innerHTML
@@ -1700,6 +1784,157 @@ document.addEventListener('click', function(e) {
     filterByRecipient(btn.getAttribute('data-recipient'));
   }
 });
+
+/* ════════════════════════════════════════
+   TEXT HIGHLIGHTING
+════════════════════════════════════════ */
+var _hlColor = 'gold';
+var _hlPendingText = '';
+var _hlPendingDpId = '';
+var _hlPendingLetterN = -1;
+
+function selectHlColor(btn) {
+  document.querySelectorAll('.hl-color-btn').forEach(function(b) { b.classList.remove('selected'); });
+  btn.classList.add('selected');
+  _hlColor = btn.getAttribute('data-color');
+}
+
+function hideHlPopup() {
+  document.getElementById('hl-popup').classList.remove('show');
+  _hlPendingText = '';
+  if (window.getSelection) window.getSelection().removeAllRanges();
+}
+
+function positionHlPopup(rect) {
+  var popup = document.getElementById('hl-popup');
+  popup.classList.add('show');
+  var pw = 220, ph = 80;
+  var top = rect.bottom + window.scrollY + 8;
+  var left = Math.max(8, Math.min(rect.left + window.scrollX, window.innerWidth - pw - 8));
+  if (top + ph > window.innerHeight + window.scrollY - 20) {
+    top = rect.top + window.scrollY - ph - 8;
+  }
+  popup.style.top = top + 'px';
+  popup.style.left = left + 'px';
+}
+
+function setupHighlightListener(scrollerId) {
+  var scroller = document.getElementById(scrollerId);
+  if (!scroller) return;
+  scroller.addEventListener('mouseup', onTextSelected);
+  scroller.addEventListener('touchend', function(e) {
+    // Small delay for iOS selection to settle
+    setTimeout(onTextSelected, 80);
+  });
+}
+
+function onTextSelected() {
+  var sel = window.getSelection();
+  if (!sel || sel.isCollapsed || !sel.toString().trim()) {
+    hideHlPopup();
+    return;
+  }
+  var text = sel.toString().trim();
+  if (text.length < 2 || text.length > 600) { hideHlPopup(); return; }
+
+  // Find which dp contains the selection
+  var range = sel.getRangeAt(0);
+  var container = range.commonAncestorContainer;
+  var dpEl = container.nodeType === 3 ? container.parentElement : container;
+  while (dpEl && !dpEl.getAttribute('data-dp-id')) dpEl = dpEl.parentElement;
+
+  if (!dpEl) { hideHlPopup(); return; }
+
+  _hlPendingText = text;
+  _hlPendingDpId = dpEl.getAttribute('data-dp-id');
+  _hlPendingLetterN = currentLetterIdx >= 0 && CORPUS[currentLetterIdx]
+    ? CORPUS[currentLetterIdx].canonical_number : -1;
+
+  if (_hlPendingLetterN < 0) { hideHlPopup(); return; }
+
+  var rect = range.getBoundingClientRect();
+  positionHlPopup(rect);
+}
+
+function confirmHighlight() {
+  if (!_hlPendingText || _hlPendingLetterN < 0) { hideHlPopup(); return; }
+  var l = CORPUS.find(function(x) { return x.canonical_number === _hlPendingLetterN; });
+  if (!l) { hideHlPopup(); return; }
+
+  // Check for duplicate
+  var duplicate = STATE.highlights.some(function(h) {
+    return h.dp_id === _hlPendingDpId && h.text === _hlPendingText;
+  });
+  if (duplicate) { showToast('Passage déjà surligné'); hideHlPopup(); return; }
+
+  var hl = {
+    id: 'hl_' + Date.now(),
+    letter_id: l.letter_id,
+    n: _hlPendingLetterN,
+    dp_id: _hlPendingDpId,
+    text: _hlPendingText,
+    color: _hlColor,
+    date: new Date().toLocaleDateString('fr-FR', {day:'numeric',month:'long',year:'numeric'})
+  };
+  STATE.highlights.unshift(hl);
+  saveState();
+  hideHlPopup();
+  showToast('Passage surligné');
+  // Re-render the current letter to show the mark
+  if (currentLetterIdx >= 0 && CORPUS[currentLetterIdx]) {
+    if (isWide()) renderWideReader(CORPUS[currentLetterIdx], true);
+    else renderPhoneReader(CORPUS[currentLetterIdx]);
+  }
+}
+
+function hlClick(e, hlId) {
+  e.stopPropagation();
+  var hl = STATE.highlights.find(function(h) { return h.id === hlId; });
+  if (!hl) return;
+  if (confirm('Supprimer ce surlignage ?')) {
+    STATE.highlights = STATE.highlights.filter(function(h) { return h.id !== hlId; });
+    saveState();
+    showToast('Surlignage supprimé');
+    if (currentLetterIdx >= 0 && CORPUS[currentLetterIdx]) {
+      if (isWide()) renderWideReader(CORPUS[currentLetterIdx], true);
+      else renderPhoneReader(CORPUS[currentLetterIdx]);
+    }
+  }
+}
+
+function renderHighlights() {
+  var el = document.getElementById('t-highlights');
+  if (!el) return;
+  if (!STATE.highlights.length) {
+    el.innerHTML = '<div class="empty-state"><i class="ti ti-highlight" aria-hidden="true"></i>Sélectionnez du texte dans une lettre pour le surligner.</div>';
+    return;
+  }
+  var colorBg = {gold:'rgba(201,168,76,.35)',pink:'rgba(236,100,120,.28)',green:'rgba(80,180,120,.28)',blue:'rgba(80,140,220,.28)'};
+  el.innerHTML = STATE.highlights.map(function(h, i) {
+    var bg = colorBg[h.color] || colorBg.gold;
+    return '<div class="hl-item">'
+      + '<button class="hl-item-body" onclick="openLetter(' + h.n + ')" aria-label="Ouvrir ' + esc(h.letter_id) + '">'
+      + '<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">'
+      + '<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:' + bg + ';flex-shrink:0"></span>'
+      + '<span class="hl-ref">' + esc(h.letter_id) + ' · ' + esc(h.date) + '</span>'
+      + '</div>'
+      + '<div class="hl-text">« ' + esc(h.text.length > 120 ? h.text.slice(0,120)+'…' : h.text) + ' »</div>'
+      + '</button>'
+      + '<button onclick="deleteHighlight(event,' + i + ')" aria-label="Supprimer le surlignage"'
+      + ' style="padding:12px 14px 12px 4px;background:none;border:none;cursor:pointer;color:var(--muted);flex-shrink:0">'
+      + '<i class="ti ti-trash" aria-hidden="true" style="font-size:14px"></i>'
+      + '</button>'
+      + '</div>';
+  }).join('');
+}
+
+function deleteHighlight(e, idx) {
+  e.stopPropagation();
+  STATE.highlights.splice(idx, 1);
+  saveState();
+  renderHighlights();
+  showToast('Surlignage supprimé');
+}
 
 /* ════════════════════════════════════════
    KEYBOARD
