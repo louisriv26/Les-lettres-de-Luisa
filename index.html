@@ -217,7 +217,7 @@ mark.hl:hover{opacity:.7;}
 /* Text size bar */
 .text-size-bar{display:none;position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
   background:var(--white);border:0.5px solid var(--border);border-radius:10px;padding:8px 14px;
-  z-index:200;align-items:center;gap:12px;font-family:var(--body);font-size:13px;color:var(--night);}
+  z-index:550;align-items:center;gap:12px;font-family:var(--body);font-size:13px;color:var(--night);}
 .text-size-bar.open{display:flex;}
 .tsz-btn{background:none;border:0.5px solid var(--border);border-radius:6px;padding:4px 10px;
   cursor:pointer;color:var(--night);font-family:var(--body);font-size:14px;transition:background .15s;}
@@ -524,7 +524,7 @@ html[data-layout="wide"] #reader-empty small{font-family:var(--body);font-size:1
     <button class="snav-item" onclick="switchPanel('p-notes')" id="snav-notes" aria-label="Notes"><i class="ti ti-bookmark" aria-hidden="true"></i>Notes</button>
     <div class="sidebar-bottom">
       <button class="snav-item" onclick="cycleTheme()" id="snav-theme" aria-label="Thème"><i class="ti ti-moon" aria-hidden="true"></i>Thème</button>
-      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v1.2.5 · 2026-06-10 15:49 UTC</div>
+      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v1.2.9 · 2026-06-10 16:47 UTC</div>
     </div>
   </nav>
 
@@ -564,7 +564,7 @@ html[data-layout="wide"] #reader-empty small{font-family:var(--body);font-size:1
           <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:16px;color:var(--muted)"></i>
         </button>
         <div style="height:12px"></div>
-        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v1.2.5 · 2026-06-10 15:49 UTC</div>
+        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v1.2.9 · 2026-06-10 16:47 UTC</div>
       </div>
     </div>
 
@@ -980,6 +980,39 @@ function initApp() {
   });
 }
 
+/* ════════════════════════════════════════
+   PARAGRAPH ANCHOR SCROLL
+   Restores reading position by paragraph ID, not percentage.
+   Percentage drifts after rotation because text reflows at different widths.
+════════════════════════════════════════ */
+function getFirstVisibleDpId(scrollerId) {
+  var scroller = document.getElementById(scrollerId);
+  if (!scroller) return null;
+  var scrollerRect = scroller.getBoundingClientRect();
+  var dps = scroller.querySelectorAll('[data-dp-id]');
+  for (var i = 0; i < dps.length; i++) {
+    var rect = dps[i].getBoundingClientRect();
+    // Paragraph is "visible" if its top is within the scroller viewport
+    if (rect.top >= scrollerRect.top && rect.top <= scrollerRect.bottom) {
+      return dps[i].getAttribute('data-dp-id');
+    }
+  }
+  // Fallback: return first dp if all are above viewport (scrolled past beginning)
+  return dps.length > 0 ? dps[0].getAttribute('data-dp-id') : null;
+}
+
+function scrollToDpId(scrollerId, dpId) {
+  if (!dpId) return;
+  var scroller = document.getElementById(scrollerId);
+  if (!scroller) return;
+  var target = scroller.querySelector('[data-dp-id="' + dpId + '"]');
+  if (!target) return;
+  var scrollerRect = scroller.getBoundingClientRect();
+  var targetRect = target.getBoundingClientRect();
+  // Scroll so the paragraph appears near the top of the reader (with small padding)
+  scroller.scrollTop += targetRect.top - scrollerRect.top - 12;
+}
+
 var _resizeTimer = null;
 function onResize() {
   clearTimeout(_resizeTimer);
@@ -994,10 +1027,15 @@ function onResize() {
     if (currentLetterIdx >= 0 && CORPUS[currentLetterIdx]) {
       var l = CORPUS[currentLetterIdx];
       var n = l.canonical_number;
-      // Capture scroll position from whichever reader was active
-      var prevScroller = wide
-        ? document.getElementById('phone-reader-scroll')   // was phone, now going wide
-        : document.getElementById('wide-reader-scroll');    // was wide, now going phone
+
+      // Capture first visible paragraph BEFORE re-render (anchor restore)
+      var prevScrollerId = wide
+        ? 'phone-reader-scroll'    // was phone, now going wide
+        : 'wide-reader-scroll';    // was wide, now going phone
+      var anchorDpId = getFirstVisibleDpId(prevScrollerId);
+
+      // Also save percentage as fallback
+      var prevScroller = document.getElementById(prevScrollerId);
       if (prevScroller && prevScroller.scrollHeight > prevScroller.clientHeight) {
         var pct = Math.round(prevScroller.scrollTop / (prevScroller.scrollHeight - prevScroller.clientHeight) * 100);
         if (pct > 0) STATE.positions[n] = pct;
@@ -1020,20 +1058,26 @@ function onResize() {
         });
       }
 
-      // Restore scroll after layout has fully settled (rAF × 2 = after paint)
-      var savedPct = STATE.positions[n] || 0;
-      if (savedPct > 2) {
+      // Restore by paragraph anchor after layout settles (rAF × 2 ensures reflow complete)
+      requestAnimationFrame(function() {
         requestAnimationFrame(function() {
-          requestAnimationFrame(function() {
-            var scroller = wide
-              ? document.getElementById('wide-reader-scroll')
-              : document.getElementById('phone-reader-scroll');
-            if (!scroller) return;
-            var max = scroller.scrollHeight - scroller.clientHeight;
-            if (max > 0) scroller.scrollTop = Math.round(savedPct / 100 * max);
-          });
+          var newScrollerId = wide ? 'wide-reader-scroll' : 'phone-reader-scroll';
+          if (anchorDpId) {
+            // Primary: scroll to the exact paragraph that was visible before rotation
+            scrollToDpId(newScrollerId, anchorDpId);
+          } else {
+            // Fallback: percentage restore
+            var savedPct = STATE.positions[n] || 0;
+            if (savedPct > 2) {
+              var scroller = document.getElementById(newScrollerId);
+              if (scroller) {
+                var max = scroller.scrollHeight - scroller.clientHeight;
+                if (max > 0) scroller.scrollTop = Math.round(savedPct / 100 * max);
+              }
+            }
+          }
         });
-      }
+      });
     }
   }, 180); // debounce: ignore intermediate frames during rotation animation
 }
@@ -1834,6 +1878,7 @@ var _hlColor = 'gold';
 var _hlPendingText = '';
 var _hlPendingDpId = '';
 var _hlPendingLetterN = -1;
+var _hlPendingOffset = 0; // char offset within the dp's escaped text
 
 function selectHlColor(btn) {
   document.querySelectorAll('.hl-color-btn').forEach(function(b) { b.classList.remove('selected'); });
@@ -1897,6 +1942,13 @@ function onTextSelected() {
   _hlPendingDpId = dpEl.getAttribute('data-dp-id');
   _hlPendingLetterN = currentLetterIdx >= 0 && CORPUS[currentLetterIdx]
     ? CORPUS[currentLetterIdx].canonical_number : -1;
+  // Capture char offset within the paragraph for robust re-matching
+  try {
+    var dpRange = document.createRange();
+    dpRange.selectNodeContents(dpEl);
+    dpRange.setEnd(range.startContainer, range.startOffset);
+    _hlPendingOffset = dpRange.toString().length;
+  } catch(e) { _hlPendingOffset = 0; }
 
   if (_hlPendingLetterN < 0) { hideHlPopup(); return; }
 
@@ -1921,6 +1973,8 @@ function confirmHighlight() {
     n: _hlPendingLetterN,
     dp_id: _hlPendingDpId,
     text: _hlPendingText,
+    offset_start: _hlPendingOffset,
+    offset_end: _hlPendingOffset + _hlPendingText.length,
     color: _hlColor,
     date: new Date().toLocaleDateString('fr-FR', {day:'numeric',month:'long',year:'numeric'})
   };
@@ -2065,10 +2119,12 @@ if ('serviceWorker' in navigator) {
         });
       });
 
-      // Case 2: SW already waiting when page loads (e.g. bfcache restore on iOS)
+      // Case 2: SW already waiting when page loads → auto-apply immediately
+      // (User closed and reopened app — update is ready, just apply it silently)
       if (reg.waiting && navigator.serviceWorker.controller) {
         _newWorker = reg.waiting;
-        showUpdateBanner();
+        _newWorker.postMessage({ type: 'SKIP_WAITING' });
+        // controllerchange will fire and reload the page
       }
 
       // Case 3: periodic check every 60s (catches iOS Safari which may not fire updatefound)
@@ -2082,6 +2138,25 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.addEventListener('controllerchange', function() {
       location.reload();
     });
+  });
+
+  // Case 5: app returns to foreground (iOS bfcache resume — load event doesn't re-fire)
+  // This is the primary mechanism on iOS Safari PWA
+  document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState !== 'visible') return;
+    if (!_swReg) return;
+
+    // Check if a new SW is already waiting (installed while app was backgrounded)
+    // Auto-apply immediately — no need to show banner, user just reopened the app
+    if (_swReg.waiting && navigator.serviceWorker.controller) {
+      _newWorker = _swReg.waiting;
+      _newWorker.postMessage({ type: 'SKIP_WAITING' });
+      // controllerchange will fire → location.reload()
+      return;
+    }
+
+    // Trigger a fresh update check — this re-fetches sw.js from network
+    _swReg.update().catch(function() {});
   });
 }
 

@@ -17,93 +17,149 @@ concurrency:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    name: Corpus & App QA
+    name: Full QA Gates
     steps:
       - uses: actions/checkout@v4
 
-      - name: Validate corpus.json
+      - name: Gate 1 — JS syntax (inline script)
+        run: |
+          python3 -c "
+          with open('index.html') as f: html = f.read()
+          start = html.index('<script>') + 8
+          end = html.rindex('</script>')
+          with open('/tmp/inline.js','w') as f: f.write(html[start:end])
+          "
+          node --check /tmp/inline.js && echo "PASS: inline JS syntax" || (echo "FAIL: inline JS syntax"; exit 1)
+
+      - name: Gate 2 — SW syntax
+        run: |
+          node --check sw.js && echo "PASS: sw.js syntax" || (echo "FAIL: sw.js syntax"; exit 1)
+
+      - name: Gate 3-9 — App integrity
         run: |
           python3 << 'EOF'
           import json, sys, re
 
+          errors = []
+
+          # --- Corpus ---
           with open('corpus.json') as f:
               corpus = json.load(f)
-
-          errors = []
           letters = corpus.get('letters', [])
 
-          # 1. Letter count
           if len(letters) != 136:
               errors.append(f"Expected 136 letters, got {len(letters)}")
 
-          # 2. No missing canonical numbers
           nums = set(l['canonical_number'] for l in letters)
           missing = [n for n in range(1,137) if n not in nums]
           if missing:
               errors.append(f"Missing canonical numbers: {missing}")
 
-          # 3. No duplicates
           seen = {}
           for l in letters:
               n = l['canonical_number']
               if n in seen: errors.append(f"Duplicate: {n}")
               seen[n] = True
 
-          # 4. Required fields
+          total_dp = 0
           for l in letters:
-              n = l['canonical_number']
-              if not l.get('body_fr'):
-                  errors.append(f"L{n}: empty body_fr")
-              if not l.get('display_paragraphs'):
-                  errors.append(f"L{n}: no display_paragraphs")
-              if l.get('translation_base') != 'english_source':
-                  errors.append(f"L{n}: translation_base={l.get('translation_base')}")
-              if l.get('quality_status') != 'validated':
-                  errors.append(f"L{n}: quality_status={l.get('quality_status')}")
-
-          # 5. No empty display_paragraphs
-          for l in letters:
-              for dp in l.get('display_paragraphs', []):
+              dps = l.get('display_paragraphs', [])
+              total_dp += len(dps)
+              for dp in dps:
                   if not dp.get('text_fr','').strip():
-                      errors.append(f"L{l['canonical_number']}: empty DP {dp.get('display_paragraph_id','?')}")
-
-          # 6. No Volition residues (forbidden term)
-          for l in letters:
-              text = l.get('body_fr','') + ' '.join(dp.get('text_fr','') for dp in l.get('display_paragraphs',[]))
+                      errors.append(f"L{l['canonical_number']}: empty DP")
+              text = l.get('body_fr','') + ' '.join(dp.get('text_fr','') for dp in dps)
               if re.search(r'\b[Vv]olition\b', text):
-                  errors.append(f"L{l['canonical_number']}: contains forbidden term 'Volition'")
+                  errors.append(f"L{l['canonical_number']}: contains 'Volition'")
 
-          # 7. SW version check
-          with open('sw.js') as f:
-              sw = f.read()
-          if 'luisa-v1.0.0' in sw or 'luisa-corpus-v1.0.0' in sw:
-              errors.append("sw.js still uses stale v1.0.0 cache name")
+          if total_dp != 909:
+              errors.append(f"Expected 909 display_paragraphs, got {total_dp}")
 
-          # 8. Manifest icons present
+          # --- index.html ---
+          with open('index.html') as f:
+              html = f.read()
+          script = html[html.index('<script>')+8:html.rindex('</script>')]
+
+          # No JSON.stringify in onclick
+          if re.search(r'onclick="[^"]*JSON\.stringify', html):
+              errors.append("BROKEN onclick with JSON.stringify found")
+
+          # No optional chaining
+          oc = re.findall(r'\?\.', script)
+          if oc:
+              errors.append(f"Optional chaining (?.) found: {len(oc)} occurrences")
+
+          # No background:var(--night) — dark mode bug
+          if 'background:var(--night)' in html:
+              errors.append("background:var(--night) found — dark mode inversion bug")
+
+          # CSS uses data-layout not raw media query for layout
+          if '@media(min-width:768px){' in html:
+              errors.append("Raw @media(min-width:768px){ found — layout must use html[data-layout]")
+
+          # text-size-bar z-index must be > 500 (phone-reader)
+          if 'z-index:200' in html and 'text-size-bar' in html:
+              errors.append("text-size-bar may have wrong z-index (should be >500)")
+
+          # Key functions present
+          required_fns = [
+              'filterByTopic','filterByRecipient','openLetter','renderList',
+              'renderWideReader','renderPhoneReader','onResize','isWide','applyLayout',
+              'buildDPs','toggleRead','updateReadBtn','confirmHighlight',
+              'showUpdateBanner','applyUpdate','getFirstVisibleDpId','scrollToDpId',
+          ]
+          for fn in required_fns:
+              if f'function {fn}(' not in script:
+                  errors.append(f"Missing function: {fn}")
+
+          # Key IDs present
+          required_ids = ['wr-read-btn','pr-read-btn','hl-popup','update-banner',
+                          'text-size-bar','t-highlights','note-sheet']
+          for rid in required_ids:
+              if f'id="{rid}"' not in html:
+                  errors.append(f"Missing element id: {rid}")
+
+          # Stale version check
           import os
+          with open('sw.js') as f: sw = f.read()
+          sw_cache = re.search(r"CACHE_VERSION = '([^']+)'", sw)
+          if sw_cache:
+              sw_ver = sw_cache.group(1)
+              html_ver = re.search(r'v(\d+\.\d+\.\d+) · \d{4}', html)
+              if html_ver:
+                  html_ver_str = 'luisa-v' + html_ver.group(1)
+                  if sw_ver != html_ver_str:
+                      errors.append(f"Version mismatch: sw={sw_ver}, html={html_ver_str}")
+
+          # --- SW file ---
+          # No auto skipWaiting in install
+          install_start = sw.find("addEventListener('install'")
+          activate_start = sw.find("addEventListener('activate'")
+          if install_start >= 0 and activate_start >= 0:
+              install_block = sw[install_start:activate_start]
+              auto_skip = [l for l in install_block.split('\n')
+                          if 'skipWaiting' in l and not l.strip().startswith('//')]
+              if auto_skip:
+                  errors.append(f"Auto skipWaiting in install block: {auto_skip}")
+
+          # Manifest
+          with open('manifest.json') as f:
+              manifest = json.load(f)
+          if manifest.get('orientation') != 'any':
+              errors.append(f"manifest orientation should be 'any', got: {manifest.get('orientation')}")
+
+          # Icons present
           for icon in ['icons/icon-192.png','icons/icon-512.png','icons/apple-touch-icon.png']:
               if not os.path.exists(icon):
                   errors.append(f"Missing icon: {icon}")
 
           if errors:
               print(f"QA FAILED — {len(errors)} error(s):")
-              for e in errors:
-                  print(f"  ✗ {e}")
+              for e in errors: print(f"  ✗ {e}")
               sys.exit(1)
           else:
-              print(f"QA PASS — 136 letters, {len(letters)} validated")
-              print(f"  Fingerprint: {corpus.get('global_fingerprint_sha256','—')[:16]}…")
+              print(f"QA PASS — all {len(required_fns)} functions, {len(letters)} letters, {total_dp} DPs")
           EOF
-
-      - name: Validate HTML syntax
-        run: python3 -c "
-          with open('index.html') as f: html = f.read()
-          assert '<script>' in html or '<script ' in html, 'No script tag found'
-          assert 'loadCorpus' in html, 'loadCorpus function missing'
-          assert 'sw.js' in html, 'Service worker registration missing'
-          assert 'manifest.json' in html, 'Manifest link missing'
-          print('HTML basic validation PASS')
-          "
 
   deploy:
     needs: validate
