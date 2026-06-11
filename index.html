@@ -211,7 +211,6 @@ mark.hl:hover{opacity:.7;}
 .action-btn:hover,.action-btn:focus-visible{color:var(--night);outline:none;}
 .action-btn .ti{font-size:18px;}
 .action-btn.fav-active{color:var(--gold);}
-.action-btn.relire-active{color:var(--gold);}
 .action-btn.read-active{color:var(--gold);}
 
 /* Text size bar */
@@ -524,7 +523,7 @@ html[data-layout="wide"] #reader-empty small{font-family:var(--body);font-size:1
     <button class="snav-item" onclick="switchPanel('p-notes')" id="snav-notes" aria-label="Notes"><i class="ti ti-bookmark" aria-hidden="true"></i>Notes</button>
     <div class="sidebar-bottom">
       <button class="snav-item" onclick="cycleTheme()" id="snav-theme" aria-label="Thème"><i class="ti ti-moon" aria-hidden="true"></i>Thème</button>
-      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v1.2.9 · 2026-06-10 16:47 UTC</div>
+      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v1.3.0 · 2026-06-11 12:47 UTC</div>
     </div>
   </nav>
 
@@ -564,7 +563,7 @@ html[data-layout="wide"] #reader-empty small{font-family:var(--body);font-size:1
           <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:16px;color:var(--muted)"></i>
         </button>
         <div style="height:12px"></div>
-        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v1.2.9 · 2026-06-10 16:47 UTC</div>
+        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v1.3.0 · 2026-06-11 12:47 UTC</div>
       </div>
     </div>
 
@@ -638,13 +637,11 @@ html[data-layout="wide"] #reader-empty small{font-family:var(--body);font-size:1
       <div class="tab-row" role="tablist">
         <button class="tab active" onclick="setTab(this,'t-favs')" role="tab" aria-selected="true">Favoris</button>
         <button class="tab" onclick="setTab(this,'t-notes')" role="tab" aria-selected="false">Notes</button>
-        <button class="tab" onclick="setTab(this,'t-relire')" role="tab" aria-selected="false">À relire</button>
         <button class="tab" onclick="setTab(this,'t-highlights')" role="tab" aria-selected="false">Surlignages</button>
       </div>
       <div class="scroll" id="notes-scroll">
         <div id="t-favs" role="tabpanel"></div>
         <div id="t-notes" style="display:none" role="tabpanel"></div>
-        <div id="t-relire" style="display:none" role="tabpanel"></div>
         <div id="t-highlights" style="display:none" role="tabpanel"></div>
       </div>
     </div>
@@ -692,7 +689,6 @@ html[data-layout="wide"] #reader-empty small{font-family:var(--body);font-size:1
       <div class="action-bar" role="toolbar" aria-label="Actions">
         <button class="action-btn" id="wr-fav-btn" onclick="toggleFav()" aria-label="Ajouter aux favoris"><i class="ti ti-heart" aria-hidden="true"></i><span>Favori</span></button>
         <button class="action-btn" id="wr-read-btn" onclick="toggleRead()" aria-label="Marquer comme lu"><i class="ti ti-check" aria-hidden="true"></i><span>Lu</span></button>
-        <button class="action-btn" id="wr-relire-btn" onclick="toggleRelire()" aria-label="Marquer à relire"><i class="ti ti-bookmark" aria-hidden="true"></i><span>Relire</span></button>
         <button class="action-btn" onclick="addNote()" aria-label="Ajouter une note"><i class="ti ti-pencil" aria-hidden="true"></i><span>Note</span></button>
         <button class="action-btn" onclick="shareLetter()" aria-label="Partager"><i class="ti ti-share" aria-hidden="true"></i><span>Partager</span></button>
         <button class="action-btn" onclick="openTextBar()" aria-label="Taille du texte"><i class="ti ti-typography" aria-hidden="true"></i><span>Texte</span></button>
@@ -743,7 +739,6 @@ html[data-layout="wide"] #reader-empty small{font-family:var(--body);font-size:1
     <div class="action-bar" role="toolbar" aria-label="Actions">
       <button class="action-btn" id="pr-fav-btn" onclick="toggleFav()" aria-label="Ajouter aux favoris"><i class="ti ti-heart" aria-hidden="true"></i><span>Favori</span></button>
       <button class="action-btn" id="pr-read-btn" onclick="toggleRead()" aria-label="Marquer comme lu"><i class="ti ti-check" aria-hidden="true"></i><span>Lu</span></button>
-      <button class="action-btn" id="pr-relire-btn" onclick="toggleRelire()" aria-label="Marquer à relire"><i class="ti ti-bookmark" aria-hidden="true"></i><span>Relire</span></button>
       <button class="action-btn" onclick="addNote()" aria-label="Ajouter une note"><i class="ti ti-pencil" aria-hidden="true"></i><span>Note</span></button>
       <button class="action-btn" onclick="shareLetter()" aria-label="Partager"><i class="ti ti-share" aria-hidden="true"></i><span>Partager</span></button>
       <button class="action-btn" onclick="openTextBar()" aria-label="Taille du texte"><i class="ti ti-typography" aria-hidden="true"></i><span>Texte</span></button>
@@ -796,7 +791,6 @@ function loadState() {
   try {
     return {
       favs:   new Set(JSON.parse(localStorage.getItem('lp_favs')  || '[]')),
-      relire: new Set(JSON.parse(localStorage.getItem('lp_relire')|| '[]')),
       notes:  JSON.parse(localStorage.getItem('lp_notes') || '[]'),
       lastRead: JSON.parse(localStorage.getItem('lp_last') || 'null'),
       readerSize: parseFloat(localStorage.getItem('lp_size') || '16'),
@@ -805,12 +799,11 @@ function loadState() {
       readSet: new Set(JSON.parse(localStorage.getItem('lp_read') || '[]')),
       highlights: JSON.parse(localStorage.getItem('lp_highlights') || '[]'),
     };
-  } catch(e) { console.warn('[Luisa] loadState error:', e); return {favs:new Set(),relire:new Set(),notes:[],lastRead:null,readerSize:16,theme:'system',positions:{},readSet:new Set(),highlights:[]}; }
+  } catch(e) { console.warn('[Luisa] loadState error:', e); return {favs:new Set(),notes:[],lastRead:null,readerSize:16,theme:'system',positions:{},readSet:new Set(),highlights:[]}; }
 }
 function saveState() {
   try {
     localStorage.setItem('lp_favs',      JSON.stringify([...STATE.favs]));
-    localStorage.setItem('lp_relire',    JSON.stringify([...STATE.relire]));
     localStorage.setItem('lp_notes',     JSON.stringify(STATE.notes));
     if (STATE.lastRead) localStorage.setItem('lp_last', JSON.stringify(STATE.lastRead));
     localStorage.setItem('lp_size',      String(readerSize));
@@ -1302,7 +1295,6 @@ function renderWideReader(l, skipScrollReset) {
   if (!skipScrollReset) document.getElementById('wide-reader-scroll').scrollTop = 0;
   document.getElementById('wr-progress').style.width = '0%';
   updateFavBtns(l.canonical_number);
-  updateRelireBtns(l.canonical_number);
   setupHighlightListener('wide-reader-scroll');
 }
 
@@ -1323,7 +1315,6 @@ function renderPhoneReader(l, skipScrollReset) {
   if (!skipScrollReset) document.getElementById('phone-reader-scroll').scrollTop = 0;
   document.getElementById('pr-progress').style.width = '0%';
   updateFavBtns(l.canonical_number);
-  updateRelireBtns(l.canonical_number);
   setupHighlightListener('phone-reader-scroll');
 }
 
@@ -1406,14 +1397,6 @@ function toggleRead() {
   if (isWide() || prevPhonePanel === 'p-list') renderList();
 }
 
-function updateRelireBtns(n) {
-  const active = STATE.relire.has(n);
-  ['wr-relire-btn','pr-relire-btn'].forEach(id => {
-    const el = document.getElementById(id); if (!el) return;
-    el.classList.toggle('relire-active', active);
-    el.setAttribute('aria-label', active ? 'Retirer de À relire' : 'Marquer à relire');
-  });
-}
 
 function toggleFav() {
   const l = CORPUS[currentLetterIdx]; if (!l) return;
@@ -1426,14 +1409,6 @@ function toggleFav() {
   if (el) el.classList.toggle('is-fav', STATE.favs.has(n));
 }
 
-function toggleRelire() {
-  const l = CORPUS[currentLetterIdx]; if (!l) return;
-  const n = l.canonical_number;
-  if (STATE.relire.has(n)) STATE.relire.delete(n); else STATE.relire.add(n);
-  updateRelireBtns(n);
-  saveState();
-  showToast(STATE.relire.has(n) ? 'Ajouté à «\u202fÀ relire\u202f»' : 'Retiré de «\u202fÀ relire\u202f»');
-}
 
 /* ════════════════════════════════════════
    NOTES
@@ -1785,24 +1760,12 @@ function renderNotes() {
           </button>
         </div>`
       ).join('');
-
-  const relEl = document.getElementById('t-relire');
-  relEl.innerHTML = !STATE.relire.size
-    ? `<div class="empty-state"><i class="ti ti-bookmark" aria-hidden="true"></i>Appuyez sur «\u202fRelire\u202f» dans une lettre.</div>`
-    : [...STATE.relire].map(n => {
-        const l = CORPUS.find(x=>x.canonical_number===n);
-        return l ? `<button class="fav-item" onclick="openLetter(${l.canonical_number})" aria-label="${esc(l.title_fr)}">
-          <div class="fav-num" aria-hidden="true">${l.canonical_number}</div>
-          <div class="fav-title">${esc(l.title_fr)}</div>
-          <i class="ti ti-bookmark" aria-hidden="true" style="color:var(--gold);font-size:16px"></i>
-        </button>` : '';
-      }).join('');
 }
 
 function setTab(el, target) {
   document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
   el.classList.add('active'); el.setAttribute('aria-selected','true');
-  ['t-favs','t-notes','t-relire','t-highlights'].forEach(function(id) {
+  ['t-favs','t-notes','t-highlights'].forEach(function(id) {
     document.getElementById(id).style.display='none';
   });
   document.getElementById(target).style.display='';
