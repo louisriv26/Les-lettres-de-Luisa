@@ -213,7 +213,90 @@ mark.hl:hover{opacity:.7;}
 .action-btn.fav-active{color:var(--gold);}
 .action-btn.read-active{color:var(--gold);}
 
-/* Text size bar */
+/* Thematic paths */
+.path-card{background:var(--white);border:0.5px solid var(--border);border-radius:12px;
+  padding:14px 16px;cursor:pointer;transition:border-color .15s;text-align:left;
+  width:100%;margin-bottom:8px;display:flex;flex-direction:column;gap:6px;}
+.path-card:hover,.path-card:focus-visible{border-color:var(--gold);outline:none;}
+.path-card-header{display:flex;align-items:center;gap:10px;}
+.path-icon{font-size:18px;color:var(--gold);flex-shrink:0;}
+.path-label{font-family:var(--serif);font-size:14px;color:var(--night);line-height:1.3;}
+.path-desc{font-family:var(--body);font-size:11.5px;color:var(--muted);line-height:1.5;}
+.path-progress-row{display:flex;align-items:center;gap:8px;margin-top:2px;}
+.path-progress-bar{flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
+.path-progress-fill{height:100%;background:var(--gold);border-radius:2px;transition:width .3s;}
+.path-progress-label{font-family:var(--body);font-size:10px;color:var(--muted);white-space:nowrap;}
+
+/* Path reader modal */
+#path-modal{position:fixed;inset:0;z-index:850;background:var(--ivory);
+  display:none;flex-direction:column;overflow:hidden;}
+#path-modal.show{display:flex;}
+.path-modal-header{display:flex;align-items:center;gap:12px;padding:calc(12px + env(safe-area-inset-top)) 16px 12px;
+  border-bottom:0.5px solid var(--border);flex-shrink:0;}
+.path-modal-back{background:none;border:none;cursor:pointer;color:var(--muted);
+  font-size:20px;padding:4px;display:flex;align-items:center;}
+.path-modal-title{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--night);flex:1;}
+.path-modal-progress{font-family:var(--body);font-size:11px;color:var(--muted);}
+.path-letter-list{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 0;}
+.path-letter-item{display:flex;align-items:center;gap:12px;padding:12px 16px;
+  border-bottom:0.5px solid var(--border);cursor:pointer;background:none;border-left:none;
+  border-right:none;border-top:none;width:100%;text-align:left;transition:background .1s;}
+.path-letter-item:hover{background:var(--gold-pale);}
+.path-letter-item.done{opacity:.6;}
+.path-step{width:28px;height:28px;border-radius:50%;background:var(--border);
+  display:flex;align-items:center;justify-content:center;font-family:var(--body);
+  font-size:11px;color:var(--muted);flex-shrink:0;}
+.path-step.done{background:var(--gold);color:var(--night);}
+.path-step.current{background:#1A2A4A;color:var(--gold);}
+#help-overlay{position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;}
+#help-overlay.show{display:flex;}
+#help-modal{background:var(--ivory);border-radius:18px;width:min(480px,92vw);max-height:88vh;
+  display:flex;flex-direction:column;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.3);}
+.help-header{display:flex;align-items:center;justify-content:space-between;
+  padding:16px 20px 0;flex-shrink:0;}
+.help-header-title{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--muted);}
+.help-close{background:none;border:none;cursor:pointer;color:var(--muted);font-size:20px;padding:4px;}
+.help-slides{display:flex;overflow:hidden;flex:1;}
+.help-slide{min-width:100%;padding:20px 24px 16px;display:flex;flex-direction:column;gap:12px;
+  overflow-y:auto;}
+.help-icon{font-size:32px;color:var(--gold);text-align:center;line-height:1;}
+.help-title{font-family:var(--serif);font-size:20px;color:var(--night);text-align:center;line-height:1.3;}
+.help-body{font-family:var(--body);font-size:14px;color:var(--ink);line-height:1.75;}
+.help-body strong{color:var(--night);}
+.help-tip{background:var(--gold-pale);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;
+  padding:10px 14px;font-family:var(--body);font-size:13px;color:var(--ink);line-height:1.6;}
+.help-footer{display:flex;align-items:center;padding:14px 20px;gap:12px;flex-shrink:0;
+  border-top:0.5px solid var(--border);}
+.help-dots{display:flex;gap:6px;flex:1;justify-content:center;}
+.help-dot{width:7px;height:7px;border-radius:50%;background:var(--border);cursor:pointer;
+  transition:background .2s;}
+.help-dot.active{background:var(--gold);}
+.help-nav-btn{background:none;border:0.5px solid var(--border);border-radius:8px;
+  padding:7px 16px;font-family:var(--body);font-size:13px;color:var(--night);cursor:pointer;}
+.help-nav-btn.primary{background:#1A2A4A;border-color:#1A2A4A;color:var(--gold);}
+
+/* Help button */
+.help-trigger{background:none;border:0.5px solid rgba(255,255,255,.15);border-radius:50%;
+  width:28px;height:28px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:rgba(255,255,255,.4);font-size:13px;font-family:var(--body);
+  transition:all .15s;}
+.help-trigger:hover{background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);}
+.help-trigger-light{background:none;border:0.5px solid var(--border);border-radius:50%;
+  width:28px;height:28px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--muted);font-size:13px;font-family:var(--body);}
+.help-trigger-light:hover{border-color:var(--gold);color:var(--gold);}
+.export-section{padding:16px 16px 8px;border-top:0.5px solid var(--border);margin-top:8px;}
+.export-title{font-family:var(--body);font-size:11px;color:var(--muted);letter-spacing:.06em;
+  text-transform:uppercase;margin-bottom:10px;}
+.export-row{display:flex;gap:8px;margin-bottom:8px;}
+.export-btn{flex:1;padding:9px 8px;border:0.5px solid var(--border);border-radius:8px;
+  background:none;font-family:var(--body);font-size:12px;color:var(--night);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:5px;transition:background .15s;}
+.export-btn:hover{background:var(--gold-pale);}
+.export-btn.primary{background:#1A2A4A;border-color:#1A2A4A;}
+.export-btn.primary:hover{opacity:.88;}
+.export-stats{font-family:var(--body);font-size:10px;color:var(--muted);text-align:center;
+  padding:4px 0 8px;line-height:1.6;}
 .text-size-bar{display:none;position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
   background:var(--white);border:0.5px solid var(--border);border-radius:10px;padding:8px 14px;
   z-index:550;align-items:center;gap:12px;font-family:var(--body);font-size:13px;color:var(--night);}
@@ -482,6 +565,110 @@ html[data-layout="wide"] #reader-empty small{font-family:var(--body);font-size:1
   </div>
 </div>
 
+<!-- Path modal -->
+<div id="path-modal" role="dialog" aria-modal="true" aria-label="Parcours spirituel">
+  <div class="path-modal-header">
+    <button class="path-modal-back" onclick="closePath()" aria-label="Retour"><i class="ti ti-arrow-left"></i></button>
+    <div class="path-modal-title" id="path-modal-title"></div>
+    <div class="path-modal-progress" id="path-modal-progress"></div>
+  </div>
+  <div class="path-letter-list" id="path-letter-list"></div>
+</div>
+
+<!-- Help / Onboarding modal -->
+<div id="help-overlay" role="dialog" aria-modal="true" aria-label="Aide" onclick="helpOverlayClick(event)">
+  <div id="help-modal">
+    <div class="help-header">
+      <span class="help-header-title" id="help-slide-label">1 / 6</span>
+      <button class="help-close" onclick="closeHelp()" aria-label="Fermer l'aide">✕</button>
+    </div>
+    <div class="help-slides" id="help-slides">
+
+      <!-- Slide 1: Lettre du jour -->
+      <div class="help-slide">
+        <div class="help-icon"><i class="ti ti-sun"></i></div>
+        <div class="help-title">La Lettre du Jour</div>
+        <div class="help-body">
+          Chaque jour, l'app vous propose une <strong>lettre différente</strong> — choisie parmi celles que vous n'avez pas encore lues.<br><br>
+          Quand vous aurez lu toutes les lettres, la rotation reprend depuis le début.
+        </div>
+        <div class="help-tip">✦ Tapez la carte bleue sur l'Accueil pour l'ouvrir directement.</div>
+      </div>
+
+      <!-- Slide 2: Lire & marquer -->
+      <div class="help-slide">
+        <div class="help-icon"><i class="ti ti-check"></i></div>
+        <div class="help-title">Lire et marquer une lettre</div>
+        <div class="help-body">
+          En bas de chaque lettre, vous trouverez la barre d'actions :<br><br>
+          <strong>♡ Favori</strong> — garde la lettre dans votre liste personnelle<br>
+          <strong>✓ Lu</strong> — marque la lettre comme lue (pastille dorée dans la liste)<br>
+          <strong>✏ Note</strong> — ajoute une note personnelle à cette lettre<br>
+          <strong>Aa Texte</strong> — ajuste la taille de la police de lecture
+        </div>
+        <div class="help-tip">La barre de progression sur l'Accueil se met à jour à chaque lettre marquée lue.</div>
+      </div>
+
+      <!-- Slide 3: Surlignages -->
+      <div class="help-slide">
+        <div class="help-icon"><i class="ti ti-highlight"></i></div>
+        <div class="help-title">Surligner un passage</div>
+        <div class="help-body">
+          Pour surligner un passage dans une lettre :<br><br>
+          1. <strong>Sélectionnez le texte</strong> avec votre doigt (appui long, puis glisser)<br>
+          2. Une popup apparaît <strong>au-dessus</strong> de la sélection<br>
+          3. Choisissez une couleur — or, rose, vert ou bleu<br>
+          4. Tapez <strong>Surligner</strong>
+        </div>
+        <div class="help-tip">Vos surlignages sont visibles dans Mon espace → Surlignages. Tapez un surlignage pour rouvrir la lettre.</div>
+      </div>
+
+      <!-- Slide 4: Notes & Export -->
+      <div class="help-slide">
+        <div class="help-icon"><i class="ti ti-download"></i></div>
+        <div class="help-title">Sauvegarder vos données</div>
+        <div class="help-body">
+          Vos favoris, notes, surlignages et lettres lues sont sauvegardés <strong>localement sur votre appareil</strong>.<br><br>
+          Dans <strong>Mon espace</strong>, en bas de la page, vous pouvez :<br>
+          — <strong>Exporter</strong> un fichier JSON (pour migrer ou sauvegarder)<br>
+          — <strong>Exporter en texte</strong> un fichier lisible<br>
+          — <strong>Importer</strong> un fichier exporté précédemment
+        </div>
+        <div class="help-tip">⚠ Si vous désinstallez l'app, vos données seront perdues sans export préalable.</div>
+      </div>
+
+      <!-- Slide 5: Parcours spirituels -->
+      <div class="help-slide">
+        <div class="help-icon"><i class="ti ti-route"></i></div>
+        <div class="help-title">Parcours spirituels</div>
+        <div class="help-body">
+          Dans <strong>Explorer → Parcours spirituels</strong>, vous trouverez 6 séquences guidées de 7 lettres chacune :<br><br>
+          Paix et confiance · Vivre dans la Divine Volonté · La Croix et la souffrance · Vers la vraie sainteté · Faire connaître les écrits · Abandon et décision
+        </div>
+        <div class="help-tip">Chaque parcours affiche votre progression. Une lettre marquée lue dans n'importe quel endroit de l'app est automatiquement cochée dans le parcours.</div>
+      </div>
+
+      <!-- Slide 6: Recherche & Explorer -->
+      <div class="help-slide">
+        <div class="help-icon"><i class="ti ti-compass"></i></div>
+        <div class="help-title">Recherche et Explorer</div>
+        <div class="help-body">
+          <strong>Recherche</strong> — cherchez un mot ou une phrase dans toutes les lettres. Les résultats pointent directement vers le paragraphe concerné.<br><br>
+          <strong>Explorer</strong> — naviguez par situation spirituelle, par thème (45 thèmes), par destinataire, ou par ordre chronologique.<br><br>
+          <strong>Corpus</strong> — filtrez par thème, favoris, ou lettres non lues.
+        </div>
+        <div class="help-tip">Sur l'Accueil, les cartes "Je cherche une lettre pour…" sont un raccourci vers les thèmes les plus courants.</div>
+      </div>
+
+    </div><!-- .help-slides -->
+    <div class="help-footer">
+      <button class="help-nav-btn" id="help-prev" onclick="helpNav(-1)" aria-label="Précédent">←</button>
+      <div class="help-dots" id="help-dots"></div>
+      <button class="help-nav-btn primary" id="help-next" onclick="helpNav(1)" aria-label="Suivant">Suivant →</button>
+    </div>
+  </div>
+</div>
+
 <!-- Note bottom sheet (replaces prompt()) -->
 <div id="note-overlay" onclick="closeNoteSheet()" style="display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.45)"></div>
 <div id="note-sheet" role="dialog" aria-modal="true" aria-label="Ajouter une note" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:601;background:var(--ivory);border-radius:16px 16px 0 0;padding:20px 16px calc(20px + env(safe-area-inset-bottom));box-shadow:0 -4px 24px rgba(0,0,0,.18)">
@@ -523,7 +710,9 @@ html[data-layout="wide"] #reader-empty small{font-family:var(--body);font-size:1
     <button class="snav-item" onclick="switchPanel('p-notes')" id="snav-notes" aria-label="Notes"><i class="ti ti-bookmark" aria-hidden="true"></i>Notes</button>
     <div class="sidebar-bottom">
       <button class="snav-item" onclick="cycleTheme()" id="snav-theme" aria-label="Thème"><i class="ti ti-moon" aria-hidden="true"></i>Thème</button>
-      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v1.3.0 · 2026-06-11 12:47 UTC</div>
+      <button class="help-trigger" onclick="openHelp()" aria-label="Aide">?</button>
+      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v1.3.5 · 2026-06-13 06:13 UTC</div>
+    </div>2026-06-13 05:55 UTC</div>
     </div>
   </nav>
 
@@ -534,7 +723,10 @@ html[data-layout="wide"] #reader-empty small{font-family:var(--body);font-size:1
     <div class="panel active" id="p-home">
       <div class="top-bar">
         <span class="title">Lettres de Luisa</span>
-        <button class="btn-icon" onclick="cycleTheme()" aria-label="Thème" id="home-theme-btn"><i class="ti ti-moon" aria-hidden="true"></i></button>
+        <div style="display:flex;align-items:center;gap:8px">
+          <button class="help-trigger-light" onclick="openHelp()" aria-label="Aide">?</button>
+          <button class="btn-icon" onclick="cycleTheme()" aria-label="Thème" id="home-theme-btn"><i class="ti ti-moon" aria-hidden="true"></i></button>
+        </div>
       </div>
       <div class="scroll" id="home-scroll">
         <div class="install-banner" id="install-banner" role="banner">
@@ -543,13 +735,22 @@ html[data-layout="wide"] #reader-empty small{font-family:var(--body);font-size:1
           <button class="install-close" onclick="dismissInstall()" aria-label="Fermer">✕</button>
         </div>
         <button class="ldj-card" id="ldj-card" aria-label="Ouvrir la lettre du jour">
-          <div class="ldj-eyebrow" aria-hidden="true"><i class="ti ti-sun"></i> Lettre du jour</div>
+          <div class="ldj-eyebrow" id="ldj-eyebrow" aria-hidden="true"><i class="ti ti-sun"></i> Lettre du jour</div>
           <div class="ldj-num" id="ldj-id"></div>
           <div class="ldj-title" id="ldj-title"></div>
           <div class="ldj-excerpt" id="ldj-excerpt"></div>
           <div class="ldj-dest" id="ldj-dest"></div>
           <span class="ldj-cta" aria-hidden="true"><i class="ti ti-book-open" style="font-size:12px"></i> Lire la lettre</span>
         </button>
+        <div id="home-progress" style="display:none;margin:0 12px 14px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
+            <span style="font-family:var(--body);font-size:11px;color:var(--muted)">Progression</span>
+            <span id="home-progress-label" style="font-family:var(--body);font-size:11px;color:var(--gold);font-weight:500"></span>
+          </div>
+          <div style="height:4px;background:var(--border);border-radius:2px;overflow:hidden">
+            <div id="home-progress-bar" style="height:100%;background:var(--gold);border-radius:2px;width:0;transition:width .6s ease"></div>
+          </div>
+        </div>
         <div class="section-head">Je cherche une lettre pour…</div>
         <div class="situations" id="situ-grid" role="list"></div>
         <div class="section-head" id="continue-head" style="display:none">Continuer la lecture</div>
@@ -563,7 +764,7 @@ html[data-layout="wide"] #reader-empty small{font-family:var(--body);font-size:1
           <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:16px;color:var(--muted)"></i>
         </button>
         <div style="height:12px"></div>
-        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v1.3.0 · 2026-06-11 12:47 UTC</div>
+        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v1.3.5 · 2026-06-13 06:13 UTC</div>
       </div>
     </div>
 
@@ -612,6 +813,10 @@ html[data-layout="wide"] #reader-empty small{font-family:var(--body);font-size:1
       <div class="top-bar"><span class="title">Explorer</span></div>
       <div class="scroll">
         <div class="explore-section">
+          <div class="exp-title">Parcours spirituels</div>
+          <div id="exp-paths-grid"></div>
+        </div>
+        <div class="explore-section">
           <div class="exp-title">Par situation</div>
           <div class="exp-grid" id="exp-situ-grid" role="list"></div>
         </div>
@@ -643,6 +848,25 @@ html[data-layout="wide"] #reader-empty small{font-family:var(--body);font-size:1
         <div id="t-favs" role="tabpanel"></div>
         <div id="t-notes" style="display:none" role="tabpanel"></div>
         <div id="t-highlights" style="display:none" role="tabpanel"></div>
+        <!-- Export / Import — always visible -->
+        <div class="export-section">
+          <div class="export-title">Sauvegarder mes données</div>
+          <div id="export-stats" class="export-stats"></div>
+          <div class="export-row">
+            <button class="export-btn primary" onclick="exportData()" aria-label="Exporter mes données">
+              <i class="ti ti-download" aria-hidden="true"></i> Exporter
+            </button>
+            <button class="export-btn" onclick="document.getElementById('import-input').click()" aria-label="Importer des données">
+              <i class="ti ti-upload" aria-hidden="true"></i> Importer
+            </button>
+          </div>
+          <div class="export-row">
+            <button class="export-btn" onclick="exportText()" aria-label="Exporter en texte lisible">
+              <i class="ti ti-file-text" aria-hidden="true"></i> Exporter en texte
+            </button>
+          </div>
+          <input type="file" id="import-input" accept=".json" style="display:none" onchange="importData(event)">
+        </div>
       </div>
     </div>
 
@@ -777,6 +1001,52 @@ const SITUATIONS = [
   {label:'Vivre dans le Fiat',          topic:'Divine Volonté',               icon:'ti-arrow-forward',   count:17},
 ];
 
+// Curated thematic paths — ordered sequences of letters for guided reading
+const PATHS = [
+  {
+    id: 'paix',
+    label: 'Paix et confiance',
+    icon: 'ti-wave-sine',
+    description: 'Retrouver la paix intérieure et s\'abandonner à Jésus',
+    letters: [7, 55, 53, 50, 57, 12, 18]
+  },
+  {
+    id: 'divine-volonte',
+    label: 'Vivre dans la Divine Volonté',
+    icon: 'ti-star',
+    description: 'Découvrir le Don de vivre dans la Volonté de Dieu',
+    letters: [21, 19, 44, 67, 110, 101, 113]
+  },
+  {
+    id: 'croix',
+    label: 'La Croix et la souffrance',
+    icon: 'ti-heart-handshake',
+    description: 'Trouver le sens de la souffrance dans la lumière de Jésus',
+    letters: [9, 13, 15, 17, 42, 103, 124]
+  },
+  {
+    id: 'saintete',
+    label: 'Vers la vraie sainteté',
+    icon: 'ti-sparkles',
+    description: 'Grandir dans la sainteté par l\'union avec Jésus',
+    letters: [2, 5, 61, 78, 85, 120, 127]
+  },
+  {
+    id: 'propagation',
+    label: 'Faire connaître les écrits',
+    icon: 'ti-send',
+    description: 'La mission de diffuser la connaissance de la Divine Volonté',
+    letters: [35, 36, 47, 67, 75, 87, 116]
+  },
+  {
+    id: 'abandon',
+    label: 'Abandon et décision',
+    icon: 'ti-arrow-forward',
+    description: 'S\'abandonner totalement à la Volonté de Dieu',
+    letters: [44, 50, 58, 74, 93, 107, 131]
+  },
+];
+
 /* ════════════════════════════════════════
    STATE
 ════════════════════════════════════════ */
@@ -798,8 +1068,9 @@ function loadState() {
       positions: JSON.parse(localStorage.getItem('lp_positions') || '{}'),
       readSet: new Set(JSON.parse(localStorage.getItem('lp_read') || '[]')),
       highlights: JSON.parse(localStorage.getItem('lp_highlights') || '[]'),
+      pathProgress: JSON.parse(localStorage.getItem('lp_paths') || '{}'),
     };
-  } catch(e) { console.warn('[Luisa] loadState error:', e); return {favs:new Set(),notes:[],lastRead:null,readerSize:16,theme:'system',positions:{},readSet:new Set(),highlights:[]}; }
+  } catch(e) { console.warn('[Luisa] loadState error:', e); return {favs:new Set(),notes:[],lastRead:null,readerSize:16,theme:'system',positions:{},readSet:new Set(),highlights:[],pathProgress:{}}; }
 }
 function saveState() {
   try {
@@ -811,6 +1082,7 @@ function saveState() {
     localStorage.setItem('lp_positions', JSON.stringify(STATE.positions));
     localStorage.setItem('lp_read',      JSON.stringify([...STATE.readSet]));
     localStorage.setItem('lp_highlights',JSON.stringify(STATE.highlights));
+    localStorage.setItem('lp_paths',     JSON.stringify(STATE.pathProgress));
   } catch(e) { console.warn('[Luisa] saveState error:', e); }
 }
 const STATE = loadState();
@@ -902,9 +1174,15 @@ function initApp() {
   }
   window.addEventListener('resize', onResize);
 
-  // Lettre du jour — P0 fix: robust excerpt selection
-  const doy = Math.floor(Date.now() / 86400000) % CORPUS.length;
-  const ldj = CORPUS[doy];
+  // Lettre du jour — prioritise unread letters, deterministic by date
+  // Build pool: unread letters first, fallback to full corpus
+  var dayIndex = Math.floor(Date.now() / 86400000);
+  var unread = CORPUS.filter(function(l) {
+    return !STATE.readSet.has(l.canonical_number) &&
+           !EXCL_LDJ.has((l.display_paragraphs && l.display_paragraphs[0] && l.display_paragraphs[0].split_reason) || '');
+  });
+  var pool = unread.length > 0 ? unread : CORPUS;
+  var ldj = pool[dayIndex % pool.length];
   document.getElementById('ldj-id').textContent    = ldj.letter_id;
   document.getElementById('ldj-title').textContent = ldj.title_fr;
   document.getElementById('ldj-dest').textContent  = ldj.recipient_display_fr;
@@ -922,6 +1200,14 @@ function initApp() {
       '« ' + (raw.length > 180 ? raw.slice(0, 180) + '…' : raw) + ' »';
   }
   document.getElementById('ldj-card').dataset.n = ldj.canonical_number;
+
+  // Show LdJ as already-read if user has marked it
+  if (STATE.readSet.has(ldj.canonical_number)) {
+    document.getElementById('ldj-eyebrow') && (document.getElementById('ldj-eyebrow').innerHTML =
+      '<i class="ti ti-sun"></i> Lettre du jour <span style="color:rgba(255,255,255,.45);margin-left:4px">· lue ✓</span>');
+  }
+
+  updateHomeProgress();
 
   // Situations
   document.getElementById('situ-grid').innerHTML = SITUATIONS.map(s => {
@@ -965,6 +1251,8 @@ function initApp() {
   var ALLOWED_SCREENS = {'home':1,'list':1,'search':1,'explore':1,'notes':1};
   var sp = new URLSearchParams(location.search).get('screen');
   if (sp && ALLOWED_SCREENS[sp]) { isWide() ? switchPanel('p-'+sp) : phoneNav('p-'+sp, sp); }
+
+  checkOnboarding(); // Show onboarding on first launch
 
   window.addEventListener('beforeinstallprompt', e => {
     e.preventDefault(); deferredInstall = e;
@@ -1381,6 +1669,23 @@ function updateReadBtn(n) {
   });
 }
 
+function updateHomeProgress() {
+  var count = STATE.readSet.size;
+  var total = CORPUS.length;
+  var progEl = document.getElementById('home-progress');
+  var barEl  = document.getElementById('home-progress-bar');
+  var lblEl  = document.getElementById('home-progress-label');
+  if (!progEl) return;
+  if (count === 0) {
+    progEl.style.display = 'none';
+    return;
+  }
+  progEl.style.display = '';
+  var pct = Math.round(count / total * 100);
+  barEl.style.width = pct + '%';
+  lblEl.textContent = count + ' / ' + total + ' lues (' + pct + '%)';
+}
+
 function toggleRead() {
   var l = CORPUS[currentLetterIdx]; if (!l) return;
   var n = l.canonical_number;
@@ -1393,6 +1698,7 @@ function toggleRead() {
   }
   saveState();
   updateReadBtn(n);
+  updateHomeProgress();
   // Refresh list if visible so dot updates immediately
   if (isWide() || prevPhonePanel === 'p-list') renderList();
 }
@@ -1628,6 +1934,7 @@ function highlight(text, query) {
    EXPLORE
 ════════════════════════════════════════ */
 function buildExplore() {
+  buildPathCards('exp-paths-grid');
   document.getElementById('exp-situ-grid').innerHTML = SITUATIONS.slice(0,4).map(s => {
     const c = getTopicLetters(s.topic).length||s.count;
     return `<button class="exp-card" data-action="topic" data-topic="${esc(s.topic)}" role="listitem">
@@ -1730,6 +2037,7 @@ function filterByDate() {
    NOTES PANEL
 ════════════════════════════════════════ */
 function renderNotes() {
+  updateExportStats();
   const favEl = document.getElementById('t-favs');
   favEl.innerHTML = !STATE.favs.size
     ? `<div class="empty-state"><i class="ti ti-heart" aria-hidden="true"></i>Appuyez sur ♥ dans une lettre pour l'ajouter ici.</div>`
@@ -1831,6 +2139,8 @@ document.addEventListener('click', function(e) {
     setFilter(btn.getAttribute('data-filter'), btn);
   } else if (action === 'recipient') {
     filterByRecipient(btn.getAttribute('data-recipient'));
+  } else if (action === 'path') {
+    openPath(btn.getAttribute('data-path-id'));
   }
 });
 
@@ -2018,6 +2328,294 @@ function deleteHighlight(e, idx) {
   saveState();
   renderHighlights();
   showToast('Surlignage supprimé');
+}
+
+/* ════════════════════════════════════════
+   HELP / ONBOARDING
+════════════════════════════════════════ */
+var _helpSlide = 0;
+var _helpSlides = 6;
+
+function openHelp(startSlide) {
+  _helpSlide = startSlide || 0;
+  renderHelpSlide();
+  document.getElementById('help-overlay').classList.add('show');
+}
+
+function closeHelp() {
+  document.getElementById('help-overlay').classList.remove('show');
+  localStorage.setItem('lp_onboarded', '1');
+}
+
+function helpOverlayClick(e) {
+  if (e.target === document.getElementById('help-overlay')) closeHelp();
+}
+
+function helpNav(dir) {
+  var next = _helpSlide + dir;
+  if (next >= _helpSlides) { closeHelp(); return; }
+  if (next < 0) { closeHelp(); return; }
+  _helpSlide = next;
+  renderHelpSlide();
+}
+
+function renderHelpSlide() {
+  var container = document.getElementById('help-slides');
+  var slides = container.children;
+  for (var i = 0; i < slides.length; i++) {
+    slides[i].style.display = i === _helpSlide ? 'flex' : 'none';
+  }
+  document.getElementById('help-slide-label').textContent = (_helpSlide + 1) + ' / ' + _helpSlides;
+  // Dots
+  var dotsEl = document.getElementById('help-dots');
+  dotsEl.innerHTML = '';
+  for (var j = 0; j < _helpSlides; j++) {
+    var dot = document.createElement('button');
+    dot.className = 'help-dot' + (j === _helpSlide ? ' active' : '');
+    dot.setAttribute('aria-label', 'Slide ' + (j+1));
+    dot.setAttribute('data-slide', j);
+    dot.onclick = function() { _helpSlide = parseInt(this.getAttribute('data-slide')); renderHelpSlide(); };
+    dotsEl.appendChild(dot);
+  }
+  // Next button label
+  var nextBtn = document.getElementById('help-next');
+  nextBtn.textContent = _helpSlide === _helpSlides - 1 ? 'Terminer ✓' : 'Suivant →';
+  // Prev button
+  document.getElementById('help-prev').style.visibility = _helpSlide === 0 ? 'hidden' : 'visible';
+}
+
+function checkOnboarding() {
+  if (!localStorage.getItem('lp_onboarded')) {
+    setTimeout(function() { openHelp(0); }, 800); // slight delay after app loads
+  }
+}
+
+/* ════════════════════════════════════════
+   PARCOURS SPIRITUELS
+════════════════════════════════════════ */
+var _currentPathId = null;
+
+function getPathDone(path) {
+  var done = STATE.pathProgress[path.id] || [];
+  return path.letters.filter(function(n) { return done.indexOf(n) >= 0 || STATE.readSet.has(n); });
+}
+
+function buildPathCards(containerId) {
+  var el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = PATHS.map(function(path) {
+    var done = getPathDone(path);
+    var pct = Math.round(done.length / path.letters.length * 100);
+    return '<button class="path-card" data-action="path" data-path-id="' + path.id + '">'
+      + '<div class="path-card-header">'
+      + '<span class="path-icon"><i class="ti ' + path.icon + '"></i></span>'
+      + '<span class="path-label">' + esc(path.label) + '</span>'
+      + '</div>'
+      + '<div class="path-desc">' + esc(path.description) + '</div>'
+      + '<div class="path-progress-row">'
+      + '<div class="path-progress-bar"><div class="path-progress-fill" style="width:' + pct + '%"></div></div>'
+      + '<span class="path-progress-label">' + done.length + '/' + path.letters.length + '</span>'
+      + '</div>'
+      + '</button>';
+  }).join('');
+}
+
+function openPath(pathId) {
+  var path = PATHS.find(function(p) { return p.id === pathId; });
+  if (!path) return;
+  _currentPathId = pathId;
+  document.getElementById('path-modal-title').textContent = path.label;
+  renderPathModal(path);
+  document.getElementById('path-modal').classList.add('show');
+}
+
+function closePath() {
+  document.getElementById('path-modal').classList.remove('show');
+  _currentPathId = null;
+  // Refresh path cards in Explorer
+  buildPathCards('exp-paths-grid');
+}
+
+function renderPathModal(path) {
+  var done = getPathDone(path);
+  var remaining = path.letters.filter(function(n) { return done.indexOf(n) < 0; });
+  var nextN = remaining.length > 0 ? remaining[0] : null;
+
+  document.getElementById('path-modal-progress').textContent =
+    done.length + ' / ' + path.letters.length + ' lues';
+
+  var html = path.letters.map(function(n, idx) {
+    var l = CORPUS.find(function(x) { return x.canonical_number === n; });
+    if (!l) return '';
+    var isDone = done.indexOf(n) >= 0;
+    var isCurrent = n === nextN;
+    var stepClass = isDone ? 'path-step done' : (isCurrent ? 'path-step current' : 'path-step');
+    var stepLabel = isDone ? '✓' : (idx + 1);
+    return '<button class="path-letter-item' + (isDone ? ' done' : '') + '" onclick="openLetterFromPath(' + n + ')" aria-label="' + esc(l.title_fr) + '">'
+      + '<div class="' + stepClass + '">' + stepLabel + '</div>'
+      + '<div style="flex:1;min-width:0">'
+      + '<div style="font-family:var(--serif);font-size:13px;color:var(--night);line-height:1.3;margin-bottom:2px">' + esc(l.title_fr) + '</div>'
+      + '<div style="font-family:var(--body);font-size:11px;color:var(--muted)">' + esc(l.recipient_display_fr) + (l.date_text_fr ? ' · ' + esc(l.date_text_fr) : '') + '</div>'
+      + '</div>'
+      + (isDone ? '<i class="ti ti-check" style="color:var(--gold);font-size:14px;flex-shrink:0"></i>' : '')
+      + '</button>';
+  }).join('');
+
+  document.getElementById('path-letter-list').innerHTML = html;
+}
+
+function openLetterFromPath(n) {
+  // Open the letter — letter opens in phone-reader or wide reader
+  openLetter(n);
+  // Close path modal after short delay so user sees letter open
+  setTimeout(function() {
+    document.getElementById('path-modal').classList.remove('show');
+  }, 150);
+}
+
+/* ════════════════════════════════════════
+   EXPORT / IMPORT
+════════════════════════════════════════ */
+function updateExportStats() {
+  var el = document.getElementById('export-stats');
+  if (!el) return;
+  var parts = [];
+  if (STATE.favs.size)        parts.push(STATE.favs.size + ' favori' + (STATE.favs.size>1?'s':''));
+  if (STATE.notes.length)     parts.push(STATE.notes.length + ' note' + (STATE.notes.length>1?'s':''));
+  if (STATE.highlights.length) parts.push(STATE.highlights.length + ' surlignage' + (STATE.highlights.length>1?'s':''));
+  if (STATE.readSet.size)     parts.push(STATE.readSet.size + ' lettre' + (STATE.readSet.size>1?'s':'')+' lue'+(STATE.readSet.size>1?'s':''));
+  el.textContent = parts.length ? parts.join(' · ') : 'Aucune donnée à exporter pour l\'instant.';
+}
+
+function exportData() {
+  var data = {
+    version: '1.0',
+    app: 'Lettres de Luisa Piccarreta',
+    exported: new Date().toISOString(),
+    favs:       [...STATE.favs],
+    notes:      STATE.notes,
+    highlights: STATE.highlights,
+    readSet:    [...STATE.readSet],
+    lastRead:   STATE.lastRead,
+    pathProgress: STATE.pathProgress,
+  };
+  var blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement('a');
+  a.href     = url;
+  a.download = 'luisa-donnees-' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Données exportées');
+}
+
+function exportText() {
+  var lines = [];
+  lines.push('LETTRES DE LUISA PICCARRETA — MES DONNÉES');
+  lines.push('Exporté le ' + new Date().toLocaleDateString('fr-FR', {day:'numeric',month:'long',year:'numeric'}));
+  lines.push('');
+
+  if (STATE.favs.size) {
+    lines.push('═══ FAVORIS (' + STATE.favs.size + ') ═══');
+    [...STATE.favs].sort(function(a,b){return a-b;}).forEach(function(n) {
+      var l = CORPUS.find(function(x){return x.canonical_number===n;});
+      if (l) lines.push('• ' + l.letter_id + ' — ' + l.title_fr);
+    });
+    lines.push('');
+  }
+
+  if (STATE.notes.length) {
+    lines.push('═══ NOTES (' + STATE.notes.length + ') ═══');
+    STATE.notes.forEach(function(n) {
+      lines.push('[' + n.letter_id + ' · ' + n.date + ']');
+      lines.push(n.text);
+      lines.push('');
+    });
+  }
+
+  if (STATE.highlights.length) {
+    lines.push('═══ SURLIGNAGES (' + STATE.highlights.length + ') ═══');
+    STATE.highlights.forEach(function(h) {
+      lines.push('[' + h.letter_id + ' · ' + h.date + ']');
+      lines.push('« ' + h.text + ' »');
+      lines.push('');
+    });
+  }
+
+  if (STATE.readSet.size) {
+    lines.push('═══ LETTRES LUES (' + STATE.readSet.size + '/' + CORPUS.length + ') ═══');
+    [...STATE.readSet].sort(function(a,b){return a-b;}).forEach(function(n) {
+      var l = CORPUS.find(function(x){return x.canonical_number===n;});
+      if (l) lines.push('• ' + l.letter_id + ' — ' + l.title_fr);
+    });
+  }
+
+  var blob = new Blob([lines.join('\n')], {type: 'text/plain;charset=utf-8'});
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement('a');
+  a.href     = url;
+  a.download = 'luisa-donnees-' + new Date().toISOString().slice(0,10) + '.txt';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Fichier texte exporté');
+}
+
+function importData(event) {
+  var file = event.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      var data = JSON.parse(e.target.result);
+      if (!data.app || data.app !== 'Lettres de Luisa Piccarreta') {
+        showToast('Fichier non reconnu'); return;
+      }
+      // Merge strategy: add to existing, don't overwrite
+      var imported = {favs:0, notes:0, highlights:0, read:0};
+      if (Array.isArray(data.favs)) {
+        data.favs.forEach(function(n) {
+          if (!STATE.favs.has(n)) { STATE.favs.add(n); imported.favs++; }
+        });
+      }
+      if (Array.isArray(data.notes)) {
+        data.notes.forEach(function(n) {
+          var exists = STATE.notes.some(function(existing) {
+            return existing.letter_id === n.letter_id && existing.text === n.text;
+          });
+          if (!exists) { STATE.notes.push(n); imported.notes++; }
+        });
+      }
+      if (Array.isArray(data.highlights)) {
+        data.highlights.forEach(function(h) {
+          var exists = STATE.highlights.some(function(existing) {
+            return existing.dp_id === h.dp_id && existing.text === h.text;
+          });
+          if (!exists) { STATE.highlights.push(h); imported.highlights++; }
+        });
+      }
+      if (Array.isArray(data.readSet)) {
+        data.readSet.forEach(function(n) {
+          if (!STATE.readSet.has(n)) { STATE.readSet.add(n); imported.read++; }
+        });
+      }
+      saveState();
+      renderNotes();
+      updateHomeProgress();
+      updateExportStats();
+      var msg = 'Importé : ' +
+        [imported.favs && imported.favs+' favori'+(imported.favs>1?'s':''),
+         imported.notes && imported.notes+' note'+(imported.notes>1?'s':''),
+         imported.highlights && imported.highlights+' surlignage'+(imported.highlights>1?'s':''),
+         imported.read && imported.read+' lue'+(imported.read>1?'s':'')
+        ].filter(Boolean).join(', ') || 'rien de nouveau';
+      showToast(msg);
+    } catch(err) {
+      showToast('Erreur lors de l\'import');
+      console.warn('[Luisa] import error:', err);
+    }
+    event.target.value = ''; // reset file input
+  };
+  reader.readAsText(file);
 }
 
 /* ════════════════════════════════════════
