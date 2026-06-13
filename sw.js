@@ -1,12 +1,12 @@
-/* Luisa Piccarreta PWA — Service Worker v1.3.8
+/* Luisa Piccarreta PWA — Service Worker v1.3.9
    Strategy:
    - index.html → network-first, cache fallback (ensures updates propagate)
    - corpus.json → network-first, cache fallback
    - Icons / manifest → cache-first (static assets, versioned by cache name)
    - Google Fonts / CDN → stale-while-revalidate, never in install precache
 */
-const CACHE_VERSION = 'luisa-v1.3.8';
-const CORPUS_CACHE  = 'luisa-corpus-v1.3.8';
+const CACHE_VERSION = 'luisa-v1.3.9';
+const CORPUS_CACHE  = 'luisa-corpus-v1.3.9';
 
 // ONLY local files — no external URLs that can fail install
 const APP_SHELL = [
