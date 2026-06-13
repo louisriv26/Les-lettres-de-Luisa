@@ -711,7 +711,7 @@ html[data-layout="wide"] #reader-empty small{font-family:var(--body);font-size:1
     <div class="sidebar-bottom">
       <button class="snav-item" onclick="cycleTheme()" id="snav-theme" aria-label="Thème"><i class="ti ti-moon" aria-hidden="true"></i>Thème</button>
       <button class="help-trigger" onclick="openHelp()" aria-label="Aide">?</button>
-      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v1.3.7 · 2026-06-13 07:06 UTC</div>
+      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v1.3.8 · 2026-06-13 07:20 UTC</div>
     </div>2026-06-13 05:55 UTC</div>
     </div>
   </nav>
@@ -764,7 +764,7 @@ html[data-layout="wide"] #reader-empty small{font-family:var(--body);font-size:1
           <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:16px;color:var(--muted)"></i>
         </button>
         <div style="height:12px"></div>
-        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v1.3.7 · 2026-06-13 07:06 UTC</div>
+        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v1.3.8 · 2026-06-13 07:20 UTC</div>
       </div>
     </div>
 
@@ -1162,6 +1162,7 @@ function showFatalError() {
    INIT
 ════════════════════════════════════════ */
 function initApp() {
+  try {
   applyLayout(); // Set data-layout immediately so CSS matches JS from the start
   const ld = document.getElementById('loading');
   ld.classList.add('hide');
@@ -1224,26 +1225,34 @@ function initApp() {
   buildExplore();
   renderList();
 
-  // On tablet: if a letter was previously open, restore it in the wide reader
-  // so the right panel is never empty on load
-  if (isWide() && STATE.lastRead && STATE.lastRead.n) {
-    var lastIdx = CORPUS.findIndex(function(l) { return l.canonical_number === STATE.lastRead.n; });
-    if (lastIdx >= 0) {
-      currentLetterIdx = lastIdx;
-      renderWideReader(CORPUS[lastIdx]);
-      // Restore scroll position
-      var savedPct = STATE.positions[STATE.lastRead.n] || 0;
-      if (savedPct > 2) {
-        setTimeout(function() {
-          var scroller = document.getElementById('wide-reader-scroll');
-          if (!scroller) return;
-          var max = scroller.scrollHeight - scroller.clientHeight;
-          if (max > 0) scroller.scrollTop = Math.round(savedPct / 100 * max);
-        }, 120);
+  // On tablet: restore last read letter, or show LdJ so reader is never blank
+  if (isWide()) {
+    var letterToShow = null;
+    if (STATE.lastRead && STATE.lastRead.n) {
+      var lastIdx = CORPUS.findIndex(function(l) { return l.canonical_number === STATE.lastRead.n; });
+      if (lastIdx >= 0) letterToShow = lastIdx;
+    }
+    // First load or no lastRead: open the LdJ so the right panel isn't blank
+    if (letterToShow === null) {
+      letterToShow = CORPUS.findIndex(function(l) { return l.canonical_number === ldj.canonical_number; });
+    }
+    if (letterToShow >= 0) {
+      currentLetterIdx = letterToShow;
+      renderWideReader(CORPUS[letterToShow]);
+      // Restore scroll only if returning to a previously read letter
+      if (STATE.lastRead && STATE.lastRead.n === CORPUS[letterToShow].canonical_number) {
+        var savedPct = STATE.positions[STATE.lastRead.n] || 0;
+        if (savedPct > 2) {
+          setTimeout(function() {
+            var scroller = document.getElementById('wide-reader-scroll');
+            if (!scroller) return;
+            var max = scroller.scrollHeight - scroller.clientHeight;
+            if (max > 0) scroller.scrollTop = Math.round(savedPct / 100 * max);
+          }, 120);
+        }
       }
-      // Highlight selected row in list
       document.querySelectorAll('.letter-item').forEach(function(el) {
-        el.classList.toggle('selected', parseInt(el.dataset.n) === STATE.lastRead.n);
+        el.classList.toggle('selected', parseInt(el.dataset.n) === CORPUS[letterToShow].canonical_number);
       });
     }
   }
@@ -1259,6 +1268,14 @@ function initApp() {
     if (!localStorage.getItem('lp_install_dismissed'))
       document.getElementById('install-banner').classList.add('show');
   });
+  } catch(err) {
+    // DIAGNOSTIC: show error visibly on screen
+    document.body.insertAdjacentHTML('afterbegin',
+      '<div style="position:fixed;inset:0;z-index:99999;background:#fff;padding:20px;font-family:monospace;font-size:12px;overflow:auto">' +
+      '<h2 style="color:red">initApp ERROR</h2><pre>' + err.stack + '</pre></div>'
+    );
+    console.error('[Luisa] initApp failed:', err);
+  }
 }
 
 /* ════════════════════════════════════════
