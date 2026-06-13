@@ -5,10 +5,10 @@ Application de référence pour les Lettres de Luisa Piccarreta.
 
 ---
 
-## Version courante : v1.3.10
+## Version courante : v1.3.12
 
-- Corpus : 136 lettres validées (`luisa-corpus-v1.3.10`)
-- SW cache : `luisa-v1.3.10`
+- Corpus : 136 lettres validées (`luisa-corpus-v1.3.12`)
+- SW cache : `luisa-v1.3.12`
 - Testé : iPhone Safari, iPad Safari
 
 ---
@@ -32,13 +32,13 @@ Push sur `main` → GitHub Actions valide + déploie automatiquement sur GitHub 
 
 ```bash
 git add -A
-git commit -m "feat: v1.3.10"
+git commit -m "feat: v1.3.12"
 git push origin main
 ```
 
 ---
 
-## Corpus v1.1.0
+## Corpus v1.3.12
 
 | Métrique | Valeur |
 |----------|--------|
