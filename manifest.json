@@ -42,7 +42,7 @@
     "shortcuts": [
         {
             "name": "Lettre du jour",
-            "url": "./index.html?screen=home",
+            "url": "./index.html?screen=home&action=letter-of-day",
             "icons": [
                 {
                     "src": "icons/icon-192.png",

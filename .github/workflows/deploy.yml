@@ -72,8 +72,11 @@ jobs:
               if re.search(r'\b[Vv]olition\b', text):
                   errors.append(f"L{l['canonical_number']}: contains 'Volition'")
 
-          if total_dp != 909:
-              errors.append(f"Expected 909 display_paragraphs, got {total_dp}")
+          declared_dp = corpus.get('total_display_paragraphs')
+          if not isinstance(declared_dp, int):
+              errors.append("Missing integer corpus.total_display_paragraphs")
+          elif total_dp != declared_dp:
+              errors.append(f"Declared {declared_dp} display_paragraphs, computed {total_dp}")
 
           # --- index.html ---
           with open('index.html') as f:
@@ -119,17 +122,19 @@ jobs:
               if f'id="{rid}"' not in html:
                   errors.append(f"Missing element id: {rid}")
 
-          # Stale version check
+          # Release-identity coherence check. Current service workers use
+          # SHELL_CACHE/CORPUS_CACHE; do not rely on the obsolete CACHE_VERSION variable.
           import os
           with open('sw.js') as f: sw = f.read()
-          sw_cache = re.search(r"CACHE_VERSION = '([^']+)'", sw)
-          if sw_cache:
-              sw_ver = sw_cache.group(1)
-              html_ver = re.search(r'v(\d+\.\d+\.\d+) · \d{4}', html)
-              if html_ver:
-                  html_ver_str = 'luisa-v' + html_ver.group(1)
-                  if sw_ver != html_ver_str:
-                      errors.append(f"Version mismatch: sw={sw_ver}, html={html_ver_str}")
+          app_ver_m = re.search(r"APP_VERSION\s*=\s*['\"](\d+\.\d+\.\d+)['\"]", script)
+          shell_m = re.search(r"SHELL_CACHE\s*=\s*'luisa-letters-shell-v(\d+\.\d+\.\d+)'", sw)
+          corpus_m = re.search(r"CORPUS_CACHE\s*=\s*'luisa-letters-corpus-v(\d+\.\d+\.\d+)'", sw)
+          if not app_ver_m or not shell_m or not corpus_m:
+              errors.append('Unable to resolve APP_VERSION/SHELL_CACHE/CORPUS_CACHE release identity')
+          else:
+              versions = {app_ver_m.group(1), shell_m.group(1), corpus_m.group(1)}
+              if len(versions) != 1:
+                  errors.append(f"Version mismatch: app/sw identities={sorted(versions)}")
 
           # --- SW file ---
           # No auto skipWaiting in install

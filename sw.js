@@ -1,14 +1,18 @@
-/* Luisa Piccarreta PWA — Service Worker v1.3.12
-   Strategy:
-   - index.html → network-first, cache fallback (ensures updates propagate)
-   - corpus.json → network-first, cache fallback
-   - Icons / manifest → cache-first (static assets, versioned by cache name)
-   - Google Fonts / CDN → stale-while-revalidate, never in install precache
+/* Luisa Piccarreta PWA — Service Worker v2.2.1
+   LET-G strategy:
+   - index.html / navigation shell → network-first with HTTP-cache bypass, cache fallback
+   - corpus.json → network-first with HTTP-cache bypass, cache fallback
+   - local static assets → cache-first
+   - optional Google Fonts / pinned Tabler CDN → stale-while-revalidate; local typography/icon fallbacks exist
+   - a failed install fails closed, leaving the previously active worker/app intact
 */
-const CACHE_VERSION = 'luisa-v1.3.12';
-const CORPUS_CACHE  = 'luisa-corpus-v1.3.12';
+const SHELL_CACHE = 'luisa-letters-shell-v2.2.1';
+const CORPUS_CACHE = 'luisa-letters-corpus-v2.2.1';
+const APP_CACHE_PREFIX = 'luisa-letters-';
+const CANONICAL_SHELL_URL = './index.html';
+const CORPUS_URL = './corpus.json';
+const LEGACY_OWNED_CACHE_PATTERNS = [/^luisa-v1\./, /^luisa-corpus-v1\./];
 
-// ONLY local files — no external URLs that can fail install
 const APP_SHELL = [
   './',
   './index.html',
@@ -19,81 +23,101 @@ const APP_SHELL = [
   './icons/favicon-32.png',
 ];
 
-// ── Install: precache app shell only ──────────────────────
+function isOwnedCacheName(name) {
+  return name.startsWith(APP_CACHE_PREFIX) || LEGACY_OWNED_CACHE_PATTERNS.some(rx => rx.test(name));
+}
+
+async function freshFetch(urlOrRequest) {
+  const request = typeof urlOrRequest === 'string'
+    ? new Request(urlOrRequest, {cache:'reload'})
+    : new Request(urlOrRequest, {cache:'reload'});
+  const response = await fetch(request);
+  if (!response || !response.ok) throw new Error('fresh_fetch_failed:' + request.url + ':' + (response && response.status));
+  return response;
+}
+
 self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_VERSION)
-      .then(cache => cache.addAll(APP_SHELL))
-      .then(() => self.skipWaiting()) // Activate immediately — page handles reload guard
-      .catch(err => console.error('[SW] Install failed:', err))
-  );
+  event.waitUntil((async () => {
+    const shellCache = await caches.open(SHELL_CACHE);
+    const corpusCache = await caches.open(CORPUS_CACHE);
+    // cache:'reload' prevents stale browser HTTP-cache bytes from seeding a new release cache.
+    for (const url of APP_SHELL) {
+      const response = await freshFetch(url);
+      await shellCache.put(url, response.clone());
+    }
+    // Precache the protected corpus in its own cache before install can succeed. This closes
+    // the activation/offline gap where the old corpus cache could be removed before the new
+    // page had a chance to fetch corpus.json under the new worker.
+    const corpusResponse = await freshFetch(CORPUS_URL);
+    await corpusCache.put(CORPUS_URL, corpusResponse.clone());
+    // Deliberately do not skipWaiting here. The running app remains in control until explicit activation.
+  })());
 });
 
-// ── Activate: purge old caches ─────────────────────────────
 self.addEventListener('activate', event => {
-  event.waitUntil(
-    caches.keys()
-      .then(keys => Promise.all(
-        keys
-          .filter(k => k !== CACHE_VERSION && k !== CORPUS_CACHE)
-          .map(k => caches.delete(k))
-      ))
-      .then(() => self.clients.claim())
-  );
+  event.waitUntil((async () => {
+    const keys = await caches.keys();
+    await Promise.all(keys
+      .filter(name => isOwnedCacheName(name) && name !== SHELL_CACHE && name !== CORPUS_CACHE)
+      .map(name => caches.delete(name)));
+    await self.clients.claim();
+  })());
 });
 
-// ── Fetch: routing strategies ──────────────────────────────
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
-
-  // Skip non-GET
   if (event.request.method !== 'GET') return;
 
-  // corpus.json → network-first, cache fallback (never stale)
-  if (url.pathname.endsWith('corpus.json')) {
+  if (url.origin === self.location.origin && url.pathname.endsWith('corpus.json')) {
     event.respondWith(networkFirstCorpus(event.request));
     return;
   }
 
-  // Google Fonts, jsDelivr → stale-while-revalidate (opportunistic)
-  if (
-    url.hostname.includes('fonts.googleapis.com') ||
-    url.hostname.includes('fonts.gstatic.com') ||
-    url.hostname.includes('jsdelivr.net')
-  ) {
+  if (url.hostname.includes('fonts.googleapis.com') || url.hostname.includes('fonts.gstatic.com') || url.hostname.includes('jsdelivr.net')) {
     event.respondWith(staleWhileRevalidate(event.request));
     return;
   }
 
-  // index.html → network-first so updates are immediate
-  if (url.pathname === '/' || url.pathname.endsWith('/index.html') || url.pathname.endsWith('/')) {
+  if (url.origin === self.location.origin && (url.pathname === '/' || url.pathname.endsWith('/index.html') || url.pathname.endsWith('/'))) {
     event.respondWith(networkFirstShell(event.request));
     return;
   }
 
-  // App shell and local assets → cache-first
   if (url.origin === self.location.origin) {
     event.respondWith(cacheFirst(event.request));
-    return;
   }
 });
 
 async function networkFirstCorpus(request) {
   try {
-    const response = await fetch(request);
+    const response = await fetch(request, {cache:'no-store'});
     if (response.ok) {
       const cache = await caches.open(CORPUS_CACHE);
-      cache.put(request, response.clone());
+      await cache.put(request, response.clone());
     }
     return response;
-  } catch(e) {
-    console.warn('[SW] networkFirstCorpus failed:', e);
+  } catch (e) {
     const cached = await caches.match(request);
     if (cached) return cached;
-    return new Response(
-      JSON.stringify({ error: 'corpus_unavailable', letters: [] }),
-      { status: 503, headers: { 'Content-Type': 'application/json' } }
-    );
+    return new Response(JSON.stringify({error:'corpus_unavailable',letters:[]}), {status:503,headers:{'Content-Type':'application/json'}});
+  }
+}
+
+async function networkFirstShell(request) {
+  try {
+    const response = await fetch(request, {cache:'no-store'});
+    if (response.ok) {
+      const cache = await caches.open(SHELL_CACHE);
+      // Store every successful navigation response under one canonical shell key instead of
+      // proliferating one cache entry per deep-link query string.
+      await cache.put(CANONICAL_SHELL_URL, response.clone());
+    }
+    return response;
+  } catch (e) {
+    // A deep link such as ?letter=... or a manifest shortcut must still open offline even when
+    // that exact query URL was never visited online.
+    const cached = await caches.match(request) || await caches.match(CANONICAL_SHELL_URL) || await caches.match('./');
+    return cached || new Response('Offline', {status:503,headers:{'Content-Type':'text/plain; charset=utf-8'}});
   }
 }
 
@@ -103,44 +127,27 @@ async function cacheFirst(request) {
   try {
     const response = await fetch(request);
     if (response.ok) {
-      const cache = await caches.open(CACHE_VERSION);
-      cache.put(request, response.clone());
+      const cache = await caches.open(SHELL_CACHE);
+      await cache.put(request, response.clone());
     }
     return response;
-  } catch(e) {
-    console.warn('[SW] networkFirst failed:', e);
-    return new Response('Offline — ressource non disponible', { status: 503 });
-  }
-}
-
-async function networkFirstShell(request) {
-  try {
-    const response = await fetch(request);
-    if (response.ok) {
-      const cache = await caches.open(CACHE_VERSION);
-      cache.put(request, response.clone());
-    }
-    return response;
-  } catch(e) {
-    console.warn('[SW] networkFirstShell failed:', e);
-    const cached = await caches.match(request);
-    if (cached) return cached;
-    return new Response('Offline', { status: 503 });
+  } catch (e) {
+    return new Response('Offline — ressource non disponible', {status:503,headers:{'Content-Type':'text/plain; charset=utf-8'}});
   }
 }
 
 async function staleWhileRevalidate(request) {
   const cached = await caches.match(request);
-  const networkPromise = fetch(request).then(response => {
+  const networkPromise = fetch(request).then(async response => {
     if (response.ok) {
-      caches.open(CACHE_VERSION).then(c => c.put(request, response.clone()));
+      const cache = await caches.open(SHELL_CACHE);
+      await cache.put(request, response.clone());
     }
     return response;
   }).catch(() => null);
-  return cached || await networkPromise || new Response('', { status: 503 });
+  return cached || await networkPromise || new Response('', {status:503});
 }
 
-// Accept skip-waiting messages
 self.addEventListener('message', event => {
   if (event.data && event.data.type === 'SKIP_WAITING') self.skipWaiting();
 });
