@@ -157,10 +157,11 @@ html[data-theme="dark"] .topic-pill,[data-theme="system"] .topic-pill{color:inhe
 
 /* Highlights */
 mark.hl{border-radius:3px;padding:0 1px;cursor:pointer;transition:opacity .15s;}
-mark.hl-gold{background:rgba(201,168,76,.35);color:inherit;}
-mark.hl-pink{background:rgba(236,100,120,.28);color:inherit;}
-mark.hl-green{background:rgba(80,180,120,.28);color:inherit;}
+mark.hl-gold{background:rgba(214,177,61,.32);color:inherit;}
 mark.hl-blue{background:rgba(80,140,220,.28);color:inherit;}
+mark.hl-green{background:rgba(80,180,120,.28);color:inherit;}
+mark.hl-purple{background:rgba(130,91,190,.28);color:inherit;}
+mark.hl-pink{background:rgba(236,100,120,.28);color:inherit;}
 mark.hl:hover{opacity:.7;}
 
 /* Selection popup */
@@ -173,10 +174,11 @@ mark.hl:hover{opacity:.7;}
 .hl-color-btn{width:22px;height:22px;border-radius:50%;border:2px solid transparent;
   cursor:pointer;transition:transform .1s;flex-shrink:0;}
 .hl-color-btn:hover,.hl-color-btn.selected{transform:scale(1.2);border-color:var(--ink);}
-.hl-color-btn.hc-gold{background:rgba(201,168,76,.7);}
-.hl-color-btn.hc-pink{background:rgba(236,100,120,.6);}
-.hl-color-btn.hc-green{background:rgba(80,180,120,.6);}
+.hl-color-btn.hc-gold{background:rgba(214,177,61,.72);}
 .hl-color-btn.hc-blue{background:rgba(80,140,220,.6);}
+.hl-color-btn.hc-green{background:rgba(80,180,120,.6);}
+.hl-color-btn.hc-purple{background:rgba(130,91,190,.62);}
+.hl-color-btn.hc-pink{background:rgba(236,100,120,.6);}
 .hl-confirm-btn{flex:1;padding:5px 8px;border:none;border-radius:7px;
   background:#1A2A4A;color:var(--gold);font-family:var(--body);
   font-size:12px;cursor:pointer;}
@@ -303,7 +305,8 @@ mark.hl:hover{opacity:.7;}
   padding:10px 14px;font-family:var(--body);font-size:13px;color:var(--ink);line-height:1.6;}
 .help-footer{display:flex;align-items:center;padding:14px 20px;gap:12px;flex-shrink:0;
   border-top:0.5px solid var(--border);}
-.help-dots{display:flex;gap:6px;flex:1;justify-content:center;}
+.help-dots{display:flex;gap:6px;flex:1;justify-content:flex-start;min-width:0;overflow-x:auto;scrollbar-width:none;padding:0 2px;}
+.help-dots::-webkit-scrollbar{display:none;}
 .help-dot{width:7px;height:7px;border-radius:50%;background:var(--border);cursor:pointer;
   transition:background .2s;}
 .help-dot.active{background:var(--gold);}
@@ -665,10 +668,11 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
   </div>
   <div id="hl-color-panel" class="hl-popup-row" aria-label="Choisir une couleur">
     <span class="hl-popup-label">Couleur :</span>
-    <button class="hl-color-btn hc-gold" data-color="gold" onclick="confirmHighlightColor('gold')" aria-label="Or"></button>
-    <button class="hl-color-btn hc-pink" data-color="pink" onclick="confirmHighlightColor('pink')" aria-label="Rose"></button>
-    <button class="hl-color-btn hc-green" data-color="green" onclick="confirmHighlightColor('green')" aria-label="Vert"></button>
+    <button class="hl-color-btn hc-gold" data-color="gold" onclick="confirmHighlightColor('gold')" aria-label="Jaune"></button>
     <button class="hl-color-btn hc-blue" data-color="blue" onclick="confirmHighlightColor('blue')" aria-label="Bleu"></button>
+    <button class="hl-color-btn hc-green" data-color="green" onclick="confirmHighlightColor('green')" aria-label="Vert"></button>
+    <button class="hl-color-btn hc-purple" data-color="purple" onclick="confirmHighlightColor('purple')" aria-label="Violet"></button>
+    <button class="hl-color-btn hc-pink" data-color="pink" onclick="confirmHighlightColor('pink')" aria-label="Rose"></button>
     <button class="hl-remove-btn" onclick="showSelectionActions()">Retour</button>
   </div>
 </div>
@@ -683,90 +687,149 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
   <div class="path-letter-list" id="path-letter-list"></div>
 </div>
 
-<!-- Help / Onboarding modal -->
+<!-- Help / Onboarding modal — v2.2.3 Aide consolidated with À propos as final section -->
 <div id="help-overlay" aria-hidden="true" onclick="helpOverlayClick(event)">
   <div id="help-modal" role="dialog" aria-modal="true" aria-labelledby="help-modal-title" tabindex="-1">
     <div class="help-header">
-      <span class="help-header-title" id="help-modal-title">Aide</span><span class="help-header-title" id="help-slide-label">1 / 6</span>
+      <span class="help-header-title" id="help-modal-title">Aide</span><span class="help-header-title" id="help-slide-label">1 / 11</span>
       <button class="help-close" id="help-close-btn" onclick="closeHelp()" aria-label="Fermer l'aide">✕</button>
     </div>
     <div class="help-slides" id="help-slides">
 
-      <!-- Slide 1: Lettre du jour -->
-      <div class="help-slide">
+      <div class="help-slide" data-help-key="navigation">
+        <div class="help-icon"><i class="ti ti-home"></i></div>
+        <div class="help-title">Se repérer dans l’app</div>
+        <div class="help-body">
+          Les cinq destinations principales sont <strong>Accueil · Lettres · Recherche · Mon Espace · Explorer</strong>.<br><br>
+          <strong>Accueil</strong> rassemble la Lettre du jour, votre progression, les situations spirituelles et la reprise de lecture.<br>
+          <strong>Lettres</strong> — donne accès aux 136 lettres et à leurs filtres.<br>
+          <strong>Mon Espace</strong> regroupe vos Favoris, Notes, Surlignages et la sauvegarde.
+        </div>
+        <div class="help-tip">Sur téléphone, utilisez la barre du bas. Sur tablette/ordinateur, la navigation latérale garde le même ordre.</div>
+      </div>
+
+      <div class="help-slide" data-help-key="daily">
         <div class="help-icon"><i class="ti ti-sun"></i></div>
-        <div class="help-title">La Lettre du Jour</div>
+        <div class="help-title">Lettre du jour et reprise</div>
         <div class="help-body">
-          Chaque jour, l'app vous propose une <strong>lettre différente</strong> — choisie parmi celles que vous n'avez pas encore lues.<br><br>
-          Quand vous aurez lu toutes les lettres, la rotation reprend depuis le début.
+          La <strong>Lettre du jour</strong> privilégie une lettre non encore marquée lue. Son choix est mémorisé pour la <strong>date civile locale</strong> : elle ne change pas après un rechargement ou après l’avoir marquée lue le même jour.<br><br>
+          La carte <strong>Continuer la lecture</strong> rouvre votre dernière lettre et restaure votre position de lecture.
         </div>
-        <div class="help-tip">✦ Tapez la carte bleue sur l'Accueil pour l'ouvrir directement.</div>
+        <div class="help-tip">Une lettre n’est jamais marquée « Lu » automatiquement : ce statut change uniquement lorsque vous utilisez le bouton Lu.</div>
       </div>
 
-      <!-- Slide 2: Lire & marquer -->
-      <div class="help-slide">
-        <div class="help-icon"><i class="ti ti-check"></i></div>
-        <div class="help-title">Lire et marquer une lettre</div>
+      <div class="help-slide" data-help-key="reader">
+        <div class="help-icon"><i class="ti ti-book-open"></i></div>
+        <div class="help-title">Lire et organiser une lettre</div>
         <div class="help-body">
-          En bas de chaque lettre, vous trouverez la barre d'actions :<br><br>
-          <strong>♡ Favori</strong> — garde la lettre dans votre liste personnelle<br>
-          <strong>✓ Lu</strong> — marque la lettre comme lue (pastille dorée dans la liste)<br>
-          <strong>✏ Note</strong> — ajoute une note personnelle à cette lettre<br>
-          <strong>Aa Texte</strong> — ajuste la taille de la police de lecture
+          Dans le lecteur :<br><br>
+          <strong>♡ Favori</strong> — ajoute ou retire la lettre de vos Favoris.<br>
+          <strong>✓ Lu</strong> — marque la lettre lue ou non lue et met à jour la progression globale.<br>
+          <strong>✏ Note</strong> — crée une note liée à la lettre et, lorsque possible, au paragraphe visible.<br>
+          <strong>Aa Texte</strong> — ouvre les réglages de taille et de thème.<br><br>
+          Les flèches du lecteur passent à la lettre précédente ou suivante. Votre position est enregistrée avec un repère de paragraphe pour mieux résister aux changements de taille et de mise en page.
         </div>
-        <div class="help-tip">La barre de progression sur l'Accueil se met à jour à chaque lettre marquée lue.</div>
       </div>
 
-      <!-- Slide 3: Surlignages -->
-      <div class="help-slide">
+      <div class="help-slide" data-help-key="selection">
         <div class="help-icon"><i class="ti ti-highlight"></i></div>
-        <div class="help-title">Surligner un passage</div>
+        <div class="help-title">Surligner, noter et copier un passage</div>
         <div class="help-body">
-          Pour surligner un passage dans une lettre :<br><br>
-          1. <strong>Sélectionnez le texte</strong> avec votre doigt (appui long, puis glisser)<br>
-          2. Le menu contextuel propose <strong>Surligner · Note · Copier · Fermer</strong><br>
-          3. <strong>Surligner</strong> ouvre le choix or, rose, vert ou bleu<br>
-          4. <strong>Note</strong> crée une note directement liée au passage sélectionné
+          Sélectionnez précisément le texte souhaité. Le menu contextuel propose <strong>Surligner · Note · Copier · Fermer</strong>.<br><br>
+          <strong>Surligner</strong> — choisissez Jaune, Bleu, Vert, Violet ou Rose.<br>
+          <strong>Note</strong> — crée une note attachée au passage sélectionné.<br>
+          <strong>Copier</strong> — copie le passage sélectionné.<br>
+          <strong>Fermer</strong> — ferme le menu sans modifier le texte.<br><br>
+          Touchez un surlignage déjà visible pour le <strong>supprimer</strong>. Un bouton <strong>Annuler</strong> apparaît brièvement pour restaurer une suppression accidentelle.
         </div>
-        <div class="help-tip">Vos surlignages sont visibles dans Mon Espace → Surlignages. Tapez un surlignage pour rouvrir la lettre.</div>
+        <div class="help-tip">La sélection exacte dépend des capacités de sélection de texte de votre navigateur/appareil ; le texte du corpus n’est jamais modifié par un surlignage.</div>
       </div>
 
-      <!-- Slide 4: Notes & Export -->
-      <div class="help-slide">
-        <div class="help-icon"><i class="ti ti-download"></i></div>
-        <div class="help-title">Sauvegarder vos données</div>
+      <div class="help-slide" data-help-key="workspace">
+        <div class="help-icon"><i class="ti ti-heart"></i></div>
+        <div class="help-title">Mon Espace</div>
         <div class="help-body">
-          Vos favoris, notes, surlignages et lettres lues sont sauvegardés <strong>localement sur votre appareil</strong>.<br><br>
-          Dans <strong>Mon Espace</strong>, ouvrez <strong>Réglages, aide et sauvegarde</strong> pour :<br>
-          — <strong>Exporter</strong> un fichier JSON (pour migrer ou sauvegarder)<br>
-          — <strong>Exporter en texte</strong> un fichier lisible<br>
-          — <strong>Importer</strong> un fichier exporté précédemment
+          <strong>Favoris</strong> — toutes les lettres marquées ♥.<br>
+          <strong>Notes</strong> — vos notes de lettre, de paragraphe ou de passage sélectionné.<br>
+          <strong>Surlignages</strong> — vos passages colorés.<br><br>
+          Une note ou un surlignage supprimé peut être restauré immédiatement avec <strong>Annuler</strong>. Si un ancien surlignage ne peut plus être rattaché avec certitude au texte actuel, il reste visible sous <strong>À réancrer</strong> au lieu d’être déplacé arbitrairement.
         </div>
-        <div class="help-tip">⚠ Si vous désinstallez l'app, vos données seront perdues sans export préalable.</div>
-        <div class="help-tip">Hors ligne : après une première ouverture en ligne réussie, l’app et le corpus chargé restent disponibles sans réseau. La toute première ouverture nécessite Internet. Les polices disposent d’un repli système et les icônes d’un secours local.</div>
+        <div class="help-tip">Les compteurs de Mon Espace indiquent le nombre réel d’éléments personnels présents dans chaque catégorie.</div>
       </div>
 
-      <!-- Slide 5: Parcours spirituels -->
-      <div class="help-slide">
-        <div class="help-icon"><i class="ti ti-route"></i></div>
-        <div class="help-title">Parcours spirituels</div>
+      <div class="help-slide" data-help-key="search">
+        <div class="help-icon"><i class="ti ti-search"></i></div>
+        <div class="help-title">Recherche</div>
         <div class="help-body">
-          Dans <strong>Explorer → Parcours spirituels</strong>, vous trouverez 6 séquences guidées de 7 lettres chacune :<br><br>
-          Paix et confiance · Vivre dans la Divine Volonté · La Croix et la souffrance · Vers la vraie sainteté · Faire connaître les écrits · Abandon et décision
+          La recherche porte sur le <strong>texte, le titre, le destinataire, les thèmes, le numéro de lettre, la date et le lieu</strong>. Les résultats ouvrent directement le paragraphe concerné.<br><br>
+          La normalisation française tolère notamment les accents, <strong>œ/oe</strong>, <strong>æ/ae</strong>, plusieurs apostrophes, les espaces typographiques et la ponctuation.<br><br>
+          Lorsque vous ouvrez un résultat puis revenez à Recherche, la requête et la position de la liste sont restaurées.
         </div>
-        <div class="help-tip">Chaque parcours affiche votre progression. Une lettre marquée lue dans n'importe quel endroit de l'app est automatiquement cochée dans le parcours.</div>
       </div>
 
-      <!-- Slide 6: Recherche & Explorer -->
-      <div class="help-slide">
+      <div class="help-slide" data-help-key="explore">
         <div class="help-icon"><i class="ti ti-compass"></i></div>
-        <div class="help-title">Recherche et Explorer</div>
+        <div class="help-title">Explorer et Parcours spirituels</div>
         <div class="help-body">
-          <strong>Recherche</strong> — cherchez un mot ou une phrase dans toutes les lettres. Les résultats pointent directement vers le paragraphe concerné.<br><br>
-          <strong>Explorer</strong> — naviguez par situation spirituelle, par thème, par destinataire, ou par ordre chronologique.<br><br>
-          <strong>Lettres</strong> — filtrez par thème, favoris, ou lettres non lues.
+          <strong>Explorer</strong> permet de parcourir les lettres par situation spirituelle, thème, destinataire et chronologie. La vue des destinataires donne accès à l’ensemble des destinataires répertoriés.<br><br>
+          Les <strong>6 Parcours spirituels</strong> proposent chacun 7 lettres : Paix et confiance · Vivre dans la Divine Volonté · La Croix et la souffrance · Vers la vraie sainteté · Faire connaître les écrits · Abandon et décision.
         </div>
-        <div class="help-tip">Sur l'Accueil, les cartes "Je cherche une lettre pour…" sont un raccourci vers les thèmes les plus courants.</div>
+        <div class="help-tip">La progression d’un parcours utilise le même statut Lu que le reste de l’app : il n’existe pas une seconde progression cachée.</div>
+      </div>
+
+      <div class="help-slide" data-help-key="settings">
+        <div class="help-icon"><i class="ti ti-settings"></i></div>
+        <div class="help-title">Taille du texte et thème</div>
+        <div class="help-body">
+          Dans <strong>Réglages et aide</strong>, choisissez directement :<br><br>
+          <strong>Petit · 16 px</strong><br>
+          <strong>Normal · 19 px</strong><br>
+          <strong>Grand · 22 px</strong><br>
+          <strong>Très grand · 26 px</strong><br><br>
+          Pour le thème : <strong>Automatique · Clair · Sombre</strong>. Automatique suit le réglage clair/sombre du système ; Clair et Sombre restent fixes jusqu’à ce que vous les changiez.
+        </div>
+        <div class="help-tip">Changer la taille du texte ou passer entre les mises en page téléphone/tablette conserve autant que possible le même repère de lecture.</div>
+      </div>
+
+      <div class="help-slide" data-help-key="backup">
+        <div class="help-icon"><i class="ti ti-download"></i></div>
+        <div class="help-title">Sauvegarder, importer et restaurer</div>
+        <div class="help-body">
+          Vos Favoris, Notes, Surlignages, lettres lues et positions sont conservés <strong>localement sur cet appareil</strong>.<br><br>
+          <strong>Exporter</strong> crée la sauvegarde JSON restaurable.<br>
+          <strong>Exporter en texte</strong> crée un journal lisible destiné à la consultation ; ce fichier texte n’est pas le format de restauration.<br>
+          <strong>Importer</strong> vérifie la sauvegarde avant de proposer <strong>Fusionner</strong> ou <strong>Remplacer après sauvegarde de secours</strong>.<br>
+          Après un remplacement, <strong>Annuler le dernier import</strong> restaure la sauvegarde de secours tant qu’elle est disponible.
+        </div>
+        <div class="help-tip">Avant de désinstaller l’app ou de changer d’appareil, exportez le fichier JSON si vous souhaitez conserver vos données personnelles.</div>
+      </div>
+
+      <div class="help-slide" data-help-key="support">
+        <div class="help-icon"><i class="ti ti-share"></i></div>
+        <div class="help-title">Liens, support, mises à jour et hors ligne</div>
+        <div class="help-body">
+          Dans <strong>Réglages et aide → Liens et support</strong> :<br><br>
+          <strong>Copier le lien courant</strong> crée un lien stable vers l’écran, la lettre ou le paragraphe pertinent.<br>
+          <strong>Signaler un problème de texte</strong> prépare une référence technique à compléter avec votre description.<br>
+          <strong>Copier le diagnostic</strong> copie la version, l’état du service worker, le thème, la taille et une route sûre.<br><br>
+          Vos Notes, Surlignages, Favoris et positions de lecture ne sont jamais ajoutés automatiquement à ces liens ou diagnostics.<br><br>
+          La toute première ouverture nécessite Internet. Une première ouverture en ligne réussie initialise le contenu nécessaire au repli hors ligne ; le shell et le corpus peuvent ensuite être utilisés comme repli lorsque le réseau est indisponible. Quand une nouvelle version est prête, l’app affiche <strong>Mettre à jour</strong> et n’applique pas la mise à jour pendant une note non enregistrée ou un import en cours.
+        </div>
+        <div class="help-tip">Si votre navigateur propose l’installation, le bouton Installer permet d’ajouter l’app. L’installation reste facultative : l’app fonctionne aussi dans le navigateur.</div>
+      </div>
+
+      <div class="help-slide" data-help-key="about">
+        <div class="help-icon"><i class="ti ti-file-text"></i></div>
+        <div class="help-title">À propos</div>
+        <div class="help-body">
+          <strong>Lettres de Luisa Piccarreta</strong> est une application de lecture, recherche et exploration d’un corpus de <strong>136 lettres</strong> consacré à la spiritualité de la Divine Volonté.<br><br>
+          Le corpus utilise des identifiants stables et des paragraphes d’affichage reliés au texte source afin de permettre la recherche, les liens précis, les notes, les surlignages et la reprise de lecture sans modifier le texte lu.<br><br>
+          <strong>Version de l’app :</strong> v2.2.3<br>
+          <strong>Build :</strong> 15 août 2026<br>
+          <strong>Corpus :</strong> 136 lettres · 909 paragraphes d’affichage<br><br>
+          <strong>Confidentialité :</strong> vos données personnelles restent dans le stockage local de cette app, sauf lorsque vous choisissez vous-même de les exporter. Elles ne sont pas automatiquement partagées avec les autres apps de la Collection Luisa et ne sont pas incluses dans les liens, signalements ou diagnostics.
+        </div>
+        <div class="help-tip">Pour une assistance technique, utilisez Copier le diagnostic : il n’inclut pas vos notes, surlignages, favoris ni votre position de lecture.</div>
       </div>
 
     </div><!-- .help-slides -->
@@ -857,7 +920,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
   <div class="settings-section" id="settings-help-section">
     <div class="settings-label">Aide</div>
     <button class="settings-action" id="settings-help-btn" onclick="openHelpFromSettings()" aria-label="Ouvrir l’aide"><i class="ti ti-help-circle" aria-hidden="true"></i> Ouvrir l’aide</button>
-    <div class="settings-current">v2.2.1 · 2026-08-11</div>
+    <div class="settings-current">À propos se trouve à la fin de l’Aide · v2.2.3 · 2026-08-15</div>
   </div>
 </div>
 
@@ -883,7 +946,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
     <button class="snav-item" onclick="switchPanel('p-notes')" id="snav-notes" aria-label="Mon Espace"><i class="ti ti-user-circle" aria-hidden="true"></i>Mon Espace</button>
     <button class="snav-item" onclick="switchPanel('p-explore')" id="snav-explore" aria-label="Explorer"><i class="ti ti-layout-grid" aria-hidden="true"></i>Explorer</button>
     <div class="sidebar-bottom">
-      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v2.2.1 · 2026-08-11</div>
+      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v2.2.3 · 2026-08-15</div>
     </div>
   </nav>
 
@@ -933,7 +996,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
           <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:16px;color:var(--muted)"></i>
         </button>
         <div style="height:12px"></div>
-        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v2.2.1 · 2026-08-11</div>
+        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v2.2.3 · 2026-08-15</div>
       </div>
     </div>
 
@@ -1234,7 +1297,7 @@ function validateCuratedPaths() {
 /* ════════════════════════════════════════
    STATE
 ════════════════════════════════════════ */
-const APP_VERSION = '2.2.1';
+const APP_VERSION = '2.2.3';
 const STATE_SCHEMA_VERSION = 5;
 const WIDE_VIEWPORT_MIN = 768;
 const TEXT_LEVELS = Object.freeze({small:16, normal:19, large:22, xlarge:26});
@@ -1363,7 +1426,7 @@ function isStoredHighlight(item) {
     isCanonicalNumber(item.n) && validLetterId(item.letter_id) && validDisplayParagraphId(item.dp_id) &&
     typeof item.text === 'string' && item.text.length >= 2 && item.text.length <= 1000 &&
     Number.isInteger(item.offset_start) && Number.isInteger(item.offset_end) && item.offset_start >= 0 &&
-    item.offset_end >= item.offset_start && ['gold','pink','green','blue'].indexOf(item.color) >= 0 &&
+    item.offset_end >= item.offset_start && ['gold','blue','green','purple','pink'].indexOf(item.color) >= 0 &&
     (item.date === undefined || (typeof item.date === 'string' && item.date.length <= 160)) &&
     (item.text_snapshot === undefined || (typeof item.text_snapshot === 'string' && item.text_snapshot.length <= 1000)) &&
     (item.paragraph_fingerprint === undefined || typeof item.paragraph_fingerprint === 'string') &&
@@ -2860,7 +2923,7 @@ function openHelpFromSettings() {
   var settingsDialog=document.getElementById('text-size-bar');
   var opener=_dialogReturnFocus.get(settingsDialog) || document.activeElement;
   closeTextBar(true);
-  setTimeout(function(){ openHelp(0, opener); }, 20);
+  setTimeout(function(){ openHelp('navigation', opener); }, 20);
 }
 function closeTextBar(suppressReturnFocus) {
   document.getElementById('settings-overlay').classList.remove('open');
@@ -3516,7 +3579,7 @@ function removeHighlightById(hlId,withUndo){
 function hlClick(e,hlId){e.stopPropagation();removeHighlightById(hlId,true);}
 function renderHighlights(){
   var el=document.getElementById('t-highlights');if(!el)return;if(!STATE.highlights.length){el.innerHTML='<div class="empty-state"><i class="ti ti-highlight" aria-hidden="true"></i>Sélectionnez du texte dans une lettre pour le surligner.</div>';return;}
-  var colorBg={gold:'rgba(201,168,76,.35)',pink:'rgba(236,100,120,.28)',green:'rgba(80,180,120,.28)',blue:'rgba(80,140,220,.28)'};
+  var colorBg={gold:'rgba(214,177,61,.32)',blue:'rgba(80,140,220,.28)',green:'rgba(80,180,120,.28)',purple:'rgba(130,91,190,.28)',pink:'rgba(236,100,120,.28)'};
   function itemHtml(h,i){var bg=colorBg[h.color]||colorBg.gold;var stale=h.stale?'<span class="hl-stale-badge">À réancrer</span>':'';return '<div class="hl-item"><button class="hl-item-body" data-action="highlight-open" data-highlight-index="'+i+'" aria-label="Ouvrir '+esc(h.letter_id)+'"><div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:'+bg+';flex-shrink:0"></span><span class="hl-ref">'+esc(h.letter_id)+' · '+esc(h.date)+'</span>'+stale+'</div><div class="hl-text">« '+esc(h.text.length>120?h.text.slice(0,120)+'…':h.text)+' »</div></button><button data-action="highlight-delete" data-highlight-index="'+i+'" aria-label="Supprimer le surlignage" style="padding:12px 14px 12px 4px;background:none;border:none;cursor:pointer;color:var(--muted);flex-shrink:0"><i class="ti ti-trash" aria-hidden="true" style="font-size:14px"></i></button></div>';}
   var active=[],stale=[];STATE.highlights.forEach(function(h,i){(h.stale?stale:active).push({h:h,i:i});});
   var out='';
@@ -3581,10 +3644,18 @@ document.addEventListener('keydown',function(e){
    HELP / ONBOARDING
 ════════════════════════════════════════ */
 var _helpSlide = 0;
-var _helpSlides = 6;
+var _helpSlides = 0;
+function helpSlideCount() { return document.querySelectorAll('#help-slides .help-slide').length; }
+function helpSlideIndex(key) {
+  var slides=Array.from(document.querySelectorAll('#help-slides .help-slide'));
+  var idx=slides.findIndex(function(slide){return slide.getAttribute('data-help-key')===key;});
+  return idx >= 0 ? idx : 0;
+}
 
 function openHelp(startSlide, returnFocusOverride) {
-  _helpSlide = startSlide || 0;
+  _helpSlides = helpSlideCount();
+  var requested = typeof startSlide === 'string' ? helpSlideIndex(startSlide) : Number(startSlide || 0);
+  _helpSlide = Math.max(0, Math.min(_helpSlides - 1, Number.isFinite(requested) ? requested : 0));
   renderHelpSlide();
   document.getElementById('help-overlay').classList.add('show'); document.getElementById('help-overlay').setAttribute('aria-hidden','false');
   activateDialog('help-modal','help-close-btn',returnFocusOverride);
@@ -3610,9 +3681,12 @@ function helpNav(dir) {
 function renderHelpSlide() {
   var container = document.getElementById('help-slides');
   var slides = container.children;
+  _helpSlides = slides.length;
   for (var i = 0; i < slides.length; i++) {
     slides[i].style.display = i === _helpSlide ? 'flex' : 'none';
   }
+  var currentKey = slides[_helpSlide] ? slides[_helpSlide].getAttribute('data-help-key') : '';
+  document.getElementById('help-modal-title').textContent = 'Aide';
   document.getElementById('help-slide-label').textContent = (_helpSlide + 1) + ' / ' + _helpSlides;
   // Dots
   var dotsEl = document.getElementById('help-dots');
@@ -3625,6 +3699,8 @@ function renderHelpSlide() {
     dot.onclick = function() { _helpSlide = parseInt(this.getAttribute('data-slide')); renderHelpSlide(); };
     dotsEl.appendChild(dot);
   }
+  var activeDot = dotsEl.querySelector('.help-dot.active');
+  if (activeDot && activeDot.scrollIntoView) activeDot.scrollIntoView({block:'nearest',inline:'center'});
   // Next button label
   var nextBtn = document.getElementById('help-next');
   nextBtn.textContent = _helpSlide === _helpSlides - 1 ? 'Terminer ✓' : 'Suivant →';
@@ -3634,7 +3710,7 @@ function renderHelpSlide() {
 
 function checkOnboarding() {
   if (!localStorage.getItem('lp_onboarded')) {
-    setTimeout(function() { openHelp(0); }, 800); // slight delay after app loads
+    setTimeout(function() { openHelp('navigation'); }, 800); // slight delay after app loads
   }
 }
 
@@ -3904,7 +3980,7 @@ function importedHighlights(value, maps, ignored) {
   value.slice(0,5000).forEach(function(item,index){
     if(!isPlainObject(item)||hasDangerousKeys(item)||typeof item.text!=='string'){ignored.highlights++;return;}
     var letter=isCanonicalNumber(item.n)?maps.byNumber[item.n]:maps.byId[item.letter_id];var dpEntry=maps.dpById[item.dp_id];if(!letter||!dpEntry||dpEntry.letter.letter_id!==letter.letter_id||(item.letter_id&&item.letter_id!==letter.letter_id)){ignored.highlights++;return;}
-    var text=String(item.text_snapshot||item.text);if(text.length<2||text.length>1000||['gold','pink','green','blue'].indexOf(item.color)<0){ignored.highlights++;return;}
+    var text=String(item.text_snapshot||item.text);if(text.length<2||text.length>1000||['gold','blue','green','purple','pink'].indexOf(item.color)<0){ignored.highlights++;return;}
     var source=dpEntry.dp.text_fr||'';var base={id:typeof item.id==='string'&&/^[A-Za-z0-9._-]{1,120}$/.test(item.id)?item.id:'hl_import_'+letter.canonical_number+'_'+index,letter_id:letter.letter_id,n:letter.canonical_number,dp_id:item.dp_id,text:text,text_snapshot:text,offset_start:Number.isInteger(item.offset_start)?item.offset_start:-1,offset_end:Number.isInteger(item.offset_end)?item.offset_end:-1,color:item.color,date:typeof item.date==='string'?item.date.slice(0,160):'',context_before:typeof item.context_before==='string'?item.context_before.slice(0,120):'',context_after:typeof item.context_after==='string'?item.context_after.slice(0,120):''};
     var clean=enrichHighlightRecord(base,source);var key=clean.dp_id+'|'+clean.offset_start+'|'+clean.offset_end+'|'+clean.text;if(!seen.has(key)){seen.add(key);result.push(clean);}
   });if(value.length>5000)ignored.highlights+=value.length-5000;return result;
@@ -4410,6 +4486,7 @@ window.__LET_G_TEST = {
 };
 
 window.__LET_I_TEST = Object.freeze({parseInitialRoute:parseInitialRoute,applyInitialRoute:applyInitialRoute,stableUrlForRoute:stableUrlForRoute,currentRouteDescriptor:currentRouteDescriptor,privacySafeSupportRouteDescriptor:privacySafeSupportRouteDescriptor,readerIsRouteVisible:readerIsRouteVisible,currentStableUrl:currentStableUrl,buildTextIssueReport:buildTextIssueReport,buildDiagnostics:buildDiagnostics,routeLetterNumber:routeLetterNumber,constants:{appVersion:APP_VERSION,stateSchema:STATE_SCHEMA_VERSION}});
+window.__LDL_HELP_TEST = Object.freeze({openHelp:openHelp,closeHelp:closeHelp,renderHelpSlide:renderHelpSlide,helpSlideCount:helpSlideCount,helpSlideIndex:helpSlideIndex,constants:{appVersion:APP_VERSION}});
 
 loadCorpus();
 </script>

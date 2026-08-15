@@ -5,13 +5,13 @@ Application de référence pour les Lettres de Luisa Piccarreta.
 
 ---
 
-## Version courante : v2.2.1
+## Version courante : v2.2.3
 
-- Corpus protégé : 136 lettres (`luisa-letters-corpus-v2.2.1`)
-- SW cache : `luisa-letters-shell-v2.2.1`
+- Corpus protégé : 136 lettres (`luisa-letters-corpus-v2.2.3`)
+- SW cache : `luisa-letters-shell-v2.2.3`
 - LET-A : stockage isolé par domaine, import strict et transactionnel
 - LET-B : tailles sémantiques Petit 16 / Normal 19 / Grand 22 / Très grand 26, aperçu, thème Automatique/Clair/Sombre, champs iOS ≥16px
-- Validation physique iPhone/iPad/Android et cycle PWA installé requise avant déploiement
+- Déploiement public autorisé ; validation physique iPhone/iPad/Android et cycle PWA installé restent requis avant un PASS technique complet
 
 ---
 
@@ -34,7 +34,7 @@ Push sur `main` → GitHub Actions valide + déploie automatiquement sur GitHub 
 
 ```bash
 git add -A
-git commit -m "feat: v2.2.1"
+git commit -m "feat: v2.2.3"
 git push origin main
 ```
 
@@ -70,7 +70,25 @@ git push origin main
 
 ---
 
-*Source-rights clearance non résolue — pas de lancement public avant résolution.*
+*Droits de diffusion : autorisation confirmée par le propriétaire le 2026-08-13. Le déploiement public de cette version est autorisé.*
+
+
+
+## v2.2.3 — LET-J1 harmonisation d’interaction
+
+- Aide et À propos consolidés : À propos est désormais la dernière section de l’Aide, sans bouton À propos séparé dans Réglages.
+- Palette de surlignage visible harmonisée : Jaune · Bleu · Vert · Violet · Rose. Le choix Jaune conserve la clé interne historique `gold` afin d’éviter une migration de schéma inutile ; `purple` est ajouté comme nouvelle clé prise en charge.
+- Le contrat contextuel reste `Surligner · Note · Copier · Fermer`.
+- Les contrats Lien/Partager, Samsung/Android, corpus, routes, notes, positions et sauvegardes ne sont pas modifiés.
+- Validation physique iPhone/iPad/Samsung, PWA installée, Hub réel et lecteurs d’écran reste externe à ce stage.
+
+## v2.2.2 — Aide et À propos finalisés
+
+- Aide portée de 6 à 11 sections et alignée sur le runtime actuel : navigation, Lettre du jour/reprise, lecteur, actions de sélection, Mon Espace, Recherche, Explorer/parcours, taille/thème, sauvegarde/import, liens/support/PWA et À propos.
+- Le nombre de sections d’aide est désormais dérivé du DOM au lieu d’un compteur fragile codé en dur.
+- Ajout d’un accès distinct **À propos** dans Réglages et aide, ouvrant la section dédiée.
+- À propos expose uniquement les informations utiles au public : objet de l’app, version/build, corpus 136/909 et confidentialité locale.
+- Aucun texte du corpus, ID stable, schéma de données utilisateur, logique de recherche/lecture/annotation, manifest ou contrat de routes n’est modifié.
 
 
 ## LET-C — contextual actions, notes, highlighting and swipe safety
@@ -150,4 +168,4 @@ git push origin main
 - `Partager` inclut désormais l’URL stable, le titre et la référence ; le repli presse-papiers copie le lien et la référence.
 - Réglages et aide propose également **Copier le lien courant**, **Signaler un problème de texte** et **Copier le diagnostic**. Les notes, surlignages, favoris et positions de lecture ne sont jamais inclus automatiquement.
 - Le contrat de route ne dépend d’aucun transfert spécifique de plateforme. Son comportement réel en navigateur et en PWA installée doit encore être validé sur l’exact candidat avant toute revendication d’équivalence.
-- Les validations physiques/installées/live restent nécessaires avant un PASS public complet.
+- Le déploiement public est autorisé. Les validations physiques/installées/live restent nécessaires avant un **PASS technique complet** et demeurent des contrôles post-déploiement recommandés.
