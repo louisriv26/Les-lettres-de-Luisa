@@ -10,8 +10,12 @@
 <meta name="apple-mobile-web-app-title" content="Luisa">
 <title>Lettres de Luisa Piccarreta</title>
 <link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="shortcut icon" href="icons/favicon.ico">
+<link rel="apple-touch-icon" sizes="60x60" href="icons/icon-60.png">
+<link rel="apple-touch-icon" sizes="120x120" href="icons/icon-120.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
@@ -687,7 +691,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
   <div class="path-letter-list" id="path-letter-list"></div>
 </div>
 
-<!-- Help / Onboarding modal — v2.2.3 Aide consolidated with À propos as final section -->
+<!-- Help / Onboarding modal — v2.2.4 Aide consolidated with À propos as final section -->
 <div id="help-overlay" aria-hidden="true" onclick="helpOverlayClick(event)">
   <div id="help-modal" role="dialog" aria-modal="true" aria-labelledby="help-modal-title" tabindex="-1">
     <div class="help-header">
@@ -824,7 +828,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
         <div class="help-body">
           <strong>Lettres de Luisa Piccarreta</strong> est une application de lecture, recherche et exploration d’un corpus de <strong>136 lettres</strong> consacré à la spiritualité de la Divine Volonté.<br><br>
           Le corpus utilise des identifiants stables et des paragraphes d’affichage reliés au texte source afin de permettre la recherche, les liens précis, les notes, les surlignages et la reprise de lecture sans modifier le texte lu.<br><br>
-          <strong>Version de l’app :</strong> v2.2.3<br>
+          <strong>Version de l’app :</strong> v2.2.4<br>
           <strong>Build :</strong> 15 août 2026<br>
           <strong>Corpus :</strong> 136 lettres · 909 paragraphes d’affichage<br><br>
           <strong>Confidentialité :</strong> vos données personnelles restent dans le stockage local de cette app, sauf lorsque vous choisissez vous-même de les exporter. Elles ne sont pas automatiquement partagées avec les autres apps de la Collection Luisa et ne sont pas incluses dans les liens, signalements ou diagnostics.
@@ -920,7 +924,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
   <div class="settings-section" id="settings-help-section">
     <div class="settings-label">Aide</div>
     <button class="settings-action" id="settings-help-btn" onclick="openHelpFromSettings()" aria-label="Ouvrir l’aide"><i class="ti ti-help-circle" aria-hidden="true"></i> Ouvrir l’aide</button>
-    <div class="settings-current">À propos se trouve à la fin de l’Aide · v2.2.3 · 2026-08-15</div>
+    <div class="settings-current">À propos se trouve à la fin de l’Aide · v2.2.4 · 2026-08-17</div>
   </div>
 </div>
 
@@ -946,7 +950,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
     <button class="snav-item" onclick="switchPanel('p-notes')" id="snav-notes" aria-label="Mon Espace"><i class="ti ti-user-circle" aria-hidden="true"></i>Mon Espace</button>
     <button class="snav-item" onclick="switchPanel('p-explore')" id="snav-explore" aria-label="Explorer"><i class="ti ti-layout-grid" aria-hidden="true"></i>Explorer</button>
     <div class="sidebar-bottom">
-      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v2.2.3 · 2026-08-15</div>
+      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v2.2.4 · 2026-08-17</div>
     </div>
   </nav>
 
@@ -996,7 +1000,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
           <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:16px;color:var(--muted)"></i>
         </button>
         <div style="height:12px"></div>
-        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v2.2.3 · 2026-08-15</div>
+        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v2.2.4 · 2026-08-17</div>
       </div>
     </div>
 
@@ -1297,7 +1301,7 @@ function validateCuratedPaths() {
 /* ════════════════════════════════════════
    STATE
 ════════════════════════════════════════ */
-const APP_VERSION = '2.2.3';
+const APP_VERSION = '2.2.4';
 const STATE_SCHEMA_VERSION = 5;
 const WIDE_VIEWPORT_MIN = 768;
 const TEXT_LEVELS = Object.freeze({small:16, normal:19, large:22, xlarge:26});

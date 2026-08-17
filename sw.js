@@ -1,4 +1,4 @@
-/* Luisa Piccarreta PWA — Service Worker v2.2.3
+/* Luisa Piccarreta PWA — Service Worker v2.2.4
    LET-G strategy:
    - index.html / navigation shell → network-first with HTTP-cache bypass, cache fallback
    - corpus.json → network-first with HTTP-cache bypass, cache fallback
@@ -6,8 +6,8 @@
    - optional Google Fonts / pinned Tabler CDN → stale-while-revalidate; local typography/icon fallbacks exist
    - a failed install fails closed, leaving the previously active worker/app intact
 */
-const SHELL_CACHE = 'luisa-letters-shell-v2.2.3';
-const CORPUS_CACHE = 'luisa-letters-corpus-v2.2.3';
+const SHELL_CACHE = 'luisa-letters-shell-v2.2.4';
+const CORPUS_CACHE = 'luisa-letters-corpus-v2.2.4';
 const APP_CACHE_PREFIX = 'luisa-letters-';
 const CANONICAL_SHELL_URL = './index.html';
 const CORPUS_URL = './corpus.json';
@@ -17,10 +17,15 @@ const APP_SHELL = [
   './',
   './index.html',
   './manifest.json',
+  './icons/icon-60.png',
+  './icons/icon-120.png',
   './icons/icon-192.png',
   './icons/icon-512.png',
+  './icons/icon-maskable-512.png',
   './icons/apple-touch-icon.png',
+  './icons/favicon-16.png',
   './icons/favicon-32.png',
+  './icons/favicon.ico',
 ];
 
 function isOwnedCacheName(name) {

@@ -5,10 +5,10 @@ Application de référence pour les Lettres de Luisa Piccarreta.
 
 ---
 
-## Version courante : v2.2.3
+## Version courante : v2.2.4
 
-- Corpus protégé : 136 lettres (`luisa-letters-corpus-v2.2.3`)
-- SW cache : `luisa-letters-shell-v2.2.3`
+- Corpus protégé : 136 lettres (`luisa-letters-corpus-v2.2.4`)
+- SW cache : `luisa-letters-shell-v2.2.4`
 - LET-A : stockage isolé par domaine, import strict et transactionnel
 - LET-B : tailles sémantiques Petit 16 / Normal 19 / Grand 22 / Très grand 26, aperçu, thème Automatique/Clair/Sombre, champs iOS ≥16px
 - Déploiement public autorisé ; validation physique iPhone/iPad/Android et cycle PWA installé restent requis avant un PASS technique complet
@@ -22,7 +22,7 @@ index.html        ← App complète (single-file PWA)
 corpus.json       ← 136 lettres, ~2.2 Mo
 sw.js             ← Service Worker (network-first shell + corpus)
 manifest.json     ← PWA manifest (orientation: any)
-icons/            ← icon-192, icon-512, apple-touch-icon, favicon-32
+icons/            ← famille finale verrouillée v1 : 60/120/180/192/512, maskable 512, favicons 16/32/ICO
 .github/workflows/deploy.yml ← GitHub Pages auto-deploy
 ```
 
@@ -34,7 +34,7 @@ Push sur `main` → GitHub Actions valide + déploie automatiquement sur GitHub 
 
 ```bash
 git add -A
-git commit -m "feat: v2.2.3"
+git commit -m "feat: v2.2.4 locked icon family v1"
 git push origin main
 ```
 
@@ -72,6 +72,16 @@ git push origin main
 
 *Droits de diffusion : autorisation confirmée par le propriétaire le 2026-08-13. Le déploiement public de cette version est autorisé.*
 
+
+
+## v2.2.4 — Famille finale d’icônes Collection Luisa v1
+
+- Identité **Lettres** remplacée par l’icône finale verrouillée de la famille Collection Luisa v1 (livre doré chaud avec plume et enveloppe).
+- Neuf actifs plateforme sont liés : favicons 16/32/ICO, Apple 60/120/180, PWA 192/512 et maskable 512 dédié.
+- Le manifest n’utilise plus une icône normale comme `maskable`; il référence l’actif maskable verrouillé prévu pour Android/PWA.
+- Les nouveaux actifs sont inclus dans le cache shell afin qu’ils restent disponibles après une installation en ligne réussie.
+- Aucun changement de corpus, ID stable, navigation, recherche, surlignage, notes, positions, sauvegarde/import, routes Hub ou contrat de données privées.
+- Validation physique iPhone/iPad/Samsung, PWA installée, origine live et lecteurs d’écran reste externe au stage.
 
 
 ## v2.2.3 — LET-J1 harmonisation d’interaction
