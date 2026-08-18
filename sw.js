@@ -1,4 +1,4 @@
-/* Luisa Piccarreta PWA — Service Worker v2.2.4
+/* Luisa Piccarreta PWA — Service Worker v2.2.5
    LET-G strategy:
    - index.html / navigation shell → network-first with HTTP-cache bypass, cache fallback
    - corpus.json → network-first with HTTP-cache bypass, cache fallback
@@ -6,8 +6,8 @@
    - optional Google Fonts / pinned Tabler CDN → stale-while-revalidate; local typography/icon fallbacks exist
    - a failed install fails closed, leaving the previously active worker/app intact
 */
-const SHELL_CACHE = 'luisa-letters-shell-v2.2.4';
-const CORPUS_CACHE = 'luisa-letters-corpus-v2.2.4';
+const SHELL_CACHE = 'luisa-letters-shell-v2.2.5';
+const CORPUS_CACHE = 'luisa-letters-corpus-v2.2.5';
 const APP_CACHE_PREFIX = 'luisa-letters-';
 const CANONICAL_SHELL_URL = './index.html';
 const CORPUS_URL = './corpus.json';

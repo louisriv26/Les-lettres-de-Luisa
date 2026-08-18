@@ -169,30 +169,24 @@ mark.hl-pink{background:rgba(236,100,120,.28);color:inherit;}
 mark.hl:hover{opacity:.7;}
 
 /* Selection popup */
-#hl-popup{position:fixed;z-index:700;background:var(--ivory);border:0.5px solid var(--border);
-  border-radius:12px;padding:8px 10px;box-shadow:0 4px 20px rgba(0,0,0,.18);
-  display:none;flex-direction:column;gap:8px;min-width:200px;}
+#hl-popup{position:fixed;z-index:700;left:50%;right:auto;top:auto;bottom:calc(var(--sat-bot) + 72px);
+  transform:translateX(-50%);max-width:calc(100vw - 24px);width:max-content;min-width:0;
+  background:#1C1830;border:0.5px solid rgba(255,255,255,.22);border-radius:20px;padding:6px 8px;
+  box-shadow:0 6px 24px rgba(0,0,0,.34);display:none;flex-direction:column;gap:7px;}
 #hl-popup.show{display:flex;}
-.hl-popup-row{display:flex;align-items:center;gap:6px;}
-.hl-popup-label{font-family:var(--body);font-size:11px;color:var(--muted);white-space:nowrap;}
-.hl-color-btn{width:22px;height:22px;border-radius:50%;border:2px solid transparent;
-  cursor:pointer;transition:transform .1s;flex-shrink:0;}
-.hl-color-btn:hover,.hl-color-btn.selected{transform:scale(1.2);border-color:var(--ink);}
-.hl-color-btn.hc-gold{background:rgba(214,177,61,.72);}
-.hl-color-btn.hc-blue{background:rgba(80,140,220,.6);}
-.hl-color-btn.hc-green{background:rgba(80,180,120,.6);}
-.hl-color-btn.hc-purple{background:rgba(130,91,190,.62);}
-.hl-color-btn.hc-pink{background:rgba(236,100,120,.6);}
-.hl-confirm-btn{flex:1;padding:5px 8px;border:none;border-radius:7px;
-  background:#1A2A4A;color:var(--gold);font-family:var(--body);
-  font-size:12px;cursor:pointer;}
-.hl-remove-btn{padding:5px 8px;border:0.5px solid var(--border);border-radius:7px;
-  background:none;color:var(--muted);font-family:var(--body);font-size:12px;cursor:pointer;}
-.hl-action-btn{padding:7px 9px;border:0.5px solid var(--border);border-radius:8px;background:var(--white);color:var(--ink);font-family:var(--body);font-size:12px;cursor:pointer;white-space:nowrap;}
-.hl-action-btn.primary{background:#1A2A4A;color:var(--gold);border-color:#1A2A4A;}
-#selection-actions{display:flex;gap:5px;align-items:center;flex-wrap:wrap;}
-#hl-color-panel{display:none;align-items:center;gap:7px;}
-#hl-color-panel.show{display:flex;}
+.hl-popup-row{display:flex;align-items:center;justify-content:center;gap:6px;max-width:100%;}
+.hl-popup-label{font-family:var(--body);font-size:11px;color:rgba(248,246,252,.72);white-space:nowrap;}
+.hl-color-btn{width:44px;height:44px;min-width:44px!important;min-height:44px!important;border-radius:50%;border:2px solid rgba(255,255,255,.35);
+  cursor:pointer;transition:transform .1s,border-color .1s;flex-shrink:0;}
+.hl-color-btn:hover,.hl-color-btn.selected{transform:scale(1.08);border-color:#F8F6FC;}
+.hl-color-btn.hc-gold{background:rgba(214,177,61,.82);}.hl-color-btn.hc-blue{background:rgba(80,140,220,.72);}.hl-color-btn.hc-green{background:rgba(80,180,120,.72);}.hl-color-btn.hc-purple{background:rgba(130,91,190,.74);}.hl-color-btn.hc-pink{background:rgba(236,100,120,.72);}
+.hl-confirm-btn{flex:1;padding:7px 9px;border:none;border-radius:10px;background:rgba(255,255,255,.12);color:#F8F6FC;font-family:var(--body);font-size:12.5px;cursor:pointer;}
+.hl-remove-btn{padding:7px 9px;border:0.5px solid rgba(255,255,255,.22);border-radius:10px;background:transparent;color:#F8F6FC;font-family:var(--body);font-size:12.5px;cursor:pointer;}
+.hl-action-btn{min-height:44px;padding:8px 10px;border:none;border-radius:14px;background:transparent;color:#F8F6FC;font-family:var(--body);font-size:13px;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent;}
+.hl-action-btn:hover,.hl-action-btn:focus-visible{background:rgba(255,255,255,.16);}.hl-action-btn.primary{background:rgba(255,255,255,.10);color:var(--gold);border:none;}
+#selection-actions{display:flex;gap:4px;align-items:center;flex-wrap:nowrap;}
+#hl-color-panel{display:none;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;}#hl-color-panel.show{display:flex;}
+@media(max-width:360px){#hl-popup{padding-left:5px;padding-right:5px;}#selection-actions{gap:2px;}.hl-action-btn{padding-left:6px;padding-right:6px;font-size:12.5px;}#hl-color-panel .hl-popup-label{width:100%;text-align:center;}}
 .hl-stale-badge{display:inline-flex;align-items:center;margin-left:6px;padding:2px 6px;border-radius:999px;border:0.5px solid var(--border);font-family:var(--body);font-size:9px;color:var(--muted);font-style:normal;}
 .toast .undo-toast-btn{margin-left:10px;border:0;border-left:1px solid rgba(255,255,255,.25);padding:2px 0 2px 10px;background:none;color:var(--gold);font:600 12px var(--body);cursor:pointer;}
 
@@ -691,7 +685,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
   <div class="path-letter-list" id="path-letter-list"></div>
 </div>
 
-<!-- Help / Onboarding modal — v2.2.4 Aide consolidated with À propos as final section -->
+<!-- Help / Onboarding modal — v2.2.5 Aide consolidated with À propos as final section -->
 <div id="help-overlay" aria-hidden="true" onclick="helpOverlayClick(event)">
   <div id="help-modal" role="dialog" aria-modal="true" aria-labelledby="help-modal-title" tabindex="-1">
     <div class="help-header">
@@ -744,6 +738,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
           <strong>Note</strong> — crée une note attachée au passage sélectionné.<br>
           <strong>Copier</strong> — copie le passage sélectionné.<br>
           <strong>Fermer</strong> — ferme le menu sans modifier le texte.<br><br>
+          Sur iPhone et iPad, les actions de l’app apparaissent dans une barre sombre en bas du lecteur, séparée du menu de sélection d’Apple.<br><br>
           Touchez un surlignage déjà visible pour le <strong>supprimer</strong>. Un bouton <strong>Annuler</strong> apparaît brièvement pour restaurer une suppression accidentelle.
         </div>
         <div class="help-tip">La sélection exacte dépend des capacités de sélection de texte de votre navigateur/appareil ; le texte du corpus n’est jamais modifié par un surlignage.</div>
@@ -828,8 +823,8 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
         <div class="help-body">
           <strong>Lettres de Luisa Piccarreta</strong> est une application de lecture, recherche et exploration d’un corpus de <strong>136 lettres</strong> consacré à la spiritualité de la Divine Volonté.<br><br>
           Le corpus utilise des identifiants stables et des paragraphes d’affichage reliés au texte source afin de permettre la recherche, les liens précis, les notes, les surlignages et la reprise de lecture sans modifier le texte lu.<br><br>
-          <strong>Version de l’app :</strong> v2.2.4<br>
-          <strong>Build :</strong> 15 août 2026<br>
+          <strong>Version de l’app :</strong> v2.2.5<br>
+          <strong>Build :</strong> 17 août 2026<br>
           <strong>Corpus :</strong> 136 lettres · 909 paragraphes d’affichage<br><br>
           <strong>Confidentialité :</strong> vos données personnelles restent dans le stockage local de cette app, sauf lorsque vous choisissez vous-même de les exporter. Elles ne sont pas automatiquement partagées avec les autres apps de la Collection Luisa et ne sont pas incluses dans les liens, signalements ou diagnostics.
         </div>
@@ -924,7 +919,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
   <div class="settings-section" id="settings-help-section">
     <div class="settings-label">Aide</div>
     <button class="settings-action" id="settings-help-btn" onclick="openHelpFromSettings()" aria-label="Ouvrir l’aide"><i class="ti ti-help-circle" aria-hidden="true"></i> Ouvrir l’aide</button>
-    <div class="settings-current">À propos se trouve à la fin de l’Aide · v2.2.4 · 2026-08-17</div>
+    <div class="settings-current">À propos se trouve à la fin de l’Aide · v2.2.5 · 2026-08-17</div>
   </div>
 </div>
 
@@ -950,7 +945,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
     <button class="snav-item" onclick="switchPanel('p-notes')" id="snav-notes" aria-label="Mon Espace"><i class="ti ti-user-circle" aria-hidden="true"></i>Mon Espace</button>
     <button class="snav-item" onclick="switchPanel('p-explore')" id="snav-explore" aria-label="Explorer"><i class="ti ti-layout-grid" aria-hidden="true"></i>Explorer</button>
     <div class="sidebar-bottom">
-      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v2.2.4 · 2026-08-17</div>
+      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v2.2.5 · 2026-08-17</div>
     </div>
   </nav>
 
@@ -1000,7 +995,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
           <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:16px;color:var(--muted)"></i>
         </button>
         <div style="height:12px"></div>
-        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v2.2.4 · 2026-08-17</div>
+        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v2.2.5 · 2026-08-17</div>
       </div>
     </div>
 
@@ -1301,7 +1296,7 @@ function validateCuratedPaths() {
 /* ════════════════════════════════════════
    STATE
 ════════════════════════════════════════ */
-const APP_VERSION = '2.2.4';
+const APP_VERSION = '2.2.5';
 const STATE_SCHEMA_VERSION = 5;
 const WIDE_VIEWPORT_MIN = 768;
 const TEXT_LEVELS = Object.freeze({small:16, normal:19, large:22, xlarge:26});
@@ -3512,6 +3507,7 @@ var _hlPendingStart = 0;
 var _hlPendingEnd = 0;
 var _hlPendingParagraphFingerprint = '';
 var _highlightListenerCounts = {};
+var _hlPopupInteracting = false;
 
 function showSelectionActions(){document.getElementById('selection-actions').style.display='flex';document.getElementById('hl-color-panel').classList.remove('show');}
 function showHighlightColors(){document.getElementById('selection-actions').style.display='none';document.getElementById('hl-color-panel').classList.add('show');}
@@ -3523,9 +3519,15 @@ function hideHlPopup(keepPending){
   if(window.getSelection) window.getSelection().removeAllRanges();
 }
 function positionHlPopup(rect){
-  var popup=document.getElementById('hl-popup');showSelectionActions();popup.classList.add('show');
-  var pw=300,ph=74;var top=rect.top+window.scrollY-ph-12;if(top<window.scrollY+8)top=rect.bottom+window.scrollY+52;
-  var left=Math.max(8,Math.min(rect.left+window.scrollX+(rect.width/2)-pw/2,window.innerWidth-pw-8));popup.style.top=top+'px';popup.style.left=left+'px';
+  var popup=document.getElementById('hl-popup');showSelectionActions();
+  // Apple owns the native menu near selected words; app actions stay at the bottom.
+  popup.style.top='';popup.style.left='';popup.style.right='';popup.style.bottom='';popup.style.transform='';popup.classList.add('show');
+}
+function bindHlPopupInteractionGuard(){
+  var popup=document.getElementById('hl-popup');if(!popup||popup.getAttribute('data-ios-selection-guard')==='1')return;
+  popup.setAttribute('data-ios-selection-guard','1');var hold=function(){_hlPopupInteracting=true;};var release=function(){setTimeout(function(){_hlPopupInteracting=false;},350);};
+  popup.addEventListener('mousedown',function(e){hold();e.preventDefault();});popup.addEventListener('mouseup',release);
+  popup.addEventListener('touchstart',function(e){hold();e.stopPropagation();},{passive:true});popup.addEventListener('touchend',release,{passive:true});popup.addEventListener('touchcancel',release,{passive:true});
 }
 function setupHighlightListener(scrollerId){
   var scroller=document.getElementById(scrollerId);if(!scroller)return;
@@ -3535,6 +3537,7 @@ function setupHighlightListener(scrollerId){
   scroller.addEventListener('touchend',function(){setTimeout(onTextSelected,80);});
 }
 function onTextSelected(){
+  if(_hlPopupInteracting)return;
   var sel=window.getSelection();if(!sel||sel.isCollapsed||!sel.toString()){hideHlPopup();return;}
   var range=sel.getRangeAt(0);var container=range.commonAncestorContainer;var dpEl=container.nodeType===3?container.parentElement:container;
   while(dpEl&&!dpEl.getAttribute('data-dp-id'))dpEl=dpEl.parentElement;if(!dpEl){hideHlPopup();return;}
@@ -4473,6 +4476,7 @@ if ('serviceWorker' in navigator) {
    BOOT
 ════════════════════════════════════════ */
 applyLayout(); // Apply immediately so loading screen uses correct layout
+bindHlPopupInteractionGuard();
 window.__LET_F_TEST = {
   constants:{appVersion:APP_VERSION,stateSchema:STATE_SCHEMA_VERSION},
   updateWorkspaceCounts:updateWorkspaceCounts,

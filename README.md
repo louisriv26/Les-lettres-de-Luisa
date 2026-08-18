@@ -5,10 +5,10 @@ Application de référence pour les Lettres de Luisa Piccarreta.
 
 ---
 
-## Version courante : v2.2.4
+## Version courante : v2.2.5
 
-- Corpus protégé : 136 lettres (`luisa-letters-corpus-v2.2.4`)
-- SW cache : `luisa-letters-shell-v2.2.4`
+- Corpus protégé : 136 lettres (`luisa-letters-corpus-v2.2.5`)
+- SW cache : `luisa-letters-shell-v2.2.5`
 - LET-A : stockage isolé par domaine, import strict et transactionnel
 - LET-B : tailles sémantiques Petit 16 / Normal 19 / Grand 22 / Très grand 26, aperçu, thème Automatique/Clair/Sombre, champs iOS ≥16px
 - Déploiement public autorisé ; validation physique iPhone/iPad/Android et cycle PWA installé restent requis avant un PASS technique complet
@@ -34,7 +34,7 @@ Push sur `main` → GitHub Actions valide + déploie automatiquement sur GitHub 
 
 ```bash
 git add -A
-git commit -m "feat: v2.2.4 locked icon family v1"
+git commit -m "fix: v2.2.5 iPad contextual highlighting bar"
 git push origin main
 ```
 
@@ -72,6 +72,16 @@ git push origin main
 
 *Droits de diffusion : autorisation confirmée par le propriétaire le 2026-08-13. Le déploiement public de cette version est autorisé.*
 
+
+
+## v2.2.5 — LET-J3 barre contextuelle iPad / sélection Apple
+
+- `Surligner · Note · Copier · Fermer` reste dans une barre sombre fixe au bas du lecteur, séparée du menu natif Apple.
+- La position ne dépend plus du rectangle de sélection; la barre reste au-dessus des actions du lecteur et de la zone sûre.
+- Le sélecteur des cinq couleurs se replie dans le viewport sur petit écran.
+- Garde d’interaction iOS ajouté sans changer les offsets, empreintes ou schémas de notes/surlignages.
+- Corpus, IDs, manifest, workflow, routes, Recherche, Explorer, données privées et famille d’icônes inchangés.
+- Validation physique iPhone/iPad/PWA/live/AT reste externe: statut maximal `LIMITED_PASS_STATIC`.
 
 
 ## v2.2.4 — Famille finale d’icônes Collection Luisa v1
