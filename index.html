@@ -38,7 +38,7 @@
 ══════════════════════════════════════════════════════ */
 :root {
   --ivory:#F9F6F0; --night:#1A2A4A; --gold:#C9A84C; --gold-light:#E8D5A3;
-  --gold-pale:#F5EDD8; --gold-text:#7A5A20; --focus:#7A5A20; --ink:#2C1810; --muted:#7A6E62; --border:#E2D9CC; --white:#FFFFFF;
+  --gold-pale:#F5EDD8; --gold-text:#7A5A20; --focus:#7A5A20; --ink:#2C1810; --muted:#675B50; --border:#E2D9CC; --white:#FFFFFF;
   --sidebar-w:72px; --list-w:320px;
   --serif:'IM Fell English',Georgia,serif; --body:'Crimson Text',Georgia,serif;
   --reader-size:19px; --reader-title-size:22px;
@@ -47,17 +47,17 @@
 /* Auto dark */
 @media (prefers-color-scheme:dark){
   :root{--ivory:#1A1612;--night:#E8D9C4;--gold:#D4A843;--gold-light:#5A4520;--gold-pale:#2A2010;
-        --gold-text:#D4A843;--focus:#E4BC58;--ink:#D4C8BC;--muted:#8A7E72;--border:#2E2820;--white:#201C18;}
+        --gold-text:#D4A843;--focus:#E4BC58;--ink:#D4C8BC;--muted:#A3978A;--border:#2E2820;--white:#201C18;}
 }
 /* Forced dark (manual toggle) */
 html[data-theme="dark"]{
   --ivory:#1A1612;--night:#E8D9C4;--gold:#D4A843;--gold-light:#5A4520;--gold-pale:#2A2010;
-  --gold-text:#D4A843;--focus:#E4BC58;--ink:#D4C8BC;--muted:#8A7E72;--border:#2E2820;--white:#201C18;
+  --gold-text:#D4A843;--focus:#E4BC58;--ink:#D4C8BC;--muted:#A3978A;--border:#2E2820;--white:#201C18;
 }
 /* Forced light */
 html[data-theme="light"]{
   --ivory:#F9F6F0;--night:#1A2A4A;--gold:#C9A84C;--gold-light:#E8D5A3;--gold-pale:#F5EDD8;
-  --gold-text:#7A5A20;--focus:#7A5A20;--ink:#2C1810;--muted:#7A6E62;--border:#E2D9CC;--white:#FFFFFF;
+  --gold-text:#7A5A20;--focus:#7A5A20;--ink:#2C1810;--muted:#675B50;--border:#E2D9CC;--white:#FFFFFF;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;background:var(--ivory);font-family:var(--body);color:var(--ink);}
@@ -96,8 +96,8 @@ body{overflow:hidden;}
 .li-topics{display:flex;flex-wrap:wrap;gap:4px;}
 .topic-pill{font-size:10px;padding:2px 7px;border-radius:10px;background:var(--gold-pale);
   color:#7A5A20;font-family:var(--body);}
-html[data-theme="dark"] .topic-pill,[data-theme="system"] .topic-pill{color:inherit;}
-@media(prefers-color-scheme:dark){.topic-pill{color:#D4A050;}}
+html[data-theme="dark"] .topic-pill{color:#D4A050;}
+@media(prefers-color-scheme:dark){html[data-theme="system"] .topic-pill{color:#D4A050;}}
 
 /* Chips */
 .filter-row{display:flex;gap:6px;padding:8px 12px;overflow-x:auto;scrollbar-width:none;
@@ -206,7 +206,7 @@ mark.hl:hover{opacity:.7;}
 
 /* Trust panel */
 .trust-panel{margin:16px 16px 24px;border:0.5px solid var(--border);border-radius:10px;overflow:hidden;}
-.trust-head{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;
+.trust-head{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;min-height:44px;
   cursor:pointer;background:var(--white);width:100%;border:none;text-align:left;}
 .trust-head:focus-visible{outline:2px solid var(--gold);outline-offset:-2px;}
 .trust-head span{font-size:12px;color:var(--muted);font-family:var(--body);display:flex;align-items:center;gap:6px;}
@@ -219,7 +219,7 @@ mark.hl:hover{opacity:.7;}
 .trust-row:last-child{border-bottom:none;}
 .trust-row .k{color:var(--muted);flex-shrink:0;}
 .trust-row .v{color:var(--night);text-align:right;word-break:break-all;}
-.trust-row .v.pass{color:#2D7A40;}
+.trust-row .v .pass{color:#2D7A40;}
 
 /* Action bar */
 .action-bar{display:flex;border-top:0.5px solid var(--border);background:var(--ivory);
@@ -449,7 +449,7 @@ mark.hl:hover{opacity:.7;}
   border-radius:50%;border:1px solid rgba(201,168,76,.12);pointer-events:none;}
 .ldj-eyebrow{font-size:10px;letter-spacing:.14em;color:var(--gold);font-family:var(--body);
   text-transform:uppercase;margin-bottom:5px;display:flex;align-items:center;gap:5px;}
-.ldj-num{font-size:11px;color:rgba(255,255,255,.3);font-family:var(--body);margin-bottom:7px;letter-spacing:.04em;}
+.ldj-num{font-size:11px;color:rgba(255,255,255,.55);font-family:var(--body);margin-bottom:7px;letter-spacing:.04em;}
 .ldj-title{font-family:var(--serif);font-size:17px;color:#fff;margin-bottom:10px;line-height:1.4;}
 .ldj-excerpt{font-family:var(--body);font-size:14px;line-height:1.72;color:rgba(255,255,255,.72);
   font-style:italic;margin-bottom:6px;}
@@ -487,7 +487,7 @@ mark.hl:hover{opacity:.7;}
 .install-close{background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;padding:2px;flex-shrink:0;}
 
 /* Search result highlight */
-.hl{background:rgba(201,168,76,.3);border-radius:2px;padding:0 1px;}
+.hl{background:rgba(201,168,76,.3);border-radius:2px;padding:0 1px;color:var(--night);}
 
 /* Read progress bar */
 .read-progress{height:2px;background:var(--gold);width:0%;transition:width .2s;flex-shrink:0;}
@@ -685,7 +685,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
   <div class="path-letter-list" id="path-letter-list"></div>
 </div>
 
-<!-- Help / Onboarding modal — v2.2.5 Aide consolidated with À propos as final section -->
+<!-- Help / Onboarding modal — v2.2.6 Aide consolidated with À propos as final section -->
 <div id="help-overlay" aria-hidden="true" onclick="helpOverlayClick(event)">
   <div id="help-modal" role="dialog" aria-modal="true" aria-labelledby="help-modal-title" tabindex="-1">
     <div class="help-header">
@@ -823,7 +823,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
         <div class="help-body">
           <strong>Lettres de Luisa Piccarreta</strong> est une application de lecture, recherche et exploration d’un corpus de <strong>136 lettres</strong> consacré à la spiritualité de la Divine Volonté.<br><br>
           Le corpus utilise des identifiants stables et des paragraphes d’affichage reliés au texte source afin de permettre la recherche, les liens précis, les notes, les surlignages et la reprise de lecture sans modifier le texte lu.<br><br>
-          <strong>Version de l’app :</strong> v2.2.5<br>
+          <strong>Version de l’app :</strong> v2.2.6<br>
           <strong>Build :</strong> 17 août 2026<br>
           <strong>Corpus :</strong> 136 lettres · 909 paragraphes d’affichage<br><br>
           <strong>Confidentialité :</strong> vos données personnelles restent dans le stockage local de cette app, sauf lorsque vous choisissez vous-même de les exporter. Elles ne sont pas automatiquement partagées avec les autres apps de la Collection Luisa et ne sont pas incluses dans les liens, signalements ou diagnostics.
@@ -845,7 +845,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
 <div id="note-sheet" role="dialog" aria-modal="true" aria-label="Ajouter une note" aria-hidden="true" tabindex="-1" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:601;background:var(--ivory);border-radius:16px 16px 0 0;padding:20px 16px calc(20px + env(safe-area-inset-bottom));box-shadow:0 -4px 24px rgba(0,0,0,.18)">
   <div style="font-family:var(--serif);font-style:italic;font-size:16px;color:var(--night);margin-bottom:4px" id="note-sheet-title">Note</div>
   <div id="note-sheet-subtitle" style="display:none;font-family:var(--body);font-size:11px;color:var(--muted);margin-bottom:12px;line-height:1.5;font-style:italic;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></div>
-  <textarea id="note-input" rows="4" placeholder="Votre note…" style="width:100%;border:0.5px solid var(--border);border-radius:8px;padding:10px 12px;font-family:var(--body);font-size:16px;color:var(--ink);background:var(--white);resize:none;outline:none;line-height:1.6"></textarea>
+  <textarea id="note-input" rows="4" aria-label="Votre note" placeholder="Votre note…" style="width:100%;border:0.5px solid var(--border);border-radius:8px;padding:10px 12px;font-family:var(--body);font-size:16px;color:var(--ink);background:var(--white);resize:none;outline:none;line-height:1.6"></textarea>
   <div style="display:flex;gap:8px;margin-top:12px">
     <button id="note-cancel-btn" onclick="closeNoteSheet()" style="flex:1;padding:10px;border:0.5px solid var(--border);border-radius:8px;background:none;font-family:var(--body);font-size:13px;color:var(--muted);cursor:pointer">Annuler</button>
     <button id="note-save-btn" onclick="saveNoteSheet()" style="flex:2;padding:10px;border:none;border-radius:8px;background:#1A2A4A;font-family:var(--body);font-size:13px;color:var(--gold);cursor:pointer;font-weight:500">Enregistrer</button>
@@ -919,7 +919,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
   <div class="settings-section" id="settings-help-section">
     <div class="settings-label">Aide</div>
     <button class="settings-action" id="settings-help-btn" onclick="openHelpFromSettings()" aria-label="Ouvrir l’aide"><i class="ti ti-help-circle" aria-hidden="true"></i> Ouvrir l’aide</button>
-    <div class="settings-current">À propos se trouve à la fin de l’Aide · v2.2.5 · 2026-08-17</div>
+    <div class="settings-current">À propos se trouve à la fin de l’Aide · v2.2.6 · 2026-08-25</div>
   </div>
 </div>
 
@@ -945,7 +945,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
     <button class="snav-item" onclick="switchPanel('p-notes')" id="snav-notes" aria-label="Mon Espace"><i class="ti ti-user-circle" aria-hidden="true"></i>Mon Espace</button>
     <button class="snav-item" onclick="switchPanel('p-explore')" id="snav-explore" aria-label="Explorer"><i class="ti ti-layout-grid" aria-hidden="true"></i>Explorer</button>
     <div class="sidebar-bottom">
-      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v2.2.5 · 2026-08-17</div>
+      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v2.2.6 · 2026-08-25</div>
     </div>
   </nav>
 
@@ -955,7 +955,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
     <!-- HOME -->
     <div class="panel active" id="p-home">
       <div class="top-bar">
-        <span class="title">Lettres de Luisa</span>
+        <span class="title" role="heading" aria-level="1">Lettres de Luisa</span>
       </div>
       <div class="scroll" id="home-scroll">
         <div class="install-banner" id="install-banner" role="banner">
@@ -980,11 +980,11 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
             <div id="home-progress-bar" style="height:100%;background:var(--gold);border-radius:2px;width:0;transition:width .6s ease"></div>
           </div>
         </div>
-        <div class="section-head">Je cherche une lettre pour…</div>
+        <div class="section-head" role="heading" aria-level="2">Je cherche une lettre pour…</div>
         <div class="situations" id="situ-grid" role="list"></div>
-        <div class="section-head" id="home-paths-head" style="display:none">Mes parcours</div>
+        <div class="section-head" role="heading" aria-level="2" id="home-paths-head" style="display:none">Mes parcours</div>
         <div id="home-paths"></div>
-        <div class="section-head" id="continue-head" style="display:none">Continuer la lecture</div>
+        <div class="section-head" role="heading" aria-level="2" id="continue-head" style="display:none">Continuer la lecture</div>
         <button class="continue-card" id="continue-card" style="display:none" onclick="resumeReading()">
           <div class="cont-thumb" id="cont-num" aria-hidden="true"></div>
           <div class="cont-info">
@@ -995,14 +995,14 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
           <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:16px;color:var(--muted)"></i>
         </button>
         <div style="height:12px"></div>
-        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v2.2.5 · 2026-08-17</div>
+        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v2.2.6 · 2026-08-25</div>
       </div>
     </div>
 
     <!-- LIST -->
     <div class="panel" id="p-list">
       <div class="top-bar">
-        <span class="title" id="list-title">136 Lettres</span>
+        <span class="title" id="list-title" role="heading" aria-level="1">136 Lettres</span>
         <button class="btn-icon" onclick="resetFilter()" aria-label="Réinitialiser le filtre"><i class="ti ti-filter-off" aria-hidden="true"></i></button>
       </div>
       <div class="filter-row" id="filter-row" role="toolbar" aria-label="Filtres"></div>
@@ -1017,7 +1017,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
 
     <!-- SEARCH -->
     <div class="panel" id="p-search">
-      <div class="top-bar"><span class="title">Recherche</span></div>
+      <div class="top-bar"><span class="title" role="heading" aria-level="1">Recherche</span></div>
       <div class="search-bar" role="search">
         <i class="ti ti-search" aria-hidden="true"></i>
         <input type="search" id="search-input" placeholder="Mots-clés, thème, destinataire…"
@@ -1041,26 +1041,26 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
 
     <!-- EXPLORE -->
     <div class="panel" id="p-explore">
-      <div class="top-bar"><span class="title">Explorer</span></div>
+      <div class="top-bar"><span class="title" role="heading" aria-level="1">Explorer</span></div>
       <div class="scroll">
         <div class="explore-section">
-          <div class="exp-title">Parcours spirituels</div>
+          <div class="exp-title" role="heading" aria-level="2">Parcours spirituels</div>
           <div id="exp-paths-grid"></div>
         </div>
         <div class="explore-section">
-          <div class="exp-title">Par situation</div>
+          <div class="exp-title" role="heading" aria-level="2">Par situation</div>
           <div class="exp-grid" id="exp-situ-grid" role="list"></div>
         </div>
         <div class="explore-section">
-          <div class="exp-title">Par thème</div>
+          <div class="exp-title" role="heading" aria-level="2">Par thème</div>
           <div class="exp-grid" id="exp-theme-grid" role="list"></div>
         </div>
         <div class="explore-section">
-          <div class="exp-title">Par destinataire</div>
+          <div class="exp-title" role="heading" aria-level="2">Par destinataire</div>
           <div class="dest-list" id="dest-list" role="list"></div>
         </div>
         <div class="explore-section">
-          <div class="exp-title">Chronologie</div>
+          <div class="exp-title" role="heading" aria-level="2">Chronologie</div>
           <div class="chron-list" id="chron-list" role="list"></div>
         </div>
         <div style="height:16px"></div>
@@ -1070,18 +1070,18 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
     <!-- MON ESPACE -->
     <div class="panel" id="p-notes">
       <div class="top-bar">
-        <span class="title">Mon Espace</span>
+        <span class="title" role="heading" aria-level="1">Mon Espace</span>
         <button class="btn-icon" onclick="openTextBar('data')" aria-label="Réglages, aide et sauvegarde"><i class="ti ti-settings" aria-hidden="true"></i></button>
       </div>
       <div class="tab-row" role="tablist">
-        <button class="tab active" onclick="setTab(this,'t-favs')" role="tab" aria-selected="true">Favoris <span class="tab-count" id="workspace-fav-count">0</span></button>
-        <button class="tab" onclick="setTab(this,'t-notes')" role="tab" aria-selected="false">Notes <span class="tab-count" id="workspace-note-count">0</span></button>
-        <button class="tab" onclick="setTab(this,'t-highlights')" role="tab" aria-selected="false">Surlignages <span class="tab-count" id="workspace-highlight-count">0</span></button>
+        <button class="tab active" id="tab-favs" onclick="setTab(this,'t-favs')" role="tab" aria-selected="true" aria-controls="t-favs">Favoris <span class="tab-count" id="workspace-fav-count">0</span></button>
+        <button class="tab" id="tab-notes" onclick="setTab(this,'t-notes')" role="tab" aria-selected="false" aria-controls="t-notes">Notes <span class="tab-count" id="workspace-note-count">0</span></button>
+        <button class="tab" id="tab-highlights" onclick="setTab(this,'t-highlights')" role="tab" aria-selected="false" aria-controls="t-highlights">Surlignages <span class="tab-count" id="workspace-highlight-count">0</span></button>
       </div>
       <div class="scroll" id="notes-scroll">
-        <div id="t-favs" role="tabpanel"></div>
-        <div id="t-notes" style="display:none" role="tabpanel"></div>
-        <div id="t-highlights" style="display:none" role="tabpanel"></div>
+        <div id="t-favs" role="tabpanel" aria-labelledby="tab-favs"></div>
+        <div id="t-notes" style="display:none" role="tabpanel" aria-labelledby="tab-notes"></div>
+        <div id="t-highlights" style="display:none" role="tabpanel" aria-labelledby="tab-highlights"></div>
         <div class="workspace-status">
           <div class="workspace-status-title">Sauvegarde</div>
           <div id="workspace-backup-stats" class="workspace-status-text" aria-live="polite"></div>
@@ -1112,7 +1112,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
       <div id="wide-reader-scroll" class="scroll" onscroll="updateReadProgress('wr')">
         <div class="letter-header">
           <div class="lh-num" id="wr-id"></div>
-          <div class="lh-title" id="wr-title"></div>
+          <div class="lh-title" id="wr-title" role="heading" aria-level="1"></div>
           <div class="lh-meta" id="wr-meta"></div>
           <div class="lh-topics" id="wr-topics"></div>
         </div>
@@ -1163,7 +1163,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
     <div class="scroll" id="phone-reader-scroll" style="flex:1" onscroll="updateReadProgress('pr')">
       <div class="letter-header">
         <div class="lh-num" id="pr-id"></div>
-        <div class="lh-title" id="pr-title"></div>
+        <div class="lh-title" id="pr-title" role="heading" aria-level="1"></div>
         <div class="lh-meta" id="pr-meta"></div>
         <div class="lh-topics" id="pr-topics"></div>
       </div>
@@ -1296,7 +1296,7 @@ function validateCuratedPaths() {
 /* ════════════════════════════════════════
    STATE
 ════════════════════════════════════════ */
-const APP_VERSION = '2.2.5';
+const APP_VERSION = '2.2.6';
 const STATE_SCHEMA_VERSION = 5;
 const WIDE_VIEWPORT_MIN = 768;
 const TEXT_LEVELS = Object.freeze({small:16, normal:19, large:22, xlarge:26});
@@ -1311,6 +1311,7 @@ let CORPUS = [], TOPICS_INDEX = {}, RECIPIENTS_INDEX = {};
 let CORPUS_META = { fingerprint: '', version: '', totalLetters: 0, totalDisplayParagraphs: 0 };
 let currentLetterIdx = -1;
 let currentFilter = 'all';
+let currentListView = {kind:'base', value:'all'};
 let readerTextLevel = 'normal';
 let readerSize = TEXT_LEVELS[readerTextLevel];
 let deferredInstall = null;
@@ -1636,6 +1637,31 @@ function enrichHighlightRecord(item, sourceText) {
     stale_reason:resolved.ok ? '' : resolved.reason
   });
 }
+function canonicalizeHighlightsForCorpus(items) {
+  var changed = false;
+  var highlights = (items || []).map(function(item) {
+    var entry = corpusDpEntry(item.dp_id);
+    if (!entry) {
+      if (!item.stale || item.stale_reason !== 'missing_display_paragraph') changed = true;
+      return Object.assign({}, item, {stale:true, stale_reason:'missing_display_paragraph'});
+    }
+    var next = enrichHighlightRecord(item, entry.dp.text_fr || '');
+    var keys=['text_snapshot','paragraph_fingerprint','corpus_fingerprint','context_before','context_after','stale','recovered','stale_reason'];
+    if (keys.some(function(k){ return item[k] !== next[k]; }) || item.offset_start !== next.offset_start || item.offset_end !== next.offset_end) changed=true;
+    return next;
+  });
+  var byDp = {};
+  highlights.forEach(function(h){ if(!h.stale){(byDp[h.dp_id]||(byDp[h.dp_id]=[])).push(h);} });
+  Object.keys(byDp).forEach(function(dpId){
+    var arr=byDp[dpId].slice().sort(function(a,b){return a.offset_start-b.offset_start || a.offset_end-b.offset_end;});
+    var lastEnd=-1;
+    arr.forEach(function(h){
+      if(h.offset_start < lastEnd){ if(!h.stale || h.stale_reason!=='overlapping_range') changed=true; h.stale=true; h.stale_reason='overlapping_range'; }
+      else lastEnd=h.offset_end;
+    });
+  });
+  return {highlights:highlights, changed:changed};
+}
 function migrateLetCUserRecords() {
   if (!CORPUS.length) return {ok:false,reason:'corpus_not_loaded'};
   var now = new Date().toISOString(), noteChanged = false, hlChanged = false;
@@ -1649,22 +1675,9 @@ function migrateLetCUserRecords() {
     if (!next.corpus_fingerprint) { next.corpus_fingerprint = CORPUS_META.fingerprint || ''; noteChanged = true; }
     return next;
   });
-  var highlights = STATE.highlights.map(function(item) {
-    var entry = corpusDpEntry(item.dp_id);
-    if (!entry) return Object.assign({},item,{stale:true,stale_reason:'missing_display_paragraph'});
-    var next = enrichHighlightRecord(item, entry.dp.text_fr || '');
-    var keys=['text_snapshot','paragraph_fingerprint','corpus_fingerprint','context_before','context_after','stale','recovered','stale_reason'];
-    if (keys.some(function(k){ return item[k] !== next[k]; }) || item.offset_start !== next.offset_start || item.offset_end !== next.offset_end) hlChanged=true;
-    return next;
-  });
-  // Mark overlapping ranges stale rather than rendering an arbitrary nested result.
-  var byDp = {};
-  highlights.forEach(function(h){ if(!h.stale){(byDp[h.dp_id]||(byDp[h.dp_id]=[])).push(h);} });
-  Object.keys(byDp).forEach(function(dpId){
-    var arr=byDp[dpId].slice().sort(function(a,b){return a.offset_start-b.offset_start || a.offset_end-b.offset_end;});
-    var lastEnd=-1;
-    arr.forEach(function(h){ if(h.offset_start < lastEnd){h.stale=true;h.stale_reason='overlapping_range';hlChanged=true;} else lastEnd=h.offset_end; });
-  });
+  var canonicalHighlights = canonicalizeHighlightsForCorpus(STATE.highlights);
+  var highlights = canonicalHighlights.highlights;
+  if (canonicalHighlights.changed) hlChanged = true;
   var needsSchema = STATE._stateSchema < STATE_SCHEMA_VERSION;
   if (!noteChanged && !hlChanged && !needsSchema) return {ok:true,skipped:true};
   var result = SafeStorage.writeBatch([
@@ -2084,7 +2097,7 @@ function initApp() {
   updateHomePaths();
   document.getElementById('situ-grid').innerHTML = SITUATIONS.map(s => {
     const c = getTopicLetters(s.topic).length;
-    return `<button class="situ-card" data-action="topic" data-topic="${esc(s.topic)}" role="listitem">
+    return `<button class="situ-card" data-action="situation-topic" data-topic="${esc(s.topic)}" role="listitem">
       <span class="situ-icon" aria-hidden="true"><i class="ti ${s.icon}"></i></span>
       <div class="situ-label">${esc(s.label)}</div>
       <div class="situ-count">${c} lettre${c>1?'s':''}</div>
@@ -2151,6 +2164,8 @@ function getReadingAnchor(scrollerId) {
   var anchorY = scrollerRect.top + 12;
   var dps = scroller.querySelectorAll('[data-dp-id]');
   if (!dps.length) return null;
+  var firstRect = dps[0].getBoundingClientRect();
+  if (anchorY < firstRect.top) return null;
   var best = null, bestDistance = Infinity;
   for (var i = 0; i < dps.length; i++) {
     var rect = dps[i].getBoundingClientRect();
@@ -2189,6 +2204,7 @@ function scrollToReadingPosition(scrollerId, n, position) {
   var scroller = document.getElementById(scrollerId);
   var normalized = normalizePositionValue(n, position);
   if (!scroller || !normalized) return false;
+  var max = Math.max(0, scroller.scrollHeight - scroller.clientHeight);
   if (normalized.dp_id) {
     var target = scroller.querySelector('[data-dp-id="' + normalized.dp_id + '"]');
     if (target) {
@@ -2196,11 +2212,17 @@ function scrollToReadingPosition(scrollerId, n, position) {
       var targetRect = target.getBoundingClientRect();
       var desiredY = scrollerRect.top + 12;
       var pointY = targetRect.top + Math.max(1, targetRect.height) * clamp01(normalized.fraction_within_dp);
-      scroller.scrollTop += pointY - desiredY;
+      var targetScroll = scroller.scrollTop + pointY - desiredY;
+      var fractionScroll = max > 0 ? Math.round(clamp01(normalized.letter_fraction) * max) : 0;
+      var first = scroller.querySelector('[data-dp-id]');
+      if (first === target && clamp01(normalized.fraction_within_dp) === 0 && fractionScroll < targetScroll) {
+        scroller.scrollTop = fractionScroll;
+        return true;
+      }
+      scroller.scrollTop = targetScroll;
       return true;
     }
   }
-  var max = Math.max(0, scroller.scrollHeight - scroller.clientHeight);
   if (max > 0) {
     scroller.scrollTop = Math.round(clamp01(normalized.letter_fraction) * max);
     return true;
@@ -2330,11 +2352,14 @@ function getTopicLetters(topic) {
 ════════════════════════════════════════ */
 function updateContinueCard() {
   const last = STATE.lastRead;
-  if (!last || !CORPUS.length) return;
+  const head = document.getElementById('continue-head');
+  const card = document.getElementById('continue-card');
+  function hideContinue(){ if(head) head.style.display='none'; if(card) card.style.display='none'; }
+  if (!last || !CORPUS.length) { hideContinue(); return; }
   const l = CORPUS.find(x => x.canonical_number === last.n);
-  if (!l) return;
-  document.getElementById('continue-head').style.display = '';
-  document.getElementById('continue-card').style.display = 'flex';
+  if (!l) { hideContinue(); return; }
+  if (head) head.style.display = '';
+  if (card) card.style.display = 'flex';
   document.getElementById('cont-num').textContent   = l.canonical_number;
   document.getElementById('cont-title').textContent = l.title_fr;
   document.getElementById('cont-sub').textContent   = l.recipient_display_fr;
@@ -2982,75 +3007,57 @@ function buildFilterChips() {
 }
 function setFilter(val, el) {
   currentFilter = val;
+  currentListView = ['all','fav','unread'].indexOf(val) >= 0 ? {kind:'base',value:val} : {kind:'topic_exact',value:val};
   document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
   if(el) el.classList.add('active');
   renderList();
 }
-function resetFilter() { currentFilter='all'; buildFilterChips(); renderList(); }
-function filterByTopic(topic) {
-  currentFilter = topic;
+function resetFilter() { currentFilter='all'; currentListView={kind:'base',value:'all'}; buildFilterChips(); renderList(); }
+function filterByTopic(topic, matchMode) {
+  var exact = matchMode === 'exact';
+  currentFilter = exact ? topic : '__custom__';
+  currentListView = {kind:exact?'topic_exact':'topic_broad',value:topic};
   if (isWide()) {
     switchPanel('p-list');
-    // After renderList, ensure the currently open letter stays highlighted
-    // and wide reader stays populated (renderList may have rebuilt the list)
     if (currentLetterIdx >= 0 && CORPUS[currentLetterIdx]) {
       var n = CORPUS[currentLetterIdx].canonical_number;
-      document.querySelectorAll('.letter-item').forEach(function(el) {
-        el.classList.toggle('selected', parseInt(el.dataset.n) === n);
-      });
+      document.querySelectorAll('.letter-item').forEach(function(el) { el.classList.toggle('selected', parseInt(el.dataset.n) === n); });
     }
-  } else {
-    phoneNav('p-list','list');
-  }
+  } else phoneNav('p-list','list');
   buildFilterChips();
   renderList();
 }
-
 function renderList() {
-  var items;
-  if (currentFilter==='all') items = CORPUS;
-  else if (currentFilter==='fav') items = CORPUS.filter(function(l){return STATE.favs.has(l.canonical_number);});
-  else if (currentFilter==='unread') items = CORPUS.filter(function(l){return !STATE.readSet.has(l.canonical_number);});
-  else items = CORPUS.filter(function(l){return (l.topics_fr||[]).some(function(t){return t.toLowerCase().includes(currentFilter.toLowerCase());});});
-
-  var readCount = STATE.readSet.size;
-  var progressStr = currentFilter==='all' ? ` · ${readCount}/${CORPUS.length} lues` : '';
-  document.getElementById('list-title').textContent =
-    currentFilter==='all' ? `${CORPUS.length} Lettres` :
-    currentFilter==='fav' ? 'Favoris' :
-    currentFilter==='unread' ? `Non lues (${items.length})` :
-    `${currentFilter} (${items.length})`;
-  // Show read progress bar under title when showing all
+  var view = currentListView || {kind:'base',value:currentFilter||'all'};
+  var listEl = document.getElementById('letter-list');
+  var titleEl = document.getElementById('list-title');
   var progEl = document.getElementById('list-read-progress');
-  if (progEl) {
-    if (currentFilter==='all' && CORPUS.length > 0) {
-      var pct = Math.round(readCount / CORPUS.length * 100);
-      progEl.style.display = '';
-      progEl.querySelector('.lrp-bar').style.width = pct + '%';
-      progEl.querySelector('.lrp-label').textContent = `${readCount} / ${CORPUS.length} lues (${pct}%)`;
-    } else {
-      progEl.style.display = 'none';
-    }
-  }
-
-  if (!items.length) {
-    document.getElementById('letter-list').innerHTML =
-      `<div class="empty-state" role="status"><i class="ti ti-letter-case" aria-hidden="true"></i>Aucune lettre pour ce filtre.</div>`;
+  if (view.kind === 'all_recipients') {
+    var recData=getRecipientData().slice().sort(function(a,b){return a.display_fr.localeCompare(b.display_fr,'fr',{sensitivity:'base'}) || b.count-a.count;});
+    if (progEl) progEl.style.display='none';
+    titleEl.textContent='Tous les destinataires ('+recData.length+')';
+    listEl.innerHTML=recData.map(function(r){return `<button class="dest-item" data-action="recipient-key" data-recipient-key="${esc(r.key)}" role="listitem" style="width:100%"><div class="dest-name">${esc(r.display_fr)}</div><div class="dest-count">${r.count} lettre${r.count>1?'s':''}</div><i class="ti ti-chevron-right" aria-hidden="true" style="font-size:13px;color:var(--muted)"></i></button>`;}).join('');
     return;
   }
-  var cur = (currentLetterIdx >= 0 && CORPUS[currentLetterIdx]) ? CORPUS[currentLetterIdx].canonical_number : -1;
-  document.getElementById('letter-list').innerHTML = items.map(function(l) {
-    var isRead = STATE.readSet.has(l.canonical_number);
-    return `<button class="letter-item${l.canonical_number===cur?' selected':''}" data-n="${l.canonical_number}"
-      data-action="open-letter" role="listitem" aria-label="${esc(l.title_fr)}">
-      <div class="li-num${STATE.favs.has(l.canonical_number)?' is-fav':''}${!isRead?' is-unread':''}" aria-hidden="true">${l.canonical_number}</div>
-      <div class="li-body">
-        <div class="li-title${isRead?' li-read':''}">${esc(l.title_fr)}</div>
-        <div class="li-dest">${esc(l.recipient_display_fr)}${l.date_text_fr?' · '+esc(l.date_text_fr):''}</div>
-        <div class="li-topics" aria-hidden="true">${(l.topics_fr||[]).slice(0,4).map(function(t){return `<span class="topic-pill">${esc(t)}</span>`;}).join('')}</div>
-      </div>
-    </button>`;
-  }).join('');
+  var items=[], title='';
+  if (view.kind==='base' && view.value==='all') { items=CORPUS; title=`${CORPUS.length} Lettres`; }
+  else if (view.kind==='base' && view.value==='fav') { items=CORPUS.filter(function(l){return STATE.favs.has(l.canonical_number);}); title='Favoris'; }
+  else if (view.kind==='base' && view.value==='unread') { items=CORPUS.filter(function(l){return !STATE.readSet.has(l.canonical_number);}); title=`Non lues (${items.length})`; }
+  else if (view.kind==='topic_exact') { items=CORPUS.filter(function(l){return (l.topics_fr||[]).indexOf(view.value)>=0;}); title=`${view.value} (${items.length})`; }
+  else if (view.kind==='topic_broad') { var q=String(view.value||'').toLowerCase(); items=CORPUS.filter(function(l){return (l.topics_fr||[]).some(function(t){return t.toLowerCase().includes(q);});}); title=`${view.value} (${items.length})`; }
+  else if (view.kind==='recipient') { var rec=getRecipientData().find(function(r){return r.key===view.value;}); var nums=new Set(rec?(rec.letters||[]):[]); items=CORPUS.filter(function(l){return nums.has(l.canonical_number);}); title=(rec?rec.display_fr:view.label||view.value)+' ('+items.length+')'; }
+  else if (view.kind==='dated') { items=CORPUS.filter(function(l){return l.date_iso;}).sort(function(a,b){return a.date_iso>b.date_iso?1:-1;}); title=`Chronologie (${items.length})`; }
+  else { items=CORPUS; title=`${CORPUS.length} Lettres`; }
+  titleEl.textContent=title;
+  var readCount=STATE.readSet.size;
+  if (progEl) {
+    if (view.kind==='base' && view.value==='all' && CORPUS.length>0) {
+      var pct=Math.round(readCount/CORPUS.length*100); progEl.style.display=''; progEl.querySelector('.lrp-bar').style.width=pct+'%'; progEl.querySelector('.lrp-label').textContent=`${readCount} / ${CORPUS.length} lues (${pct}%)`;
+    } else progEl.style.display='none';
+  }
+  if (!items.length) { listEl.innerHTML=`<div class="empty-state" role="status"><i class="ti ti-letter-case" aria-hidden="true"></i>Aucune lettre pour ce filtre.</div>`; return; }
+  var cur=(currentLetterIdx>=0&&CORPUS[currentLetterIdx])?CORPUS[currentLetterIdx].canonical_number:-1;
+  listEl.innerHTML=items.map(function(l){var isRead=STATE.readSet.has(l.canonical_number);return `<button class="letter-item${l.canonical_number===cur?' selected':''}" data-n="${l.canonical_number}" data-action="open-letter" role="listitem" aria-label="${esc(l.title_fr)}"><div class="li-num${STATE.favs.has(l.canonical_number)?' is-fav':''}${!isRead?' is-unread':''}" aria-hidden="true">${l.canonical_number}</div><div class="li-body"><div class="li-title${isRead?' li-read':''}">${esc(l.title_fr)}</div><div class="li-dest">${esc(l.recipient_display_fr)}${l.date_text_fr?' · '+esc(l.date_text_fr):''}</div><div class="li-topics" aria-hidden="true">${(l.topics_fr||[]).slice(0,4).map(function(t){return `<span class="topic-pill">${esc(t)}</span>`;}).join('')}</div></div></button>`;}).join('');
 }
 
 /* ════════════════════════════════════════
@@ -3213,7 +3220,7 @@ function buildExplore() {
   buildPathCards('exp-paths-grid');
   document.getElementById('exp-situ-grid').innerHTML = SITUATIONS.slice(0,4).map(s => {
     const c = getTopicLetters(s.topic).length;
-    return `<button class="exp-card" data-action="topic" data-topic="${esc(s.topic)}" role="listitem">
+    return `<button class="exp-card" data-action="situation-topic" data-topic="${esc(s.topic)}" role="listitem">
       <span class="exp-icon" aria-hidden="true"><i class="ti ${s.icon}"></i></span>
       <div class="exp-label">${esc(s.label)}</div>
       <div class="exp-sub">${c} lettre${c>1?'s':''}</div>
@@ -3231,7 +3238,7 @@ function buildExplore() {
   var allTopics = Object.keys(topicMap).sort(function(a,b){ return topicMap[b]-topicMap[a]; });
   document.getElementById('exp-theme-grid').innerHTML = allTopics.map(function(t) {
     var c = topicMap[t];
-    return `<button class="exp-card" data-action="topic" data-topic="${esc(t)}" role="listitem">
+    return `<button class="exp-card" data-action="topic-exact" data-topic="${esc(t)}" role="listitem">
       <div class="exp-label" style="font-size:12px">${esc(t)}</div>
       <div class="exp-sub">${c} lettre${c>1?'s':''}</div>
     </button>`;
@@ -3252,7 +3259,7 @@ function buildExplore() {
   const dated = CORPUS.filter(l=>l.date_iso).sort((a,b)=>a.date_iso>b.date_iso?1:-1);
   document.getElementById('chron-list').innerHTML =
     dated.slice(0,6).map(l =>
-      `<button class="chron-item" data-action="open-letter" role="listitem">
+      `<button class="chron-item" data-action="open-letter" data-n="${l.canonical_number}" role="listitem">
         <div class="chron-year">${l.date_iso.slice(0,4)}</div>
         <div class="chron-info"><div class="ct">${esc(l.title_fr)}</div><div class="cs">${esc(l.recipient_display_fr)}</div></div>
         <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:13px;color:var(--muted)"></i>
@@ -3279,43 +3286,23 @@ function getRecipientData() {
 function filterByRecipientKey(key) {
   var rec=getRecipientData().find(function(r){return r.key===key;});
   if(!rec) return;
-  var nums=new Set(rec.letters||[]);
-  var items=CORPUS.filter(function(l){return nums.size ? nums.has(l.canonical_number) : (l.recipient_normalized||l.recipient_display_fr)===key;});
-  if(!items.length) return;
+  currentFilter='__custom__'; currentListView={kind:'recipient',value:key,label:rec.display_fr};
   if(isWide()) switchPanel('p-list'); else phoneNav('p-list','list');
-  document.getElementById('letter-list').innerHTML=items.map(function(l){return `<button class="letter-item" data-n="${l.canonical_number}" data-action="open-letter" role="listitem" aria-label="${esc(l.title_fr)}">
-      <div class="li-num${STATE.favs.has(l.canonical_number)?' is-fav':''}" aria-hidden="true">${l.canonical_number}</div>
-      <div class="li-body"><div class="li-title">${esc(l.title_fr)}</div><div class="li-dest">${l.date_text_fr?esc(l.date_text_fr):'Date inconnue'}</div></div>
-    </button>`;}).join('');
-  document.getElementById('list-title').textContent=rec.display_fr+' ('+items.length+')';
+  buildFilterChips(); renderList();
 }
 function filterByRecipient(name) {
   var rec=getRecipientData().find(function(r){return r.display_fr===name;});
   if(rec) filterByRecipientKey(rec.key);
 }
 function showAllRecipients() {
-  var recData=getRecipientData().slice().sort(function(a,b){return a.display_fr.localeCompare(b.display_fr,'fr',{sensitivity:'base'}) || b.count-a.count;});
+  currentFilter='__custom__'; currentListView={kind:'all_recipients',value:''};
   if(isWide()) switchPanel('p-list'); else phoneNav('p-list','list');
-  document.getElementById('letter-list').innerHTML=recData.map(function(r){return `<button class="dest-item" data-action="recipient-key" data-recipient-key="${esc(r.key)}" role="listitem" style="width:100%">
-      <div class="dest-name">${esc(r.display_fr)}</div><div class="dest-count">${r.count} lettre${r.count>1?'s':''}</div>
-      <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:13px;color:var(--muted)"></i>
-    </button>`;}).join('');
-  document.getElementById('list-title').textContent='Tous les destinataires ('+recData.length+')';
+  buildFilterChips(); renderList();
 }
-
 function filterByDate() {
-  const dated = CORPUS.filter(l=>l.date_iso).sort((a,b)=>a.date_iso>b.date_iso?1:-1);
+  currentFilter='__custom__'; currentListView={kind:'dated',value:''};
   if (isWide()) switchPanel('p-list'); else phoneNav('p-list','list');
-  document.getElementById('letter-list').innerHTML = dated.map(l =>
-    `<button class="letter-item" data-n="${l.canonical_number}" data-action="open-letter" role="listitem" aria-label="${esc(l.title_fr)}">
-      <div class="li-num${STATE.favs.has(l.canonical_number)?' is-fav':''}" aria-hidden="true">${l.canonical_number}</div>
-      <div class="li-body">
-        <div class="li-title">${esc(l.title_fr)}</div>
-        <div class="li-dest">${esc(l.recipient_display_fr)} · ${esc(l.date_text_fr)}</div>
-      </div>
-    </button>`
-  ).join('');
-  document.getElementById('list-title').textContent = `Chronologie (${dated.length})`;
+  buildFilterChips(); renderList();
 }
 
 /* ════════════════════════════════════════
@@ -3455,8 +3442,10 @@ document.addEventListener('click', function(e) {
   var btn = e.target.closest('[data-action]');
   if (!btn) return;
   var action = btn.getAttribute('data-action');
-  if (action === 'topic') {
-    filterByTopic(btn.getAttribute('data-topic'));
+  if (action === 'topic-exact') {
+    filterByTopic(btn.getAttribute('data-topic'),'exact');
+  } else if (action === 'situation-topic') {
+    filterByTopic(btn.getAttribute('data-topic'),'broad');
   } else if (action === 'filter') {
     setFilter(btn.getAttribute('data-filter'), btn);
   } else if (action === 'recipient') {
@@ -3535,6 +3524,7 @@ function setupHighlightListener(scrollerId){
   scroller.setAttribute('data-highlight-listener-bound','1');_highlightListenerCounts[scrollerId]=(_highlightListenerCounts[scrollerId]||0)+1;
   scroller.addEventListener('mouseup',onTextSelected);
   scroller.addEventListener('touchend',function(){setTimeout(onTextSelected,80);});
+  scroller.addEventListener('keyup',function(e){ if(e.shiftKey || e.key==='Shift') setTimeout(onTextSelected,0); });
 }
 function onTextSelected(){
   if(_hlPopupInteracting)return;
@@ -4139,6 +4129,7 @@ function prepareImportedState(parsed, mode) {
     if (parsed.present.theme) next.theme = incoming.theme;
   }
   next.highlights = ensureUniqueHighlightIds(next.highlights);
+  next.highlights = canonicalizeHighlightsForCorpus(next.highlights).highlights;
   return next;
 }
 function commitImportedState(parsed, mode) {
@@ -4189,6 +4180,7 @@ function commitImportedState(parsed, mode) {
   if (currentLetterIdx >= 0 && CORPUS[currentLetterIdx]) {
     updateReadBtn(CORPUS[currentLetterIdx].canonical_number);
     updateFavBtns(CORPUS[currentLetterIdx].canonical_number);
+    rerenderCurrentReaderKeepingScroll();
   }
   return result;
 }
@@ -4359,8 +4351,9 @@ window.__LET_H_TEST = Object.freeze({
    KEYBOARD
 ════════════════════════════════════════ */
 document.addEventListener('keydown', e => {
-  if (currentLetterIdx < 0) return;
-  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (currentLetterIdx < 0 || !readerIsRouteVisible() || topDialog()) return;
+  var interactive = e.target && e.target.closest && e.target.closest('button,a,input,textarea,select,[role="button"],[role="tab"],[contenteditable="true"]');
+  if (interactive) return;
   if (e.key === 'ArrowLeft')  { e.preventDefault(); prevLetter(); }
   if (e.key === 'ArrowRight') { e.preventDefault(); nextLetter(); }
   if (e.key === 'Escape' && !isWide()) closePhoneReader();

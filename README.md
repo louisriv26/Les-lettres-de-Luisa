@@ -5,10 +5,10 @@ Application de référence pour les Lettres de Luisa Piccarreta.
 
 ---
 
-## Version courante : v2.2.5
+## Version courante : v2.2.6
 
-- Corpus protégé : 136 lettres (`luisa-letters-corpus-v2.2.5`)
-- SW cache : `luisa-letters-shell-v2.2.5`
+- Corpus protégé : 136 lettres (`luisa-letters-corpus-v2.2.6`)
+- SW cache : `luisa-letters-shell-v2.2.6`
 - LET-A : stockage isolé par domaine, import strict et transactionnel
 - LET-B : tailles sémantiques Petit 16 / Normal 19 / Grand 22 / Très grand 26, aperçu, thème Automatique/Clair/Sombre, champs iOS ≥16px
 - Déploiement public autorisé ; validation physique iPhone/iPad/Android et cycle PWA installé restent requis avant un PASS technique complet
@@ -19,7 +19,7 @@ Application de référence pour les Lettres de Luisa Piccarreta.
 
 ```
 index.html        ← App complète (single-file PWA)
-corpus.json       ← 136 lettres, ~2.2 Mo
+corpus.json       ← 136 lettres, ~2.1 Mo
 sw.js             ← Service Worker (network-first shell + corpus)
 manifest.json     ← PWA manifest (orientation: any)
 icons/            ← famille finale verrouillée v1 : 60/120/180/192/512, maskable 512, favicons 16/32/ICO
@@ -34,7 +34,7 @@ Push sur `main` → GitHub Actions valide + déploie automatiquement sur GitHub 
 
 ```bash
 git add -A
-git commit -m "fix: v2.2.5 iPad contextual highlighting bar"
+git commit -m "fix: v2.2.6 functional reconciliation"
 git push origin main
 ```
 
@@ -65,7 +65,7 @@ git push origin main
 - `lp_paths` est migré une seule fois vers `lp_read`, puis supprimé
 - Sauvegarde machine : format `luisa-letters-user-data`, schéma 5; import compatible avec les sauvegardes schémas 2, 3 et 4 ainsi que l’ancien format v1.
 - Un remplacement crée `lp_pre_restore_snapshot`; le dernier import peut être annulé depuis « Mon espace »
-- Tous les fonds "sombres" utilisent `#1A2A4A` fixe (jamais `var(--night)` qui s'inverse en dark mode)
+- Les surfaces sombres principales utilisent `#1A2A4A` fixe (jamais `var(--night)` qui s'inverse en dark mode) ; la barre contextuelle de sélection conserve intentionnellement son fond distinct `#1C1830`.
 - `text-size-bar` est la feuille « Réglages de lecture » (z-index:550) avec aperçu utilisant les mêmes variables typographiques que le lecteur
 
 ---
@@ -73,6 +73,16 @@ git push origin main
 *Droits de diffusion : autorisation confirmée par le propriétaire le 2026-08-13. Le déploiement public de cette version est autorisé.*
 
 
+
+## v2.2.6 — Functional reconciliation (25 août 2026)
+
+- Explorer : cartes de chronologie réparées ; vues destinataire/date/tous les destinataires désormais pilotées par un état de vue persistant et un rendu unique.
+- Thèmes : les cartes de taxonomie utilisent l’appartenance exacte ; les situations dévotionnelles conservent volontairement une recherche thématique large.
+- Import : normalisation des chevauchements partagée avec le démarrage ; lecteur ouvert et carte « Continuer la lecture » synchronisés immédiatement.
+- Lecteur : les positions dans l’en-tête utilisent le fractionnement de lettre ; navigation clavier limitée au lecteur réellement visible.
+- Thème sombre : couleurs explicites lisibles pour les pastilles de thème et les correspondances de recherche.
+- Corpus protégé, IDs, schéma d’état 5 et modèle de sélection Apple inchangés.
+- Validation physique iPhone/iPad/Samsung/PWA/AT reste externe.
 
 ## v2.2.5 — LET-J3 barre contextuelle iPad / sélection Apple
 
