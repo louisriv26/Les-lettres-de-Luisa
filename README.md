@@ -5,10 +5,10 @@ Application de référence pour les Lettres de Luisa Piccarreta.
 
 ---
 
-## Version courante : v2.2.6
+## Version courante : v2.2.8
 
-- Corpus protégé : 136 lettres (`luisa-letters-corpus-v2.2.6`)
-- SW cache : `luisa-letters-shell-v2.2.6`
+- Corpus protégé : 136 lettres (`luisa-letters-corpus-v2.2.8`)
+- SW cache : `luisa-letters-shell-v2.2.8`
 - LET-A : stockage isolé par domaine, import strict et transactionnel
 - LET-B : tailles sémantiques Petit 16 / Normal 19 / Grand 22 / Très grand 26, aperçu, thème Automatique/Clair/Sombre, champs iOS ≥16px
 - Déploiement public autorisé ; validation physique iPhone/iPad/Android et cycle PWA installé restent requis avant un PASS technique complet
@@ -34,7 +34,7 @@ Push sur `main` → GitHub Actions valide + déploie automatiquement sur GitHub 
 
 ```bash
 git add -A
-git commit -m "fix: v2.2.6 functional reconciliation"
+git commit -m "fix: v2.2.8 four-pass audit remediation and help truthfulness"
 git push origin main
 ```
 
@@ -73,6 +73,25 @@ git push origin main
 *Droits de diffusion : autorisation confirmée par le propriétaire le 2026-08-13. Le déploiement public de cette version est autorisé.*
 
 
+
+## v2.2.8 — Four-pass audit remediation and Help truthfulness (25 août 2026)
+
+- Aide : précise que le statut Lu n’est pas automatique pendant la lecture mais peut être restauré par un import de sauvegarde.
+- Recherche : précise qu’un résultat textuel ouvre le paragraphe correspondant, tandis qu’un résultat fondé uniquement sur les métadonnées ouvre la lettre.
+- Version/cache : app, README et caches service worker alignés sur v2.2.8 ; corpus inchangé.
+- Audit : le dispositif de preuve est reconstruit de façon autoportante avec baseline v2.2.7 hashée, build reproductible, test Help lié au candidat exact, audit AST des fonctions critiques, scan récursif de références et audit exhaustif des revendications actives.
+- Validation physique iPhone/iPad/Samsung/PWA/AT reste externe : statut maximal `LIMITED_PASS_STATIC`.
+
+
+## v2.2.7 — Help truthfulness and discoverability reconciliation (25 août 2026)
+
+- Aide : correction du Build actif (25 août 2026) et alignement de la version sur v2.2.7.
+- Lecteur : l’Aide documente désormais Partager et Source et validation sans exposer inutilement les détails techniques.
+- Lettres/Explorer : filtres, repères Lu/Favori et distinction Situation (large) / Thème (exact) explicités.
+- Recherche, sauvegarde et hors ligne : vocabulaire simplifié et avertissement sur l’effacement des données du navigateur ajouté.
+- Accessibilité de l’Aide : titres sémantiques, sommaire direct, libellés de sujets pour les points, aria-current et annonce de la section active.
+- Corpus, IDs, schéma d’état 5, notes/surlignages, sélection Apple, Recherche/Explorer runtime, routes et données personnelles inchangés.
+- Validation physique iPhone/iPad/Samsung/PWA/AT reste externe : statut maximal `LIMITED_PASS_STATIC`.
 
 ## v2.2.6 — Functional reconciliation (25 août 2026)
 

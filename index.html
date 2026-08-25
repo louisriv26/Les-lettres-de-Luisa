@@ -292,11 +292,14 @@ mark.hl:hover{opacity:.7;}
   padding:16px 20px 0;flex-shrink:0;}
 .help-header-title{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--muted);}
 .help-close{background:none;border:none;cursor:pointer;color:var(--muted);font-size:20px;padding:4px;}
+.help-topic-row{padding:10px 20px 0;flex-shrink:0;}
+.help-topic-select{width:100%;min-height:44px;border:0.5px solid var(--border);border-radius:9px;background:var(--white);
+  color:var(--night);font-family:var(--body);font-size:14px;padding:8px 34px 8px 12px;}
 .help-slides{display:flex;overflow:hidden;flex:1;}
-.help-slide{min-width:100%;padding:20px 24px 16px;display:flex;flex-direction:column;gap:12px;
+.help-slide{min-width:100%;padding:16px 24px 16px;display:flex;flex-direction:column;gap:12px;
   overflow-y:auto;}
 .help-icon{font-size:32px;color:var(--gold-text);text-align:center;line-height:1;}
-.help-title{font-family:var(--serif);font-size:20px;color:var(--night);text-align:center;line-height:1.3;}
+.help-title{font-family:var(--serif);font-size:20px;color:var(--night);text-align:center;line-height:1.3;margin:0;}
 .help-body{font-family:var(--body);font-size:14px;color:var(--ink);line-height:1.75;}
 .help-body strong{color:var(--night);}
 .help-tip{background:var(--gold-pale);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;
@@ -685,53 +688,61 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
   <div class="path-letter-list" id="path-letter-list"></div>
 </div>
 
-<!-- Help / Onboarding modal — v2.2.6 Aide consolidated with À propos as final section -->
+<!-- Help / Onboarding modal — v2.2.8 Aide consolidated with À propos as final section -->
 <div id="help-overlay" aria-hidden="true" onclick="helpOverlayClick(event)">
   <div id="help-modal" role="dialog" aria-modal="true" aria-labelledby="help-modal-title" tabindex="-1">
     <div class="help-header">
-      <span class="help-header-title" id="help-modal-title">Aide</span><span class="help-header-title" id="help-slide-label">1 / 11</span>
+      <span class="help-header-title" id="help-modal-title">Aide</span><span class="help-header-title" id="help-slide-label" aria-live="polite" aria-atomic="true">1 / 11</span>
       <button class="help-close" id="help-close-btn" onclick="closeHelp()" aria-label="Fermer l'aide">✕</button>
+    </div>
+    <div class="help-topic-row">
+      <label class="sr-only" for="help-topic-select">Sommaire de l’aide</label>
+      <select class="help-topic-select" id="help-topic-select" aria-label="Sommaire de l’aide" onchange="helpSelectTopic(this.value)"></select>
     </div>
     <div class="help-slides" id="help-slides">
 
       <div class="help-slide" data-help-key="navigation">
         <div class="help-icon"><i class="ti ti-home"></i></div>
-        <div class="help-title">Se repérer dans l’app</div>
+        <h2 class="help-title">Se repérer dans l’app</h2>
         <div class="help-body">
           Les cinq destinations principales sont <strong>Accueil · Lettres · Recherche · Mon Espace · Explorer</strong>.<br><br>
           <strong>Accueil</strong> rassemble la Lettre du jour, votre progression, les situations spirituelles et la reprise de lecture.<br>
-          <strong>Lettres</strong> — donne accès aux 136 lettres et à leurs filtres.<br>
-          <strong>Mon Espace</strong> regroupe vos Favoris, Notes, Surlignages et la sauvegarde.
+          <strong>Lettres</strong> donne accès aux 136 lettres : utilisez <strong>Toutes · Favoris · Non lues</strong> ou les filtres thématiques. Un cœur repère un Favori, un point doré une lettre non lue ; une lettre déjà marquée Lu apparaît plus discrètement.<br>
+          <strong>Recherche</strong> retrouve un mot ou une expression dans les lettres et leurs métadonnées.<br>
+          <strong>Mon Espace</strong> regroupe vos Favoris, Notes, Surlignages et la sauvegarde.<br>
+          <strong>Explorer</strong> propose des parcours, situations, thèmes, destinataires et la chronologie.
         </div>
         <div class="help-tip">Sur téléphone, utilisez la barre du bas. Sur tablette/ordinateur, la navigation latérale garde le même ordre.</div>
       </div>
 
       <div class="help-slide" data-help-key="daily">
         <div class="help-icon"><i class="ti ti-sun"></i></div>
-        <div class="help-title">Lettre du jour et reprise</div>
+        <h2 class="help-title">Lettre du jour et reprise</h2>
         <div class="help-body">
-          La <strong>Lettre du jour</strong> privilégie une lettre non encore marquée lue. Son choix est mémorisé pour la <strong>date civile locale</strong> : elle ne change pas après un rechargement ou après l’avoir marquée lue le même jour.<br><br>
-          La carte <strong>Continuer la lecture</strong> rouvre votre dernière lettre et restaure votre position de lecture.
+          La <strong>Lettre du jour</strong> privilégie une lettre que vous n’avez pas encore marquée Lu. Elle reste la même pendant toute la journée, même après un rechargement ou si vous la marquez ensuite comme lue.<br><br>
+          La carte <strong>Continuer la lecture</strong> rouvre votre dernière lettre et restaure autant que possible l’endroit précis où vous vous étiez arrêté.
         </div>
-        <div class="help-tip">Une lettre n’est jamais marquée « Lu » automatiquement : ce statut change uniquement lorsque vous utilisez le bouton Lu.</div>
+        <div class="help-tip">Lors de la lecture, une lettre n’est jamais marquée « Lu » automatiquement : utilisez le bouton Lu pour changer ce statut. Une sauvegarde importée peut toutefois restaurer des statuts Lu antérieurs.</div>
       </div>
 
       <div class="help-slide" data-help-key="reader">
         <div class="help-icon"><i class="ti ti-book-open"></i></div>
-        <div class="help-title">Lire et organiser une lettre</div>
+        <h2 class="help-title">Lire et organiser une lettre</h2>
         <div class="help-body">
           Dans le lecteur :<br><br>
           <strong>♡ Favori</strong> — ajoute ou retire la lettre de vos Favoris.<br>
           <strong>✓ Lu</strong> — marque la lettre lue ou non lue et met à jour la progression globale.<br>
           <strong>✏ Note</strong> — crée une note liée à la lettre et, lorsque possible, au paragraphe visible.<br>
+          <strong>Partager</strong> — ouvre les options de partage de votre appareil avec un lien stable vers la lettre et, lorsque possible, le passage actuel ; si le partage direct n’est pas disponible, le lien et la référence sont copiés.<br>
           <strong>Aa Texte</strong> — ouvre les réglages de taille et de thème.<br><br>
-          Les flèches du lecteur passent à la lettre précédente ou suivante. Votre position est enregistrée avec un repère de paragraphe pour mieux résister aux changements de taille et de mise en page.
+          Les flèches du lecteur passent à la lettre précédente ou suivante. Votre position est enregistrée avec un repère de paragraphe pour mieux résister aux changements de taille et de mise en page.<br><br>
+          <strong>Source et validation</strong> affiche des informations de traçabilité sur la lettre : identifiant, base de traduction, état du parallèle français, terminologie et validation. L’empreinte technique sert au contrôle du corpus ; elle ne modifie pas le texte lu.
         </div>
       </div>
 
       <div class="help-slide" data-help-key="selection">
         <div class="help-icon"><i class="ti ti-highlight"></i></div>
-        <div class="help-title">Surligner, noter et copier un passage</div>
+        <h2 class="help-title">Surligner, noter et copier un passage</h2>
         <div class="help-body">
           Sélectionnez précisément le texte souhaité. Le menu contextuel propose <strong>Surligner · Note · Copier · Fermer</strong>.<br><br>
           <strong>Surligner</strong> — choisissez Jaune, Bleu, Vert, Violet ou Rose.<br>
@@ -746,7 +757,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
 
       <div class="help-slide" data-help-key="workspace">
         <div class="help-icon"><i class="ti ti-heart"></i></div>
-        <div class="help-title">Mon Espace</div>
+        <h2 class="help-title">Mon Espace</h2>
         <div class="help-body">
           <strong>Favoris</strong> — toutes les lettres marquées ♥.<br>
           <strong>Notes</strong> — vos notes de lettre, de paragraphe ou de passage sélectionné.<br>
@@ -758,19 +769,20 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
 
       <div class="help-slide" data-help-key="search">
         <div class="help-icon"><i class="ti ti-search"></i></div>
-        <div class="help-title">Recherche</div>
+        <h2 class="help-title">Recherche</h2>
         <div class="help-body">
-          La recherche porte sur le <strong>texte, le titre, le destinataire, les thèmes, le numéro de lettre, la date et le lieu</strong>. Les résultats ouvrent directement le paragraphe concerné.<br><br>
-          La normalisation française tolère notamment les accents, <strong>œ/oe</strong>, <strong>æ/ae</strong>, plusieurs apostrophes, les espaces typographiques et la ponctuation.<br><br>
+          La recherche porte sur le <strong>texte, le titre, le destinataire, les thèmes, le numéro de lettre, la date et le lieu</strong>. Lorsqu’un passage du texte correspond, le résultat ouvre directement le paragraphe concerné. Pour une correspondance dans le titre, le destinataire, un thème, le numéro, la date ou le lieu, le résultat ouvre la lettre.<br><br>
+          Elle tolère les accents, différentes apostrophes et certaines variantes typographiques : vous n’avez donc pas besoin de reproduire exactement la ponctuation du texte.<br><br>
           Lorsque vous ouvrez un résultat puis revenez à Recherche, la requête et la position de la liste sont restaurées.
         </div>
       </div>
 
       <div class="help-slide" data-help-key="explore">
         <div class="help-icon"><i class="ti ti-compass"></i></div>
-        <div class="help-title">Explorer et Parcours spirituels</div>
+        <h2 class="help-title">Explorer et Parcours spirituels</h2>
         <div class="help-body">
           <strong>Explorer</strong> permet de parcourir les lettres par situation spirituelle, thème, destinataire et chronologie. La vue des destinataires donne accès à l’ensemble des destinataires répertoriés.<br><br>
+          <strong>Par situation</strong> cherche volontairement de façon plus large pour vous aider à partir de ce que vous vivez. <strong>Par thème</strong> affiche les lettres auxquelles le thème précis a été attribué. Les deux vues peuvent donc donner des résultats différents sans qu’il s’agisse d’une erreur.<br><br>
           Les <strong>6 Parcours spirituels</strong> proposent chacun 7 lettres : Paix et confiance · Vivre dans la Divine Volonté · La Croix et la souffrance · Vers la vraie sainteté · Faire connaître les écrits · Abandon et décision.
         </div>
         <div class="help-tip">La progression d’un parcours utilise le même statut Lu que le reste de l’app : il n’existe pas une seconde progression cachée.</div>
@@ -778,7 +790,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
 
       <div class="help-slide" data-help-key="settings">
         <div class="help-icon"><i class="ti ti-settings"></i></div>
-        <div class="help-title">Taille du texte et thème</div>
+        <h2 class="help-title">Taille du texte et thème</h2>
         <div class="help-body">
           Dans <strong>Réglages et aide</strong>, choisissez directement :<br><br>
           <strong>Petit · 16 px</strong><br>
@@ -792,39 +804,39 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
 
       <div class="help-slide" data-help-key="backup">
         <div class="help-icon"><i class="ti ti-download"></i></div>
-        <div class="help-title">Sauvegarder, importer et restaurer</div>
+        <h2 class="help-title">Sauvegarder, importer et restaurer</h2>
         <div class="help-body">
-          Vos Favoris, Notes, Surlignages, lettres lues et positions sont conservés <strong>localement sur cet appareil</strong>.<br><br>
+          Vos Favoris, Notes, Surlignages, lettres lues et positions sont conservés dans le <strong>stockage local de cette app sur cet appareil</strong>.<br><br>
           <strong>Exporter</strong> crée la sauvegarde JSON restaurable.<br>
           <strong>Exporter en texte</strong> crée un journal lisible destiné à la consultation ; ce fichier texte n’est pas le format de restauration.<br>
           <strong>Importer</strong> vérifie la sauvegarde avant de proposer <strong>Fusionner</strong> ou <strong>Remplacer après sauvegarde de secours</strong>.<br>
           Après un remplacement, <strong>Annuler le dernier import</strong> restaure la sauvegarde de secours tant qu’elle est disponible.
         </div>
-        <div class="help-tip">Avant de désinstaller l’app ou de changer d’appareil, exportez le fichier JSON si vous souhaitez conserver vos données personnelles.</div>
+        <div class="help-tip">Avant de désinstaller l’app, changer d’appareil, effacer les données du navigateur ou réinitialiser les données du site, exportez la sauvegarde JSON si vous souhaitez conserver vos données personnelles.</div>
       </div>
 
       <div class="help-slide" data-help-key="support">
         <div class="help-icon"><i class="ti ti-share"></i></div>
-        <div class="help-title">Liens, support, mises à jour et hors ligne</div>
+        <h2 class="help-title">Liens, support, mises à jour et hors ligne</h2>
         <div class="help-body">
           Dans <strong>Réglages et aide → Liens et support</strong> :<br><br>
           <strong>Copier le lien courant</strong> crée un lien stable vers l’écran, la lettre ou le paragraphe pertinent.<br>
           <strong>Signaler un problème de texte</strong> prépare une référence technique à compléter avec votre description.<br>
           <strong>Copier le diagnostic</strong> copie la version, l’état du service worker, le thème, la taille et une route sûre.<br><br>
           Vos Notes, Surlignages, Favoris et positions de lecture ne sont jamais ajoutés automatiquement à ces liens ou diagnostics.<br><br>
-          La toute première ouverture nécessite Internet. Une première ouverture en ligne réussie initialise le contenu nécessaire au repli hors ligne ; le shell et le corpus peuvent ensuite être utilisés comme repli lorsque le réseau est indisponible. Quand une nouvelle version est prête, l’app affiche <strong>Mettre à jour</strong> et n’applique pas la mise à jour pendant une note non enregistrée ou un import en cours.
+          La toute première ouverture nécessite Internet. Après une première ouverture en ligne réussie, l’app conserve localement les éléments nécessaires pour pouvoir ouvrir l’application et lire les lettres lorsque le réseau n’est plus disponible. Quand une nouvelle version est prête, l’app affiche <strong>Mettre à jour</strong> et n’applique pas la mise à jour pendant une note non enregistrée ou un import en cours.
         </div>
-        <div class="help-tip">Si votre navigateur propose l’installation, le bouton Installer permet d’ajouter l’app. L’installation reste facultative : l’app fonctionne aussi dans le navigateur.</div>
+        <div class="help-tip">L’installation dépend du navigateur et de l’appareil. Si le navigateur affiche le bouton Installer, vous pouvez l’utiliser ; sur certains appareils, l’ajout à l’écran d’accueil se fait depuis le menu de partage du navigateur. L’installation reste facultative.</div>
       </div>
 
       <div class="help-slide" data-help-key="about">
         <div class="help-icon"><i class="ti ti-file-text"></i></div>
-        <div class="help-title">À propos</div>
+        <h2 class="help-title">À propos</h2>
         <div class="help-body">
           <strong>Lettres de Luisa Piccarreta</strong> est une application de lecture, recherche et exploration d’un corpus de <strong>136 lettres</strong> consacré à la spiritualité de la Divine Volonté.<br><br>
           Le corpus utilise des identifiants stables et des paragraphes d’affichage reliés au texte source afin de permettre la recherche, les liens précis, les notes, les surlignages et la reprise de lecture sans modifier le texte lu.<br><br>
-          <strong>Version de l’app :</strong> v2.2.6<br>
-          <strong>Build :</strong> 17 août 2026<br>
+          <strong>Version de l’app :</strong> v2.2.8<br>
+          <strong>Build :</strong> 25 août 2026<br>
           <strong>Corpus :</strong> 136 lettres · 909 paragraphes d’affichage<br><br>
           <strong>Confidentialité :</strong> vos données personnelles restent dans le stockage local de cette app, sauf lorsque vous choisissez vous-même de les exporter. Elles ne sont pas automatiquement partagées avec les autres apps de la Collection Luisa et ne sont pas incluses dans les liens, signalements ou diagnostics.
         </div>
@@ -919,7 +931,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
   <div class="settings-section" id="settings-help-section">
     <div class="settings-label">Aide</div>
     <button class="settings-action" id="settings-help-btn" onclick="openHelpFromSettings()" aria-label="Ouvrir l’aide"><i class="ti ti-help-circle" aria-hidden="true"></i> Ouvrir l’aide</button>
-    <div class="settings-current">À propos se trouve à la fin de l’Aide · v2.2.6 · 2026-08-25</div>
+    <div class="settings-current">À propos se trouve à la fin de l’Aide · v2.2.8 · 2026-08-25</div>
   </div>
 </div>
 
@@ -945,7 +957,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
     <button class="snav-item" onclick="switchPanel('p-notes')" id="snav-notes" aria-label="Mon Espace"><i class="ti ti-user-circle" aria-hidden="true"></i>Mon Espace</button>
     <button class="snav-item" onclick="switchPanel('p-explore')" id="snav-explore" aria-label="Explorer"><i class="ti ti-layout-grid" aria-hidden="true"></i>Explorer</button>
     <div class="sidebar-bottom">
-      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v2.2.6 · 2026-08-25</div>
+      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v2.2.8 · 2026-08-25</div>
     </div>
   </nav>
 
@@ -995,7 +1007,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
           <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:16px;color:var(--muted)"></i>
         </button>
         <div style="height:12px"></div>
-        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v2.2.6 · 2026-08-25</div>
+        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v2.2.8 · 2026-08-25</div>
       </div>
     </div>
 
@@ -1296,7 +1308,7 @@ function validateCuratedPaths() {
 /* ════════════════════════════════════════
    STATE
 ════════════════════════════════════════ */
-const APP_VERSION = '2.2.6';
+const APP_VERSION = '2.2.8';
 const STATE_SCHEMA_VERSION = 5;
 const WIDE_VIEWPORT_MIN = 768;
 const TEXT_LEVELS = Object.freeze({small:16, normal:19, large:22, xlarge:26});
@@ -3675,6 +3687,18 @@ function helpNav(dir) {
   renderHelpSlide();
 }
 
+function helpTopicTitle(slide, index) {
+  var title = slide ? slide.querySelector('.help-title') : null;
+  return title && title.textContent ? title.textContent.trim() : ('Section ' + (index + 1));
+}
+
+function helpSelectTopic(value) {
+  var index = parseInt(value, 10);
+  if (!Number.isInteger(index) || index < 0 || index >= _helpSlides) return;
+  _helpSlide = index;
+  renderHelpSlide();
+}
+
 function renderHelpSlide() {
   var container = document.getElementById('help-slides');
   var slides = container.children;
@@ -3682,16 +3706,34 @@ function renderHelpSlide() {
   for (var i = 0; i < slides.length; i++) {
     slides[i].style.display = i === _helpSlide ? 'flex' : 'none';
   }
-  var currentKey = slides[_helpSlide] ? slides[_helpSlide].getAttribute('data-help-key') : '';
+  var currentTitle = helpTopicTitle(slides[_helpSlide], _helpSlide);
   document.getElementById('help-modal-title').textContent = 'Aide';
-  document.getElementById('help-slide-label').textContent = (_helpSlide + 1) + ' / ' + _helpSlides;
-  // Dots
+  var slideLabel = document.getElementById('help-slide-label');
+  slideLabel.textContent = (_helpSlide + 1) + ' / ' + _helpSlides;
+  slideLabel.setAttribute('aria-label', 'Section ' + (_helpSlide + 1) + ' sur ' + _helpSlides + ' : ' + currentTitle);
+
+  var topicSelect = document.getElementById('help-topic-select');
+  if (topicSelect && topicSelect.options.length !== _helpSlides) {
+    topicSelect.innerHTML = '';
+    for (var s = 0; s < _helpSlides; s++) {
+      var option = document.createElement('option');
+      option.value = String(s);
+      option.textContent = (s + 1) + '. ' + helpTopicTitle(slides[s], s);
+      topicSelect.appendChild(option);
+    }
+  }
+  if (topicSelect) topicSelect.value = String(_helpSlide);
+
+  // Dots retain the compact visual design, but expose their real topics to assistive technology.
   var dotsEl = document.getElementById('help-dots');
   dotsEl.innerHTML = '';
   for (var j = 0; j < _helpSlides; j++) {
     var dot = document.createElement('button');
+    var topicTitle = helpTopicTitle(slides[j], j);
     dot.className = 'help-dot' + (j === _helpSlide ? ' active' : '');
-    dot.setAttribute('aria-label', 'Slide ' + (j+1));
+    dot.setAttribute('aria-label', 'Aller à : ' + topicTitle);
+    dot.setAttribute('title', topicTitle);
+    if (j === _helpSlide) dot.setAttribute('aria-current', 'step');
     dot.setAttribute('data-slide', j);
     dot.onclick = function() { _helpSlide = parseInt(this.getAttribute('data-slide')); renderHelpSlide(); };
     dotsEl.appendChild(dot);
@@ -3701,8 +3743,11 @@ function renderHelpSlide() {
   // Next button label
   var nextBtn = document.getElementById('help-next');
   nextBtn.textContent = _helpSlide === _helpSlides - 1 ? 'Terminer ✓' : 'Suivant →';
+  nextBtn.setAttribute('aria-label', _helpSlide === _helpSlides - 1 ? 'Terminer l’aide' : 'Section suivante');
   // Prev button
-  document.getElementById('help-prev').style.visibility = _helpSlide === 0 ? 'hidden' : 'visible';
+  var prevBtn = document.getElementById('help-prev');
+  prevBtn.style.visibility = _helpSlide === 0 ? 'hidden' : 'visible';
+  prevBtn.setAttribute('aria-label', 'Section précédente');
 }
 
 function checkOnboarding() {
@@ -4487,7 +4532,7 @@ window.__LET_G_TEST = {
 };
 
 window.__LET_I_TEST = Object.freeze({parseInitialRoute:parseInitialRoute,applyInitialRoute:applyInitialRoute,stableUrlForRoute:stableUrlForRoute,currentRouteDescriptor:currentRouteDescriptor,privacySafeSupportRouteDescriptor:privacySafeSupportRouteDescriptor,readerIsRouteVisible:readerIsRouteVisible,currentStableUrl:currentStableUrl,buildTextIssueReport:buildTextIssueReport,buildDiagnostics:buildDiagnostics,routeLetterNumber:routeLetterNumber,constants:{appVersion:APP_VERSION,stateSchema:STATE_SCHEMA_VERSION}});
-window.__LDL_HELP_TEST = Object.freeze({openHelp:openHelp,closeHelp:closeHelp,renderHelpSlide:renderHelpSlide,helpSlideCount:helpSlideCount,helpSlideIndex:helpSlideIndex,constants:{appVersion:APP_VERSION}});
+window.__LDL_HELP_TEST = Object.freeze({openHelp:openHelp,closeHelp:closeHelp,renderHelpSlide:renderHelpSlide,helpSlideCount:helpSlideCount,helpSlideIndex:helpSlideIndex,helpSelectTopic:helpSelectTopic,helpTopicTitle:helpTopicTitle,constants:{appVersion:APP_VERSION}});
 
 loadCorpus();
 </script>
