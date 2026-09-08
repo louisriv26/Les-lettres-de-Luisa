@@ -203,10 +203,6 @@ mark.hl:hover{opacity:.7;}
   line-height:1.5;margin-bottom:3px;}
 .hl-ref{font-family:var(--body);font-size:10px;color:var(--muted);}
 .dp.salutation{font-style:italic;color:var(--night);font-size:calc(var(--reader-size) - 1px);margin-bottom:1.5em;opacity:.9;}
-.dp.signature{font-style:italic;font-size:calc(var(--reader-size) - 2px);color:var(--muted);
-  border-top:0.5px solid var(--border);padding-top:14px;margin-top:1em;margin-bottom:0;text-align:center;}
-.dp.signature::before{content:'✦  ✦  ✦';display:block;text-align:center;color:var(--gold);
-  font-size:10px;margin-bottom:10px;font-style:normal;letter-spacing:.3em;opacity:.7;}
 
 /* Trust panel */
 .trust-panel{margin:16px 16px 24px;border:0.5px solid var(--border);border-radius:10px;overflow:hidden;}
@@ -1231,10 +1227,6 @@ const EXCL_LDJ = new Set([
   'opening_formula','initial_formula','devotional_opening','devotional_header','salutation',
   'before_closing_or_signature'
 ]);
-const SIG_REASONS = new Set([
-  'signature','signature_or_postscript','signature_or_date','closing_signature_or_date'
-]);
-const SIG_REGEX = /petite fille|Luisa Piccarreta|Votre.*dévou|Corato,\s*\d/i;
 const SAL_REASONS = new Set([
   'salutation','initial_formula','devotional_opening','opening_formula','devotional_header'
 ]);
@@ -2614,8 +2606,7 @@ function buildDPs(l) {
     var cls = 'dp';
     var dpAttr = dp.display_paragraph_id ? ' data-dp-id="' + esc(dp.display_paragraph_id) + '"' : '';
     var r = dp.split_reason || '';
-    if (SAL_REASONS.has(r)) cls += ' salutation';
-    else if (dp.is_signature || SIG_REASONS.has(r) || SIG_REGEX.test(dp.text_fr||'')) cls += ' signature';
+    if (SAL_REASONS.has(r) && !dp.is_signature) cls += ' salutation';
     var safe = renderDpTextWithHighlights(dp, hlMap[dp.display_paragraph_id] || []);
     return '<p class="' + cls + '"' + dpAttr + '>' + safe + '</p>';
   }).join('');
@@ -3006,7 +2997,7 @@ function buildDiagnostics() {
     'Diagnostic — Lettres de Luisa Piccarreta',
     'App: v'+APP_VERSION,
     'Corpus: '+(CORPUS_META.version||'—')+' · '+(CORPUS_META.fingerprint||'—'),
-    'SW: '+controller+' · shell=luisa-letters-shell-v'+APP_VERSION+'-r5 · corpus=luisa-letters-corpus-v'+APP_VERSION+'-r4',
+    'SW: '+controller+' · shell=luisa-letters-shell-v'+APP_VERSION+'-r8 · corpus=luisa-letters-corpus-v'+APP_VERSION+'-r4',
     'Mode: '+standalone,
     'Stockage local: '+storageDiagnosticStatus(),
     'Thème: '+STATE.theme,

@@ -8,7 +8,7 @@ Application de lecture, recherche et exploration d’une collection éditoriale 
 ## Version courante : v2.2.9
 
 - Collection actuelle : 136 entrées (`luisa-letters-corpus-v2.2.9`) — IDs et 909 paragraphes d’affichage préservés ; elle ne représente pas l’ensemble de la correspondance connue ni une édition critique définitive
-- SW cache : `luisa-letters-shell-v2.2.9-r5` · corpus cache : `luisa-letters-corpus-v2.2.9-r4` (corpus inchangé depuis R4)
+- SW cache : `luisa-letters-shell-v2.2.9-r8` · corpus cache : `luisa-letters-corpus-v2.2.9-r4` (corpus inchangé depuis R4)
 - LET-A : stockage isolé par domaine, import strict et transactionnel
 - LET-B : tailles sémantiques Petit 16 / Normal 19 / Grand 22 / Très grand 26, aperçu, thème Automatique/Clair/Sombre, champs iOS ≥16px
 - Candidat de déploiement contrôlé ; validation physique iPhone/iPad/Android et cycle PWA installé restent requis avant un PASS technique complet
@@ -34,7 +34,7 @@ Push sur `main` → GitHub Actions valide + déploie automatiquement sur GitHub 
 
 ```bash
 git add -A
-git commit -m "feat: v2.2.9 R5 contextual Help access"
+git commit -m "fix: v2.2.9 R8 HTTP fallback hardening"
 git push origin main
 ```
 
@@ -72,6 +72,45 @@ git push origin main
 
 *Droits de diffusion : autorisation confirmée par le propriétaire le 2026-08-13. Le déploiement public de cette version est autorisé.*
 
+
+
+
+## v2.2.9 R8 — Durcissement du repli HTTP du Service Worker (8 septembre 2026)
+
+- Prédécesseur immédiat : v2.2.9 R7 ZIP SHA-256 `ca8d89584fac9e936d869557d307683e8cc59dbbc82b2d8ee1d1f1fb5eeae4e5`.
+- Un audit applicatif élargi a identifié un défaut de résilience actif mais antérieur à R7 : les stratégies `networkFirstShell()` et `networkFirstCorpus()` revenaient au cache lorsque `fetch()` levait une erreur réseau, mais renvoyaient directement une réponse HTTP non-OK (par exemple 503) même lorsqu'une copie valide était déjà en cache. Cela ne satisfaisait pas pleinement le contrat documenté « network-first avec repli cache ».
+- R8 traite désormais une réponse HTTP non-OK comme une condition de repli : si une copie valide existe, le shell/corpus mis en cache est servi ; si aucun cache n'existe, la réponse HTTP non-OK d'origine est conservée. Une erreur réseau sans cache conserve le repli 503 synthétique existant.
+- Les réponses réseau 2xx restent prioritaires et continuent seules à rafraîchir les caches. Une réponse non-OK n'écrase jamais une copie connue comme bonne.
+- **Aucun changement de corpus ni de renderer** : mêmes 136 lettres, 909 DPs, 45 mutations gouvernées, 17 lettres mutées, 7 loci HOLD, 200/200 DPs historiques `is_signature:true` neutres et 5 DPs / 19 géométries de migration.
+- Le cache shell passe à `luisa-letters-shell-v2.2.9-r8`; le cache corpus reste `luisa-letters-corpus-v2.2.9-r4`.
+- La validation R8 ajoute des scénarios explicites HTTP 503 avec cache, HTTP non-OK sans cache, erreur réseau avec cache, installation échouant fermée sur ressource non-OK, et conserve tous les tests renderer/Aide/migration.
+- Validation physique iPhone/iPad/Samsung, cycle PWA installé R7→R8 sur origine HTTPS et VoiceOver/TalkBack/NVDA restent externes.
+
+
+## v2.2.9 R7 — Garde de conflit des rôles de fin de lettre (8 septembre 2026)
+
+- Prédécesseur immédiat : v2.2.9 R6 ZIP SHA-256 `f3ee6123b7c745539468fdfcceb2d615b9f6c0974dda5c43f689b8b2fa89393d`.
+- Audit adversarial R6 : un cas résiduel a été trouvé — Lettre 70 `LP.LETTER.070.DP007` porte à la fois `is_signature:true` et le `split_reason` historique `devotional_opening`; R6 supprimait la classe `signature` mais lui laissait donc la classe visuelle `salutation`.
+- R7 applique une règle de conflit conservatrice : un `split_reason` d'ouverture/salutation ne peut ajouter la classe `salutation` lorsqu'un même DP porte aussi le marqueur historique `is_signature:true`. En cas de métadonnées contradictoires, le rendu neutre prévaut.
+- Cette garde ne crée aucune typographie de signature et ne reclassifie aucune donnée du corpus. Elle change le rendu d'exactement **1 DP** par rapport à R6 : `LP.LETTER.070.DP007`.
+- Les **200/200** DPs historiques `is_signature:true` rendent désormais avec la classe de paragraphe extérieure normale `dp` (les spans de provenance éditoriale explicitement établis restent distincts). Les **153** DPs non marqués `is_signature` dont le `split_reason` appartient aux rôles d'ouverture/salutation conservent leur rendu `salutation` antérieur.
+- **Aucun changement de corpus** : mêmes 136 lettres, 909 DPs, 45 mutations gouvernées, 17 lettres mutées, 7 loci HOLD et 5 DPs / 19 géométries de migration.
+- Le cache shell passe à `luisa-letters-shell-v2.2.9-r7`; le cache corpus reste `luisa-letters-corpus-v2.2.9-r4`.
+- Le test Service Worker R7 validait le repli sur erreur réseau levée, mais ne couvrait pas encore les réponses HTTP non-OK ; cette lacune transversale est explicitement corrigée et testée en R8. Validation physique iPhone/iPad/Samsung, cycle PWA installé R6→R7 sur origine HTTPS et VoiceOver/TalkBack/NVDA restent externes.
+
+
+## v2.2.9 R6 — Rendu neutre des fins de lettres (8 septembre 2026)
+
+- Prédécesseur immédiat : v2.2.9 R5 R2 ZIP SHA-256 `174c83afc59a2a72e0ec40a059fa0ad34792df1072eaadb07efc4f0cdde7ca18`.
+- **Aucun changement de corpus** : `corpus.json` reste byte-identical à R5/R4 ; 136 entrées, 909 paragraphes d’affichage, 45 mutations gouvernées, 17 lettres mutées, 7 loci HOLD et 5 DPs de migration / 19 géométries sont inchangés.
+- Le renderer n’interprète plus `is_signature`, les motifs historiques `signature*`, ni une regex de contenu comme une instruction typographique. Ces données restent conservées pour leurs usages non visuels existants.
+- R6 a supprimé le rendu décoratif `.dp.signature` (`✦ ✦ ✦`, trait, centrage, réduction de taille, italique/couleur atténuée propres à cette classe). L’audit R7 a ensuite identifié un chevauchement résiduel distinct : `LP.LETTER.070.DP007` recevait encore la classe préexistante `salutation` à cause d’un `split_reason=devotional_opening` contradictoire.
+- Les paragraphes techniques restent distincts et leurs IDs sont strictement conservés : aucun paragraphe n’est fusionné, supprimé, déplacé ou renuméroté.
+- Les notes éditoriales explicitement identifiées (`editorial_note_spans`) conservent leur rendu de provenance distinct ; la modification R6 ne neutralise pas cette information source-critique.
+- Les exclusions historiques de la **Lettre du jour** fondées sur `is_signature` / `EXCL_LDJ` sont conservées byte-for-byte afin d’éviter un changement fonctionnel non demandé.
+- Le cache shell passe à `luisa-letters-shell-v2.2.9-r6`. Le cache corpus reste volontairement `luisa-letters-corpus-v2.2.9-r4`, puisque `corpus.json` est strictement inchangé.
+- La validation R6 avait bien vérifié l’absence de classe `signature`/ornement, mais son test autorisait aussi `dp salutation` et a donc laissé passer l’unique conflit L70 DP007. Ce PASS historique est supersédé sur ce point par l’audit et le correctif R7.
+- Validation physique iPhone/iPad/Samsung, cycle PWA installé R5→R6 sur origine HTTPS et VoiceOver/TalkBack/NVDA restent externes.
 
 
 

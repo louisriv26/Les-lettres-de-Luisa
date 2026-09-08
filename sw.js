@@ -6,7 +6,7 @@
    - optional Google Fonts / pinned Tabler CDN → stale-while-revalidate; local typography/icon fallbacks exist
    - a failed install fails closed, leaving the previously active worker/app intact
 */
-const SHELL_CACHE = 'luisa-letters-shell-v2.2.9-r5';
+const SHELL_CACHE = 'luisa-letters-shell-v2.2.9-r8';
 const CORPUS_CACHE = 'luisa-letters-corpus-v2.2.9-r4';
 const APP_CACHE_PREFIX = 'luisa-letters-';
 const CANONICAL_SHELL_URL = './index.html';
@@ -94,21 +94,26 @@ self.addEventListener('fetch', event => {
 });
 
 async function networkFirstCorpus(request) {
+  let networkResponse = null;
   try {
     const response = await fetch(request, {cache:'no-store'});
     if (response.ok) {
       const cache = await caches.open(CORPUS_CACHE);
       await cache.put(request, response.clone());
+      return response;
     }
-    return response;
+    networkResponse = response;
   } catch (e) {
-    const cached = await caches.match(request);
-    if (cached) return cached;
-    return new Response(JSON.stringify({error:'corpus_unavailable',letters:[]}), {status:503,headers:{'Content-Type':'application/json'}});
+    // Fall through to the last known-good cached corpus.
   }
+  const cached = await caches.match(request) || await caches.match(CORPUS_URL);
+  if (cached) return cached;
+  if (networkResponse) return networkResponse;
+  return new Response(JSON.stringify({error:'corpus_unavailable',letters:[]}), {status:503,headers:{'Content-Type':'application/json'}});
 }
 
 async function networkFirstShell(request) {
+  let networkResponse = null;
   try {
     const response = await fetch(request, {cache:'no-store'});
     if (response.ok) {
@@ -116,14 +121,18 @@ async function networkFirstShell(request) {
       // Store every successful navigation response under one canonical shell key instead of
       // proliferating one cache entry per deep-link query string.
       await cache.put(CANONICAL_SHELL_URL, response.clone());
+      return response;
     }
-    return response;
+    networkResponse = response;
   } catch (e) {
-    // A deep link such as ?letter=... or a manifest shortcut must still open offline even when
-    // that exact query URL was never visited online.
-    const cached = await caches.match(request) || await caches.match(CANONICAL_SHELL_URL) || await caches.match('./');
-    return cached || new Response('Offline', {status:503,headers:{'Content-Type':'text/plain; charset=utf-8'}});
+    // Fall through to the last known-good cached shell.
   }
+  // A deep link such as ?letter=... or a manifest shortcut must still open from the cached
+  // canonical shell when the network is unreachable or returns a non-OK HTTP response.
+  const cached = await caches.match(request) || await caches.match(CANONICAL_SHELL_URL) || await caches.match('./');
+  if (cached) return cached;
+  if (networkResponse) return networkResponse;
+  return new Response('Offline', {status:503,headers:{'Content-Type':'text/plain; charset=utf-8'}});
 }
 
 async function cacheFirst(request) {
