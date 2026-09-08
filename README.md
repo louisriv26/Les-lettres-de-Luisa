@@ -8,7 +8,7 @@ Application de lecture, recherche et exploration d’une collection éditoriale 
 ## Version courante : v2.2.9
 
 - Collection actuelle : 136 entrées (`luisa-letters-corpus-v2.2.9`) — IDs et 909 paragraphes d’affichage préservés ; elle ne représente pas l’ensemble de la correspondance connue ni une édition critique définitive
-- SW cache : `luisa-letters-shell-v2.2.9-r3`
+- SW cache : `luisa-letters-shell-v2.2.9-r5` · corpus cache : `luisa-letters-corpus-v2.2.9-r4` (corpus inchangé depuis R4)
 - LET-A : stockage isolé par domaine, import strict et transactionnel
 - LET-B : tailles sémantiques Petit 16 / Normal 19 / Grand 22 / Très grand 26, aperçu, thème Automatique/Clair/Sombre, champs iOS ≥16px
 - Candidat de déploiement contrôlé ; validation physique iPhone/iPad/Android et cycle PWA installé restent requis avant un PASS technique complet
@@ -34,7 +34,7 @@ Push sur `main` → GitHub Actions valide + déploie automatiquement sur GitHub 
 
 ```bash
 git add -A
-git commit -m "docs: v2.2.9 R3 source-truthfulness alignment"
+git commit -m "feat: v2.2.9 R5 contextual Help access"
 git push origin main
 ```
 
@@ -75,23 +75,36 @@ git push origin main
 
 
 
-## v2.2.9 R3 — Alignement source-critique de l’Aide et d’À propos (8 septembre 2026)
+## v2.2.9 R5 — Accès contextuel à l’Aide (8 septembre 2026)
 
-- Prédécesseur immédiat immuable de R3 : v2.2.9 R2 ZIP SHA-256 `72f482e0977110309c6afae3ab8e6980ee9968acf911aa184cf9ba7234d752b0`.
-- Baseline pré-source-critique utilisée par R2 : v2.2.8 ZIP SHA-256 `75971305d624d898c4ca488f65fa8c0eb6c24bc4bf6439d53807e37a7ef97359`.
+- Prédécesseur immédiat : v2.2.9 R4 ZIP SHA-256 `2f1cf376993165eaa8c519e8e8519135e5119ab5bff90a94cc7500dda2d1f681`.
+- **Aucun changement de corpus** : `corpus.json` reste byte-identical à R4, avec les 45 mutations gouvernées, 17 lettres mutées, 7 loci HOLD et 5 DPs de migration / 19 géométries inchangés.
+- Téléphone : un contrôle Aide `?` est désormais accessible en un geste depuis Accueil, Lettres, Recherche, Mon Espace, Explorer et le lecteur plein écran. Chaque accès ouvre directement la rubrique pertinente (`Recherche`, `Explorer`, `Mon Espace`, `Lire et organiser une lettre`, etc.).
+- Tablette/ordinateur : un contrôle permanent **Aide** est ajouté en bas de la barre latérale. Il résout la rubrique à partir de la surface active ; dans Lettres avec un lecteur actif, il ouvre la rubrique Lecteur.
+- Réglages : le bouton historique **Ouvrir l’aide** est conservé comme accès secondaire et ouvre maintenant directement la rubrique Réglages.
+- Premier lancement : la première rubrique explique explicitement comment rouvrir l’Aide ultérieurement.
+- Navigation primaire inchangée : Accueil · Lettres · Recherche · Mon Espace · Explorer ; aucune sixième destination n’est ajoutée à la barre du bas.
+- Le cache shell passe à `luisa-letters-shell-v2.2.9-r5`. Le cache corpus reste volontairement `luisa-letters-corpus-v2.2.9-r4`, puisque ses octets sont strictement inchangés.
+- Validation automatisée R5 couvre la présence/visibilité responsive des nouveaux accès, leur routage contextuel, les cibles tactiles existantes ≥44×44, le Service Worker, le workflow GitHub, et l’identité stricte du corpus R4.
+- Validation physique iPhone/iPad/Samsung, cycle PWA installé R4→R5 sur origine HTTPS et VoiceOver/TalkBack/NVDA restent externes.
+
+## v2.2.9 R4 — Adjudication adversariale Letter 48 et cache corpus (8 septembre 2026)
+
+- Prédécesseur immédiat de R4 : v2.2.9 R3 ZIP SHA-256 `08f157905f96d704a3010cf57fc30f605a6b44458999d4c398492d3fb0fc563c`.
+- Baseline pré-source-critique : v2.2.8 ZIP SHA-256 `75971305d624d898c4ca488f65fa8c0eb6c24bc4bf6439d53807e37a7ef97359`.
 - Package d’acquisition/contrôle source-critique : SHA-256 `ac147c04f236fece9a708085bf4ada0320ed039e080593a787ee06c642d98335`.
-- 136 IDs de lettre et 909 IDs de paragraphe d’affichage conservés ; aucun ajout, suppression, fusion ou renumérotation de lettre.
-- Corrections françaises bornées : #48 (`tutti` → « tous »), #57 (`Voluntate`), #71 (1939), #82 (note éditoriale : 7 octobre 1938), #97 (`braccia` → « bras »), #122 (unité de sens restaurée).
-- Métadonnées bornées : destinataires #52/#107 ; dates/lieux #53/#66/#71/#82/#93/#111/#134.
-- Appareil éditorial identifié sans suppression de texte/ID dans #55/#60/#61/#63/#68/#82 ; #63 est rendu comme intertitre éditorial distinct.
-- Migration bornée héritée de R2 : pour les six DP modifiés entre la baseline v2.2.8 et R2, les surlignages et notes dont la sélection traverse un remplacement textuel v2.2.9 sont réancrés sur le texte corrigé sans renumérotation de DP ; R3 ne modifie aucun DP.
-- Variantes non résolues et versions plus complètes (#57, #97, #118, #121, #122/#123) restent explicitement hors mutation.
-- « Source et validation » distingue la validation historique contre la base anglaise d’un contrôle italien ciblé, borné aux témoins disponibles ; il ne revendique pas une vérification sur manuscrits autographes ni une édition critique définitive.
-- Le parallèle français est présenté comme disponible pour comparaison, sans jugement d’autorité absolu.
-- Les mentions « Note éditoriale » et « Intertitre éditorial » désignent l’appareil éditorial de la source et ne sont pas présentées comme des paroles écrites par Luisa.
-- Les numéros 1 à 136 sont des numéros éditoriaux stables de la collection actuelle de l’application, non une numérotation originale établie par Luisa. Le champ technique `canonical_number` reste un **nom de champ historique (legacy)** en v2.2.9 et ne constitue pas une preuve de numérotation canonique historique.
-- Le panneau « Source et validation » n’affiche plus l’empreinte unitaire héritée par lettre. Huit champs `fingerprint_sha256` hérités ne correspondent pas au `body_fr` courant ; ils restent inchangés afin de préserver le verrou byte-identique de `corpus.json`. L’empreinte globale du corpus, utilisée par les contrôles d’intégrité/import, a été recomputée indépendamment et reste valide.
-- R3 modifie l’Aide / À propos / libellés de confiance, le README, la révision du cache shell et la compatibilité du gate CI avec le suffixe de révision `-r3` ; `corpus.json` reste octet pour octet identique à R2.
+- La mutation `V229.TEXT.048.TUTTI` est retirée de l’autorité : les témoins italiens acquis divergent entre `tutti` et `tutto` et aucun témoin matériellement plus fort ne tranche la variante. La formulation française déployée `nous transforme complètement en Jésus` est donc restaurée en attente d’une preuve plus forte.
+- Gouvernance source-critique courante : **45 mutations autorisées**, **17 lettres mutées**, **7 loci tenus en HOLD**. Letter 48 devient `HOLD_NO_MUTATION`.
+- Les cinq autres corrections textuelles restent autorisées : #57 (`Voluntate`), #71 (1939), #82 (note éditoriale : 7 octobre 1938), #97 (`braccia` → « bras »), #122 (unité de sens restaurée).
+- Les 34 mutations de métadonnées et les 6 classifications d’appareil éditorial restent inchangées et autorisées.
+- 136 IDs de lettre et 909 IDs de paragraphe d’affichage sont conservés ; aucun ajout, suppression, fusion ou renumérotation de lettre.
+- Migration de sélection : seules les **cinq** modifications textuelles encore actives entre la baseline v2.2.8 et R4 disposent d’une règle de réancrage. Letter 48 n’en a plus besoin car son texte R4 est identique au texte déployé v2.2.8 à ce locus.
+- Le corpus et le shell utilisent tous deux un suffixe de cache `-r4` afin qu’une PWA installée ne puisse pas conserver le corpus R3 supersédé sous la même clé de cache.
+- Le gate GitHub Actions accepte désormais un suffixe de révision optionnel `-rN` pour **SHELL_CACHE et CORPUS_CACHE**, tout en imposant la même version sémantique 2.2.9.
+- « Source et validation » conserve les formulations prudentes introduites en R3 : collection éditoriale actuelle, base historique anglaise, contrôle italien ciblé et borné, sans revendication d’autographes ni d’édition critique définitive.
+- Les numéros 1 à 136 restent des numéros éditoriaux stables de l’application ; `canonical_number` demeure un nom de champ historique (legacy), pas une preuve de numérotation originale de Luisa.
+- Le panneau « Source et validation » n’expose pas les huit empreintes unitaires héritées incohérentes (#65, #67, #68, #70, #72–#75). Elles restent une dette métadonnée séparée ; l’empreinte globale R4 est recomputée indépendamment.
+- Validation physique iPhone/iPad/Samsung, cycle PWA installé R3/R4 sur origine HTTPS et VoiceOver/TalkBack/NVDA restent externes.
 
 ## v2.2.8 — Four-pass audit remediation and Help truthfulness (25 août 2026)
 
@@ -193,7 +206,7 @@ git push origin main
 - Navigation principale : Accueil · Lettres · Recherche · Mon Espace · Explorer.
 - Mon Espace conserve Favoris · Notes · Surlignages, avec totaux explicites et section À réancrer.
 - Réglages, aide et sauvegarde sont regroupés dans une surface unique.
-- Le corpus canonique reste inchangé.
+- Le corpus de la collection reste inchangé.
 
 
 ## LET-G — PWA, hors ligne, ressources et mises à jour

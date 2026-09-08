@@ -76,6 +76,8 @@ body{overflow:hidden;}
 .top-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;
   border-bottom:0.5px solid var(--border);background:var(--ivory);flex-shrink:0;}
 .top-bar .title{font-family:var(--serif);font-style:italic;font-size:17px;color:var(--night);}
+.top-actions{display:flex;align-items:center;gap:2px;}
+.phone-help-entry{display:flex;}
 
 /* Letter list item */
 .letter-item{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;
@@ -530,6 +532,7 @@ mark.hl:hover{opacity:.7;}
    LET-D keeps phone-class devices in phone mode across rotation, while tablet/desktop
    layout follows the current viewport width so narrow iPad Split View becomes phone mode. */
 html[data-layout="wide"] .phone-nav{display:none!important;}
+html[data-layout="wide"] .phone-help-entry{display:none!important;}
 html[data-layout="wide"] #phone-reader{display:none!important;position:relative!important;}
 
 html[data-layout="wide"] #app{flex-direction:row;}
@@ -714,7 +717,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
           <strong>Mon Espace</strong> regroupe vos Favoris, Notes, Surlignages et la sauvegarde.<br>
           <strong>Explorer</strong> propose des parcours, situations, thèmes, destinataires et la chronologie.
         </div>
-        <div class="help-tip">Sur téléphone, utilisez la barre du bas. Sur tablette/ordinateur, la navigation latérale garde le même ordre.</div>
+        <div class="help-tip">Sur téléphone, utilisez la barre du bas. Sur tablette/ordinateur, la navigation latérale garde le même ordre. Retrouvez cette aide à tout moment avec le bouton <strong>?</strong> / <strong>Aide</strong>.</div>
       </div>
 
       <div class="help-slide" data-help-key="daily">
@@ -962,6 +965,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
     <button class="snav-item" onclick="switchPanel('p-notes')" id="snav-notes" aria-label="Mon Espace"><i class="ti ti-user-circle" aria-hidden="true"></i>Mon Espace</button>
     <button class="snav-item" onclick="switchPanel('p-explore')" id="snav-explore" aria-label="Explorer"><i class="ti ti-layout-grid" aria-hidden="true"></i>Explorer</button>
     <div class="sidebar-bottom">
+      <button class="snav-item" id="snav-help" onclick="openContextHelp(this)" aria-label="Aide sur l’écran actuel"><i class="ti ti-help-circle" aria-hidden="true"></i>Aide</button>
       <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v2.2.9 · 2026-09-08</div>
     </div>
   </nav>
@@ -973,6 +977,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
     <div class="panel active" id="p-home">
       <div class="top-bar">
         <span class="title" role="heading" aria-level="1">Lettres de Luisa</span>
+        <button class="btn-icon phone-help-entry" onclick="openHelp('navigation',this)" aria-label="Aide — Accueil"><i class="ti ti-help-circle" aria-hidden="true"></i></button>
       </div>
       <div class="scroll" id="home-scroll">
         <div class="install-banner" id="install-banner" role="banner">
@@ -1020,7 +1025,10 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
     <div class="panel" id="p-list">
       <div class="top-bar">
         <span class="title" id="list-title" role="heading" aria-level="1">136 Lettres</span>
-        <button class="btn-icon" onclick="resetFilter()" aria-label="Réinitialiser le filtre"><i class="ti ti-filter-off" aria-hidden="true"></i></button>
+        <div class="top-actions">
+          <button class="btn-icon phone-help-entry" onclick="openHelp('navigation',this)" aria-label="Aide — Lettres"><i class="ti ti-help-circle" aria-hidden="true"></i></button>
+          <button class="btn-icon" onclick="resetFilter()" aria-label="Réinitialiser le filtre"><i class="ti ti-filter-off" aria-hidden="true"></i></button>
+        </div>
       </div>
       <div class="filter-row" id="filter-row" role="toolbar" aria-label="Filtres"></div>
       <div id="list-read-progress" style="display:none;padding:4px 16px 8px">
@@ -1034,7 +1042,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
 
     <!-- SEARCH -->
     <div class="panel" id="p-search">
-      <div class="top-bar"><span class="title" role="heading" aria-level="1">Recherche</span></div>
+      <div class="top-bar"><span class="title" role="heading" aria-level="1">Recherche</span><button class="btn-icon phone-help-entry" onclick="openHelp('search',this)" aria-label="Aide — Recherche"><i class="ti ti-help-circle" aria-hidden="true"></i></button></div>
       <div class="search-bar" role="search">
         <i class="ti ti-search" aria-hidden="true"></i>
         <input type="search" id="search-input" placeholder="Mots-clés, thème, destinataire…"
@@ -1058,7 +1066,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
 
     <!-- EXPLORE -->
     <div class="panel" id="p-explore">
-      <div class="top-bar"><span class="title" role="heading" aria-level="1">Explorer</span></div>
+      <div class="top-bar"><span class="title" role="heading" aria-level="1">Explorer</span><button class="btn-icon phone-help-entry" onclick="openHelp('explore',this)" aria-label="Aide — Explorer"><i class="ti ti-help-circle" aria-hidden="true"></i></button></div>
       <div class="scroll">
         <div class="explore-section">
           <div class="exp-title" role="heading" aria-level="2">Parcours spirituels</div>
@@ -1088,7 +1096,10 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
     <div class="panel" id="p-notes">
       <div class="top-bar">
         <span class="title" role="heading" aria-level="1">Mon Espace</span>
-        <button class="btn-icon" onclick="openTextBar('data')" aria-label="Réglages, aide et sauvegarde"><i class="ti ti-settings" aria-hidden="true"></i></button>
+        <div class="top-actions">
+          <button class="btn-icon phone-help-entry" onclick="openHelp('workspace',this)" aria-label="Aide — Mon Espace"><i class="ti ti-help-circle" aria-hidden="true"></i></button>
+          <button class="btn-icon" onclick="openTextBar('data')" aria-label="Réglages, aide et sauvegarde"><i class="ti ti-settings" aria-hidden="true"></i></button>
+        </div>
       </div>
       <div class="tab-row" role="tablist">
         <button class="tab active" id="tab-favs" onclick="setTab(this,'t-favs')" role="tab" aria-selected="true" aria-controls="t-favs">Favoris <span class="tab-count" id="workspace-fav-count">0</span></button>
@@ -1175,6 +1186,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
         <button class="nav-btn" id="pr-btn-prev" onclick="prevLetter()" aria-label="Lettre précédente"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
         <span id="pr-pos" style="min-width:50px;text-align:center" aria-live="polite">— / 136</span>
         <button class="nav-btn" id="pr-btn-next" onclick="nextLetter()" aria-label="Lettre suivante"><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
+        <button class="btn-icon phone-help-entry" onclick="openHelp('reader',this)" aria-label="Aide — Lecture"><i class="ti ti-help-circle" aria-hidden="true"></i></button>
       </div>
     </div>
     <div class="scroll" id="phone-reader-scroll" style="flex:1" onscroll="updateReadProgress('pr')">
@@ -1641,7 +1653,6 @@ function resolveHighlightRange(item, sourceText) {
   return {ok:false,start:start,end:end,recovered:false,reason:'text_not_found'};
 }
 const SOURCE_CRITICAL_TEXT_MIGRATIONS = Object.freeze({
-  'LP.LETTER.048.DP001':Object.freeze({old:'nous transforme complètement en Jésus',new:'nous transforme tous en Jésus'}),
   'LP.LETTER.057.DP001':Object.freeze({old:'In Volunatate Dei',new:'In Voluntate Dei'}),
   'LP.LETTER.071.DP005':Object.freeze({old:'Corato, 24 mars 1929.',new:'Corato, 24 mars 1939.'}),
   'LP.LETTER.082.DP004':Object.freeze({old:'(*) Luisa quitta l’Orphelinat le 10 octobre 1938',new:'(*) Luisa quitta l’Orphelinat le 7 octobre 1938'}),
@@ -1668,7 +1679,7 @@ function migrateSourceCriticalSelection(item, sourceText, selectionField) {
   function mapEnd(pos){ if(pos<=oldStart)return pos; if(pos>=oldEnd)return pos+delta; return oldStart+rule.new.length; }
   var start=mapStart(resolved.start), end=mapEnd(resolved.end);
   if (end < start) end=start;
-  var next=Object.assign({},item,{offset_start:start,offset_end:end,paragraph_fingerprint:fingerprintText(current),corpus_fingerprint:CORPUS_META.fingerprint || '',recovered:true,source_critical_migration:'v2.2.9-R2'});
+  var next=Object.assign({},item,{offset_start:start,offset_end:end,paragraph_fingerprint:fingerprintText(current),corpus_fingerprint:CORPUS_META.fingerprint || '',recovered:true,source_critical_migration:'v2.2.9-R4'});
   var newSnap=current.slice(start,end);
   if (field==='selection_text') next.selection_text=newSnap;
   else {next.text_snapshot=newSnap;next.text=newSnap;}
@@ -1685,7 +1696,7 @@ function canonicalizeNoteSelectionRecord(item, sourceText) {
   var changed = migrated.changed || next.offset_start !== resolved.start || next.offset_end !== resolved.end || next.paragraph_fingerprint !== fingerprintText(sourceText) || next.corpus_fingerprint !== (CORPUS_META.fingerprint || '');
   next = Object.assign({},next,{offset_start:resolved.start,offset_end:resolved.end,paragraph_fingerprint:fingerprintText(sourceText),corpus_fingerprint:CORPUS_META.fingerprint || ''});
   if (resolved.recovered || migrated.changed) next.selection_recovered = true;
-  if (migrated.changed) next.source_critical_migration = 'v2.2.9-R2';
+  if (migrated.changed) next.source_critical_migration = 'v2.2.9-R4';
   return {item:next,changed:changed};
 }
 function enrichHighlightRecord(item, sourceText) {
@@ -2995,7 +3006,7 @@ function buildDiagnostics() {
     'Diagnostic — Lettres de Luisa Piccarreta',
     'App: v'+APP_VERSION,
     'Corpus: '+(CORPUS_META.version||'—')+' · '+(CORPUS_META.fingerprint||'—'),
-    'SW: '+controller+' · shell=luisa-letters-shell-v'+APP_VERSION+'-r3 · corpus=luisa-letters-corpus-v'+APP_VERSION,
+    'SW: '+controller+' · shell=luisa-letters-shell-v'+APP_VERSION+'-r5 · corpus=luisa-letters-corpus-v'+APP_VERSION+'-r4',
     'Mode: '+standalone,
     'Stockage local: '+storageDiagnosticStatus(),
     'Thème: '+STATE.theme,
@@ -3041,7 +3052,7 @@ function openHelpFromSettings() {
   var settingsDialog=document.getElementById('text-size-bar');
   var opener=_dialogReturnFocus.get(settingsDialog) || document.activeElement;
   closeTextBar(true);
-  setTimeout(function(){ openHelp('navigation', opener); }, 20);
+  setTimeout(function(){ openHelp('settings', opener); }, 20);
 }
 function closeTextBar(suppressReturnFocus) {
   document.getElementById('settings-overlay').classList.remove('open');
@@ -3742,6 +3753,16 @@ function helpSlideIndex(key) {
   var idx=slides.findIndex(function(slide){return slide.getAttribute('data-help-key')===key;});
   return idx >= 0 ? idx : 0;
 }
+
+function currentHelpKey() {
+  var active=document.querySelector('.panel.active'), id=active ? active.id : 'p-home';
+  if (id === 'p-search') return 'search';
+  if (id === 'p-notes') return 'workspace';
+  if (id === 'p-explore') return 'explore';
+  if (id === 'p-list' && currentLetterIdx >= 0 && readerIsRouteVisible()) return 'reader';
+  return 'navigation';
+}
+function openContextHelp(opener) { openHelp(currentHelpKey(), opener || document.activeElement); }
 
 function openHelp(startSlide, returnFocusOverride) {
   _helpSlides = helpSlideCount();

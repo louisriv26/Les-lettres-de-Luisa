@@ -128,7 +128,7 @@ jobs:
           with open('sw.js') as f: sw = f.read()
           app_ver_m = re.search(r"APP_VERSION\s*=\s*['\"](\d+\.\d+\.\d+)['\"]", script)
           shell_m = re.search(r"SHELL_CACHE\s*=\s*'luisa-letters-shell-v(\d+\.\d+\.\d+)(?:-r\d+)?'", sw)
-          corpus_m = re.search(r"CORPUS_CACHE\s*=\s*'luisa-letters-corpus-v(\d+\.\d+\.\d+)'", sw)
+          corpus_m = re.search(r"CORPUS_CACHE\s*=\s*'luisa-letters-corpus-v(\d+\.\d+\.\d+)(?:-r\d+)?'", sw)
           if not app_ver_m or not shell_m or not corpus_m:
               errors.append('Unable to resolve APP_VERSION/SHELL_CACHE/CORPUS_CACHE release identity')
           else:
