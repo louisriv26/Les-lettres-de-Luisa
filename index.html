@@ -158,6 +158,8 @@ html[data-theme="dark"] .topic-pill{color:#D4A050;}
 
 .letter-body{padding:0 24px 8px;}
 .dp{font-family:var(--body);font-size:var(--reader-size);line-height:1.82;color:var(--ink);margin-bottom:1.3em;}
+.source-editor-note{font-size:.93em;font-style:italic;color:var(--muted);opacity:.92;}
+.source-editor-note::before{content:"Note éditoriale · ";font-family:var(--sans);font-size:.78em;font-style:normal;font-weight:700;letter-spacing:.035em;color:var(--gold-text);}.source-editor-note.source-editor-heading::before{content:"Intertitre éditorial · ";}
 
 /* Highlights */
 mark.hl{border-radius:3px;padding:0 1px;cursor:pointer;transition:opacity .15s;}
@@ -688,7 +690,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
   <div class="path-letter-list" id="path-letter-list"></div>
 </div>
 
-<!-- Help / Onboarding modal — v2.2.8 Aide consolidated with À propos as final section -->
+<!-- Help / Onboarding modal — v2.2.9 source-critical remediation -->
 <div id="help-overlay" aria-hidden="true" onclick="helpOverlayClick(event)">
   <div id="help-modal" role="dialog" aria-modal="true" aria-labelledby="help-modal-title" tabindex="-1">
     <div class="help-header">
@@ -707,7 +709,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
         <div class="help-body">
           Les cinq destinations principales sont <strong>Accueil · Lettres · Recherche · Mon Espace · Explorer</strong>.<br><br>
           <strong>Accueil</strong> rassemble la Lettre du jour, votre progression, les situations spirituelles et la reprise de lecture.<br>
-          <strong>Lettres</strong> donne accès aux 136 lettres : utilisez <strong>Toutes · Favoris · Non lues</strong> ou les filtres thématiques. Un cœur repère un Favori, un point doré une lettre non lue ; une lettre déjà marquée Lu apparaît plus discrètement.<br>
+          <strong>Lettres</strong> donne accès aux 136 entrées de la collection : utilisez <strong>Toutes · Favoris · Non lues</strong> ou les filtres thématiques. Un cœur repère un Favori, un point doré une lettre non lue ; une lettre déjà marquée Lu apparaît plus discrètement.<br>
           <strong>Recherche</strong> retrouve un mot ou une expression dans les lettres et leurs métadonnées.<br>
           <strong>Mon Espace</strong> regroupe vos Favoris, Notes, Surlignages et la sauvegarde.<br>
           <strong>Explorer</strong> propose des parcours, situations, thèmes, destinataires et la chronologie.
@@ -736,7 +738,9 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
           <strong>Partager</strong> — ouvre les options de partage de votre appareil avec un lien stable vers la lettre et, lorsque possible, le passage actuel ; si le partage direct n’est pas disponible, le lien et la référence sont copiés.<br>
           <strong>Aa Texte</strong> — ouvre les réglages de taille et de thème.<br><br>
           Les flèches du lecteur passent à la lettre précédente ou suivante. Votre position est enregistrée avec un repère de paragraphe pour mieux résister aux changements de taille et de mise en page.<br><br>
-          <strong>Source et validation</strong> affiche des informations de traçabilité sur la lettre : identifiant, base de traduction, état du parallèle français, terminologie et validation. L’empreinte technique sert au contrôle du corpus ; elle ne modifie pas le texte lu.
+          <strong>Source et validation</strong> présente les informations de traçabilité disponibles pour chaque entrée : identifiant, base historique de traduction, parallèle français, terminologie et état de validation. La mention <strong>« validée contre la base anglaise »</strong> décrit le contrôle effectué dans le cadre de la traduction française historique de l’application ; elle ne signifie pas que le texte a été vérifié sur un manuscrit autographe. Pour certains loci corrigés en v2.2.9, un <strong>contrôle ciblé des sources italiennes disponibles</strong> est indiqué séparément. Certaines variantes ou versions parallèles plus complètes restent volontairement non fusionnées tant que leur autorité documentaire n’est pas suffisamment établie.<br><br>
+          Les mentions <strong>« Note éditoriale »</strong> et <strong>« Intertitre éditorial »</strong> identifient des éléments provenant de l’appareil éditorial de la source ; ils ne sont pas présentés comme des paroles écrites par Luisa.<br><br>
+          Les numéros 1 à 136 sont les <strong>numéros éditoriaux stables de la collection actuelle de l’application</strong> ; ils ne constituent pas une numérotation originale établie par Luisa.
         </div>
       </div>
 
@@ -833,11 +837,12 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
         <div class="help-icon"><i class="ti ti-file-text"></i></div>
         <h2 class="help-title">À propos</h2>
         <div class="help-body">
-          <strong>Lettres de Luisa Piccarreta</strong> est une application de lecture, recherche et exploration d’un corpus de <strong>136 lettres</strong> consacré à la spiritualité de la Divine Volonté.<br><br>
-          Le corpus utilise des identifiants stables et des paragraphes d’affichage reliés au texte source afin de permettre la recherche, les liens précis, les notes, les surlignages et la reprise de lecture sans modifier le texte lu.<br><br>
-          <strong>Version de l’app :</strong> v2.2.8<br>
-          <strong>Build :</strong> 25 août 2026<br>
-          <strong>Corpus :</strong> 136 lettres · 909 paragraphes d’affichage<br><br>
+          <strong>Lettres de Luisa Piccarreta</strong> est une application de lecture, de recherche et d’exploration d’une <strong>collection éditoriale actuelle de 136 entrées</strong> consacrée à la correspondance de Luisa Piccarreta et à la spiritualité de la Divine Volonté.<br><br>
+          Cette collection ne constitue pas l’ensemble de la correspondance connue de Luisa ni une édition critique définitive. Le texte français de l’application a historiquement été établi à partir d’une base anglaise, avec des comparaisons françaises. En v2.2.9, certains textes et métadonnées ont fait l’objet d’un <strong>contrôle ciblé à partir des témoins italiens disponibles</strong>, tout en conservant les identifiants et la structure de l’application. Certaines variantes et versions parallèles plus complètes restent à étudier lorsque des témoins de plus haute autorité seront disponibles.<br><br>
+          La collection utilise des identifiants stables et des paragraphes d’affichage reliés au texte source afin de permettre la recherche, les liens précis, les notes, les surlignages et la reprise de lecture sans modifier le texte lu.<br><br>
+          <strong>Version de l’app :</strong> v2.2.9<br>
+          <strong>Build :</strong> 8 septembre 2026<br>
+          <strong>Collection actuelle :</strong> 136 entrées · 909 paragraphes d’affichage<br><br>
           <strong>Confidentialité :</strong> vos données personnelles restent dans le stockage local de cette app, sauf lorsque vous choisissez vous-même de les exporter. Elles ne sont pas automatiquement partagées avec les autres apps de la Collection Luisa et ne sont pas incluses dans les liens, signalements ou diagnostics.
         </div>
         <div class="help-tip">Pour une assistance technique, utilisez Copier le diagnostic : il n’inclut pas vos notes, surlignages, favoris ni votre position de lecture.</div>
@@ -931,7 +936,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
   <div class="settings-section" id="settings-help-section">
     <div class="settings-label">Aide</div>
     <button class="settings-action" id="settings-help-btn" onclick="openHelpFromSettings()" aria-label="Ouvrir l’aide"><i class="ti ti-help-circle" aria-hidden="true"></i> Ouvrir l’aide</button>
-    <div class="settings-current">À propos se trouve à la fin de l’Aide · v2.2.8 · 2026-08-25</div>
+    <div class="settings-current">À propos se trouve à la fin de l’Aide · v2.2.9 · 2026-09-08</div>
   </div>
 </div>
 
@@ -957,7 +962,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
     <button class="snav-item" onclick="switchPanel('p-notes')" id="snav-notes" aria-label="Mon Espace"><i class="ti ti-user-circle" aria-hidden="true"></i>Mon Espace</button>
     <button class="snav-item" onclick="switchPanel('p-explore')" id="snav-explore" aria-label="Explorer"><i class="ti ti-layout-grid" aria-hidden="true"></i>Explorer</button>
     <div class="sidebar-bottom">
-      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v2.2.8 · 2026-08-25</div>
+      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v2.2.9 · 2026-09-08</div>
     </div>
   </nav>
 
@@ -1007,7 +1012,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
           <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:16px;color:var(--muted)"></i>
         </button>
         <div style="height:12px"></div>
-        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v2.2.8 · 2026-08-25</div>
+        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v2.2.9 · 2026-09-08</div>
       </div>
     </div>
 
@@ -1109,7 +1114,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
     <div id="reader-empty">
       <i class="ti ti-book-open" aria-hidden="true"></i>
       <p>Sélectionnez une lettre<br>pour commencer la lecture</p>
-      <small>136 lettres de Luisa Piccarreta</small>
+      <small>136 entrées de la collection</small>
     </div>
     <div id="wide-reader" style="display:none;flex-direction:column;height:100%;overflow:hidden" role="main" aria-label="Lecteur">
       <div class="read-progress" id="wr-progress"></div>
@@ -1308,7 +1313,7 @@ function validateCuratedPaths() {
 /* ════════════════════════════════════════
    STATE
 ════════════════════════════════════════ */
-const APP_VERSION = '2.2.8';
+const APP_VERSION = '2.2.9';
 const STATE_SCHEMA_VERSION = 5;
 const WIDE_VIEWPORT_MIN = 768;
 const TEXT_LEVELS = Object.freeze({small:16, normal:19, large:22, xlarge:26});
@@ -1635,7 +1640,57 @@ function resolveHighlightRange(item, sourceText) {
   }
   return {ok:false,start:start,end:end,recovered:false,reason:'text_not_found'};
 }
+const SOURCE_CRITICAL_TEXT_MIGRATIONS = Object.freeze({
+  'LP.LETTER.048.DP001':Object.freeze({old:'nous transforme complètement en Jésus',new:'nous transforme tous en Jésus'}),
+  'LP.LETTER.057.DP001':Object.freeze({old:'In Volunatate Dei',new:'In Voluntate Dei'}),
+  'LP.LETTER.071.DP005':Object.freeze({old:'Corato, 24 mars 1929.',new:'Corato, 24 mars 1939.'}),
+  'LP.LETTER.082.DP004':Object.freeze({old:'(*) Luisa quitta l’Orphelinat le 10 octobre 1938',new:'(*) Luisa quitta l’Orphelinat le 7 octobre 1938'}),
+  'LP.LETTER.097.DP002':Object.freeze({old:'Que la paix et la confiance soient les armes avec lesquelles vous vous réfugiez, en toute rencontre, dans le Très Saint Cœur de Jésus, pour vivre avec Lui.',new:'Que la paix et la confiance soient les bras qui vous portent à vous réfugier, en toute rencontre, dans le Très Saint Cœur de Jésus, pour vivre avec Lui.'}),
+  'LP.LETTER.122.DP001':Object.freeze({old:'possédé ; elle nous fait renaître dans le bien connu ;',new:'La connaissance fait aimer et apprécier le bien possédé ; elle nous fait renaître dans le bien connu ;'})
+});
+function migrateSourceCriticalSelection(item, sourceText, selectionField) {
+  var rule = SOURCE_CRITICAL_TEXT_MIGRATIONS[item && item.dp_id];
+  if (!rule) return {item:item,changed:false};
+  var current = String(sourceText || '');
+  var field = selectionField || 'text_snapshot';
+  var snap = String((item && item[field]) || (field==='text_snapshot' ? item.text : '') || '');
+  if (!snap || !Number.isInteger(item.offset_start) || !Number.isInteger(item.offset_end)) return {item:item,changed:false};
+  var currentProbe = Object.assign({},item,{text_snapshot:snap,text:snap});
+  if (resolveHighlightRange(currentProbe,current).ok) return {item:item,changed:false};
+  var newAt = current.indexOf(rule.new);
+  if (newAt < 0 || current.indexOf(rule.new,newAt+1) >= 0) return {item:item,changed:false};
+  var oldSource = current.slice(0,newAt) + rule.old + current.slice(newAt+rule.new.length);
+  var oldProbe = Object.assign({},item,{text_snapshot:snap,text:snap});
+  var resolved = resolveHighlightRange(oldProbe,oldSource);
+  if (!resolved.ok) return {item:item,changed:false};
+  var oldStart=newAt, oldEnd=newAt+rule.old.length, delta=rule.new.length-rule.old.length;
+  function mapStart(pos){ if(pos<=oldStart)return pos; if(pos>=oldEnd)return pos+delta; return oldStart; }
+  function mapEnd(pos){ if(pos<=oldStart)return pos; if(pos>=oldEnd)return pos+delta; return oldStart+rule.new.length; }
+  var start=mapStart(resolved.start), end=mapEnd(resolved.end);
+  if (end < start) end=start;
+  var next=Object.assign({},item,{offset_start:start,offset_end:end,paragraph_fingerprint:fingerprintText(current),corpus_fingerprint:CORPUS_META.fingerprint || '',recovered:true,source_critical_migration:'v2.2.9-R2'});
+  var newSnap=current.slice(start,end);
+  if (field==='selection_text') next.selection_text=newSnap;
+  else {next.text_snapshot=newSnap;next.text=newSnap;}
+  return {item:next,changed:true};
+}
+function canonicalizeNoteSelectionRecord(item, sourceText) {
+  var migrated = migrateSourceCriticalSelection(item, sourceText, 'selection_text');
+  var next = migrated.item;
+  var snap = String(next.selection_text || '');
+  if (!snap || !Number.isInteger(next.offset_start) || !Number.isInteger(next.offset_end)) return {item:next,changed:migrated.changed};
+  var probe = Object.assign({},next,{text_snapshot:snap,text:snap});
+  var resolved = resolveHighlightRange(probe, sourceText);
+  if (!resolved.ok) return {item:next,changed:migrated.changed};
+  var changed = migrated.changed || next.offset_start !== resolved.start || next.offset_end !== resolved.end || next.paragraph_fingerprint !== fingerprintText(sourceText) || next.corpus_fingerprint !== (CORPUS_META.fingerprint || '');
+  next = Object.assign({},next,{offset_start:resolved.start,offset_end:resolved.end,paragraph_fingerprint:fingerprintText(sourceText),corpus_fingerprint:CORPUS_META.fingerprint || ''});
+  if (resolved.recovered || migrated.changed) next.selection_recovered = true;
+  if (migrated.changed) next.source_critical_migration = 'v2.2.9-R2';
+  return {item:next,changed:changed};
+}
 function enrichHighlightRecord(item, sourceText) {
+  var migrated = migrateSourceCriticalSelection(item, sourceText, 'text_snapshot');
+  item = migrated.item;
   var snap = String(item.text_snapshot || item.text || '');
   var resolved = resolveHighlightRange(item, sourceText);
   var start = resolved.ok ? resolved.start : Number(item.offset_start || 0);
@@ -1645,7 +1700,7 @@ function enrichHighlightRecord(item, sourceText) {
     paragraph_fingerprint:fingerprintText(sourceText), corpus_fingerprint:CORPUS_META.fingerprint || '',
     context_before:sourceText.slice(Math.max(0,start-32),Math.max(0,start)),
     context_after:sourceText.slice(Math.min(sourceText.length,end),Math.min(sourceText.length,end+32)),
-    stale:!resolved.ok, recovered:!!item.recovered || !!resolved.recovered,
+    stale:!resolved.ok, recovered:!!item.recovered || !!resolved.recovered || !!migrated.changed,
     stale_reason:resolved.ok ? '' : resolved.reason
   });
 }
@@ -1683,8 +1738,14 @@ function migrateLetCUserRecords() {
     if (!validRecordId(next.id,'note_')) { next.id = makeLegacyRecordId('note_', next.letter_id+'|'+(next.dp_id||'')+'|'+next.text, index); noteChanged = true; }
     if (!next.created_at) { next.created_at = now; noteChanged = true; }
     if (!next.updated_at) { next.updated_at = next.created_at; noteChanged = true; }
-    if (entry && !next.paragraph_fingerprint) { next.paragraph_fingerprint = fingerprintText(entry.dp.text_fr || ''); noteChanged = true; }
-    if (!next.corpus_fingerprint) { next.corpus_fingerprint = CORPUS_META.fingerprint || ''; noteChanged = true; }
+    if (entry && typeof next.selection_text === 'string' && Number.isInteger(next.offset_start) && Number.isInteger(next.offset_end)) {
+      var canonicalSelection = canonicalizeNoteSelectionRecord(next, entry.dp.text_fr || '');
+      if (canonicalSelection.changed) { next = canonicalSelection.item; noteChanged = true; }
+    }
+    var currentParagraphFingerprint = entry ? fingerprintText(entry.dp.text_fr || '') : next.paragraph_fingerprint;
+    if (entry && next.paragraph_fingerprint !== currentParagraphFingerprint) { next.paragraph_fingerprint = currentParagraphFingerprint; noteChanged = true; }
+    var currentCorpusFingerprint = CORPUS_META.fingerprint || '';
+    if (next.corpus_fingerprint !== currentCorpusFingerprint) { next.corpus_fingerprint = currentCorpusFingerprint; noteChanged = true; }
     return next;
   });
   var canonicalHighlights = canonicalizeHighlightsForCorpus(STATE.highlights);
@@ -2501,12 +2562,33 @@ function renderDpTextWithHighlights(dp, highlights) {
     if (!resolved.ok || item.stale) return;
     ranges.push({start:resolved.start,end:resolved.end,color:item.color,id:item.id});
   });
-  return segmentTextByRanges(source, ranges).map(function(segment) {
-    var safeText = esc(segment.text).replace(/\n/g,'<br>');
-    if (segment.kind !== 'highlight') return safeText;
-    var r = segment.range;
-    return '<mark class="hl hl-' + r.color + '" data-action="highlight-remove" data-hl-id="' + esc(r.id) + '" role="button" tabindex="0" aria-label="Supprimer ce surlignage">' + safeText + '</mark>';
-  }).join('');
+  function renderSlice(start,end) {
+    if (end <= start) return '';
+    var slice = source.slice(start,end);
+    var clipped = ranges.filter(function(r){return r.end>start && r.start<end;}).map(function(r){
+      return {start:Math.max(r.start,start)-start,end:Math.min(r.end,end)-start,color:r.color,id:r.id};
+    });
+    return segmentTextByRanges(slice, clipped).map(function(segment) {
+      var safeText = esc(segment.text).replace(/\n/g,'<br>');
+      if (segment.kind !== 'highlight') return safeText;
+      var r = segment.range;
+      return '<mark class="hl hl-' + r.color + '" data-action="highlight-remove" data-hl-id="' + esc(r.id) + '" role="button" tabindex="0" aria-label="Supprimer ce surlignage">' + safeText + '</mark>';
+    }).join('');
+  }
+  var notes = (dp.editorial_note_spans || []).filter(function(n){
+    return Number.isInteger(n.start) && Number.isInteger(n.end) && n.start>=0 && n.end>n.start && n.end<=source.length;
+  }).slice().sort(function(a,b){return a.start-b.start || a.end-b.end;});
+  if (!notes.length) return renderSlice(0,source.length);
+  var out=[], pos=0;
+  notes.forEach(function(note){
+    if (note.start < pos) return;
+    if (note.start > pos) out.push(renderSlice(pos,note.start));
+    var roleClass = note.role === 'SOURCE_EDITOR_HEADING' ? ' source-editor-heading' : '';
+    out.push('<span class="source-editor-note' + roleClass + '" role="note" title="' + esc(note.label_fr || 'Note éditoriale de la source') + '">' + renderSlice(note.start,note.end) + '</span>');
+    pos=note.end;
+  });
+  if (pos<source.length) out.push(renderSlice(pos,source.length));
+  return out.join('');
 }
 function buildDPs(l) {
   var dps = (l.display_paragraphs||[]).slice().sort(function(a,b){return (a.display_order||0)-(b.display_order||0);});
@@ -2546,11 +2628,11 @@ function buildTopics(l) {
 function buildTrust(l) {
   return [
     ['Identifiant', `<span style="font-size:10px;font-family:monospace">${l.letter_id}</span>`],
-    ['Base traduction', 'Version anglaise'],
-    ['Parallèle français', l.french_parallel_status==='FR_PARALLEL_RELIABLE' ? '<span class="pass">✓ Fiable</span>' : esc(l.french_parallel_status||'—')],
+    ['Base historique de traduction', 'Version anglaise'],
+    ['Parallèle français', l.french_parallel_status==='FR_PARALLEL_RELIABLE' ? '<span class="pass">✓ Disponible pour comparaison</span>' : esc(l.french_parallel_status||'—')],
     ['Terminologie', l.terminology_status==='harmonized' ? '<span class="pass">✓ Harmonisée</span>' : esc(l.terminology_status||'—')],
-    ['Qualité', l.quality_status==='validated' ? '<span class="pass">✓ Validé</span>' : esc(l.quality_status||'—')],
-    l.fingerprint_sha256 ? ['Empreinte', `<span style="font-size:9px;font-family:monospace">${l.fingerprint_sha256.slice(0,24)}…</span>`] : null,
+    ['Validation de traduction', l.quality_status==='validated' ? '<span class="pass">✓ Validée contre la base anglaise</span>' : esc(l.quality_status||'—')],
+    l.source_critical_review ? ['Contrôle des sources italiennes', '<span class="pass">✓ Contrôle ciblé effectué · v2.2.9</span>'] : null,
   ].filter(Boolean).map(([k,v]) =>
     `<div class="trust-row"><span class="k">${k}</span><span class="v">${v}</span></div>`
   ).join('');
@@ -2913,7 +2995,7 @@ function buildDiagnostics() {
     'Diagnostic — Lettres de Luisa Piccarreta',
     'App: v'+APP_VERSION,
     'Corpus: '+(CORPUS_META.version||'—')+' · '+(CORPUS_META.fingerprint||'—'),
-    'SW: '+controller+' · shell=luisa-letters-shell-v'+APP_VERSION+' · corpus=luisa-letters-corpus-v'+APP_VERSION,
+    'SW: '+controller+' · shell=luisa-letters-shell-v'+APP_VERSION+'-r3 · corpus=luisa-letters-corpus-v'+APP_VERSION,
     'Mode: '+standalone,
     'Stockage local: '+storageDiagnosticStatus(),
     'Thème: '+STATE.theme,
@@ -4324,6 +4406,8 @@ window.__LET_C_TEST = Object.freeze({
   getState:snapshotState,
   fingerprintText:fingerprintText,
   resolveHighlightRange:resolveHighlightRange,
+  migrateSourceCriticalSelection:migrateSourceCriticalSelection,
+  canonicalizeNoteSelectionRecord:canonicalizeNoteSelectionRecord,
   enrichHighlightRecord:enrichHighlightRecord,
   migrateLetCUserRecords:migrateLetCUserRecords,
   showHighlightColors:showHighlightColors,

@@ -1,17 +1,17 @@
 # Lettres de Luisa Piccarreta — PWA
 
-Application de référence pour les Lettres de Luisa Piccarreta.  
-136 lettres · Spiritualité de la Divine Volonté · PWA installable avec repli hors ligne après première ouverture en ligne
+Application de lecture, recherche et exploration d’une collection éditoriale actuelle de Lettres de Luisa Piccarreta.  
+136 entrées de la collection · Spiritualité de la Divine Volonté · PWA installable avec repli hors ligne après première ouverture en ligne
 
 ---
 
-## Version courante : v2.2.8
+## Version courante : v2.2.9
 
-- Corpus protégé : 136 lettres (`luisa-letters-corpus-v2.2.8`)
-- SW cache : `luisa-letters-shell-v2.2.8`
+- Collection actuelle : 136 entrées (`luisa-letters-corpus-v2.2.9`) — IDs et 909 paragraphes d’affichage préservés ; elle ne représente pas l’ensemble de la correspondance connue ni une édition critique définitive
+- SW cache : `luisa-letters-shell-v2.2.9-r3`
 - LET-A : stockage isolé par domaine, import strict et transactionnel
 - LET-B : tailles sémantiques Petit 16 / Normal 19 / Grand 22 / Très grand 26, aperçu, thème Automatique/Clair/Sombre, champs iOS ≥16px
-- Déploiement public autorisé ; validation physique iPhone/iPad/Android et cycle PWA installé restent requis avant un PASS technique complet
+- Candidat de déploiement contrôlé ; validation physique iPhone/iPad/Android et cycle PWA installé restent requis avant un PASS technique complet
 
 ---
 
@@ -19,7 +19,7 @@ Application de référence pour les Lettres de Luisa Piccarreta.
 
 ```
 index.html        ← App complète (single-file PWA)
-corpus.json       ← 136 lettres, ~2.1 Mo
+corpus.json       ← 136 entrées de la collection, ~2.1 Mo
 sw.js             ← Service Worker (network-first shell + corpus)
 manifest.json     ← PWA manifest (orientation: any)
 icons/            ← famille finale verrouillée v1 : 60/120/180/192/512, maskable 512, favicons 16/32/ICO
@@ -34,7 +34,7 @@ Push sur `main` → GitHub Actions valide + déploie automatiquement sur GitHub 
 
 ```bash
 git add -A
-git commit -m "fix: v2.2.8 four-pass audit remediation and help truthfulness"
+git commit -m "docs: v2.2.9 R3 source-truthfulness alignment"
 git push origin main
 ```
 
@@ -48,10 +48,10 @@ git push origin main
 | Source paragraphs | 202 |
 | Display paragraphs | 909 |
 | Topics (topics_fr) | 45 |
-| Destinataires | 74 |
+| Destinataires | 73 |
 | IDs stables | `LP.LETTER.001` → `LP.LETTER.136` |
 
-**Ne pas modifier le corpus** — IDs stables référencés par les surlignages et notes utilisateur.
+**Ne jamais renuméroter les IDs stables.** Toute mutation de corpus doit être bornée par un ledger source-critique et préserver les 136 IDs de lettre et 909 IDs de paragraphe d’affichage.
 
 ---
 
@@ -73,6 +73,25 @@ git push origin main
 *Droits de diffusion : autorisation confirmée par le propriétaire le 2026-08-13. Le déploiement public de cette version est autorisé.*
 
 
+
+
+## v2.2.9 R3 — Alignement source-critique de l’Aide et d’À propos (8 septembre 2026)
+
+- Prédécesseur immédiat immuable de R3 : v2.2.9 R2 ZIP SHA-256 `72f482e0977110309c6afae3ab8e6980ee9968acf911aa184cf9ba7234d752b0`.
+- Baseline pré-source-critique utilisée par R2 : v2.2.8 ZIP SHA-256 `75971305d624d898c4ca488f65fa8c0eb6c24bc4bf6439d53807e37a7ef97359`.
+- Package d’acquisition/contrôle source-critique : SHA-256 `ac147c04f236fece9a708085bf4ada0320ed039e080593a787ee06c642d98335`.
+- 136 IDs de lettre et 909 IDs de paragraphe d’affichage conservés ; aucun ajout, suppression, fusion ou renumérotation de lettre.
+- Corrections françaises bornées : #48 (`tutti` → « tous »), #57 (`Voluntate`), #71 (1939), #82 (note éditoriale : 7 octobre 1938), #97 (`braccia` → « bras »), #122 (unité de sens restaurée).
+- Métadonnées bornées : destinataires #52/#107 ; dates/lieux #53/#66/#71/#82/#93/#111/#134.
+- Appareil éditorial identifié sans suppression de texte/ID dans #55/#60/#61/#63/#68/#82 ; #63 est rendu comme intertitre éditorial distinct.
+- Migration bornée héritée de R2 : pour les six DP modifiés entre la baseline v2.2.8 et R2, les surlignages et notes dont la sélection traverse un remplacement textuel v2.2.9 sont réancrés sur le texte corrigé sans renumérotation de DP ; R3 ne modifie aucun DP.
+- Variantes non résolues et versions plus complètes (#57, #97, #118, #121, #122/#123) restent explicitement hors mutation.
+- « Source et validation » distingue la validation historique contre la base anglaise d’un contrôle italien ciblé, borné aux témoins disponibles ; il ne revendique pas une vérification sur manuscrits autographes ni une édition critique définitive.
+- Le parallèle français est présenté comme disponible pour comparaison, sans jugement d’autorité absolu.
+- Les mentions « Note éditoriale » et « Intertitre éditorial » désignent l’appareil éditorial de la source et ne sont pas présentées comme des paroles écrites par Luisa.
+- Les numéros 1 à 136 sont des numéros éditoriaux stables de la collection actuelle de l’application, non une numérotation originale établie par Luisa. Le champ technique `canonical_number` reste un **nom de champ historique (legacy)** en v2.2.9 et ne constitue pas une preuve de numérotation canonique historique.
+- Le panneau « Source et validation » n’affiche plus l’empreinte unitaire héritée par lettre. Huit champs `fingerprint_sha256` hérités ne correspondent pas au `body_fr` courant ; ils restent inchangés afin de préserver le verrou byte-identique de `corpus.json`. L’empreinte globale du corpus, utilisée par les contrôles d’intégrité/import, a été recomputée indépendamment et reste valide.
+- R3 modifie l’Aide / À propos / libellés de confiance, le README, la révision du cache shell et la compatibilité du gate CI avec le suffixe de révision `-r3` ; `corpus.json` reste octet pour octet identique à R2.
 
 ## v2.2.8 — Four-pass audit remediation and Help truthfulness (25 août 2026)
 
@@ -165,7 +184,7 @@ git push origin main
 - Retour depuis un résultat de recherche : conservation de la requête et de la position de la liste.
 - Lettre du jour : identité persistée pour la date civile locale ; elle ne change pas après marquage Lu/rechargement le même jour.
 - Explorer : comptes de situations strictement dérivés du corpus, vue « Tous les destinataires », chronologie conservée.
-- Les six parcours sont validés contre les 136 numéros canoniques et leurs IDs stables avant l’initialisation. Leur progression dérive uniquement de `lp_read`.
+- Les six parcours sont validés contre les 136 numéros stables de l’application et leurs IDs stables avant l’initialisation. Leur progression dérive uniquement de `lp_read`.
 
 
 
@@ -183,7 +202,7 @@ git push origin main
 - L’installation du nouveau Service Worker échoue fermée si le shell frais ne peut pas être mis en cache ; l’ancien Service Worker reste alors la version de travail.
 - Les caches utilisent le préfixe propriétaire `luisa-letters-`; le nettoyage ne supprime que les caches de cette app (plus ses anciens noms v1.x explicitement reconnus).
 - Une mise à jour en attente n’est jamais appliquée automatiquement dans une session active. Elle attend l’action de l’utilisateur et refuse de recharger si une note non enregistrée ou un import est en cours.
-- Promesse hors ligne : **la toute première installation/ouverture nécessite Internet**. L’installation du Service Worker met maintenant en cache de façon fraîche le shell **et `corpus.json`** avant de pouvoir réussir ; après activation, les 136 lettres disposent donc d’un repli hors ligne. Les routes profondes et raccourcis avec paramètres retombent sur le shell canonique mis en cache. Le cycle réel installé reste à valider sur appareils.
+- Promesse hors ligne : **la toute première installation/ouverture nécessite Internet**. L’installation du Service Worker met maintenant en cache de façon fraîche le shell **et `corpus.json`** avant de pouvoir réussir ; après activation, les 136 entrées de la collection disposent donc d’un repli hors ligne. Les routes profondes et raccourcis avec paramètres retombent sur le shell canonique mis en cache. Le cycle réel installé reste à valider sur appareils.
 - Les polices Google restent un embellissement optionnel avec repli `Georgia`; les icônes Tabler sont épinglées et disposent de glyphes de secours locaux, donc l’interaction essentielle ne dépend pas du CDN.
 - `manifest.json` conserve `orientation: any`; les raccourcis Lettre du jour et Recherche utilisent des routes explicites.
 - La validation physique iPhone/iPad/Android et le cycle PWA réellement installé sur l’origine HTTPS restent requis avant un PASS de release LET-G.
