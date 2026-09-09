@@ -5,10 +5,10 @@ Application de lecture, recherche et exploration d’une collection éditoriale 
 
 ---
 
-## Version courante : v2.2.9
+## Version courante : v2.2.10
 
-- Collection actuelle : 136 entrées (`luisa-letters-corpus-v2.2.9`) — IDs et 909 paragraphes d’affichage préservés ; elle ne représente pas l’ensemble de la correspondance connue ni une édition critique définitive
-- SW cache : `luisa-letters-shell-v2.2.9-r11` · corpus cache : `luisa-letters-corpus-v2.2.9-r4` (corpus inchangé depuis R4)
+- Collection actuelle : 136 entrées (corpus byte-identical à R11) — IDs et 909 paragraphes d’affichage préservés ; elle ne représente pas l’ensemble de la correspondance connue ni une édition critique définitive
+- SW cache : `luisa-letters-shell-v2.2.10-r12` · corpus cache : `luisa-letters-corpus-v2.2.10-r12` (nouvelle génération de cache ; octets de `corpus.json` inchangés)
 - LET-A : stockage isolé par domaine, import strict et transactionnel
 - LET-B : tailles sémantiques Petit 16 / Normal 19 / Grand 22 / Très grand 26, aperçu, thème Automatique/Clair/Sombre, champs iOS ≥16px
 - Candidat de déploiement contrôlé ; validation physique iPhone/iPad/Android et cycle PWA installé restent requis avant un PASS technique complet
@@ -34,7 +34,7 @@ Push sur `main` → GitHub Actions valide + déploie automatiquement sur GitHub 
 
 ```bash
 git add -A
-git commit -m "fix: v2.2.9 R11 settings ultrashort hardening"
+git commit -m "fix: v2.2.10 R12 storage safety and search hardening"
 git push origin main
 ```
 
@@ -65,14 +65,31 @@ git push origin main
 - `lp_paths` est migré une seule fois vers `lp_read`, puis supprimé
 - Sauvegarde machine : format `luisa-letters-user-data`, schéma 5; import compatible avec les sauvegardes schémas 2, 3 et 4 ainsi que l’ancien format v1.
 - Un remplacement crée `lp_pre_restore_snapshot`; le dernier import peut être annulé depuis « Mon espace »
+- R12 ajoute `lp_pre_migration_snapshot` avant toute migration automatique autorisée et `lp_pending_transaction` comme journal de transaction récupérable. Un schéma futur (>5) place les écritures personnelles en protection jusqu’à mise à jour de l’app.
 - Les surfaces sombres principales utilisent `#1A2A4A` fixe (jamais `var(--night)` qui s'inverse en dark mode) ; la barre contextuelle de sélection conserve intentionnellement son fond distinct `#1C1830`.
 - `text-size-bar` est la feuille « Réglages » (z-index:550) ; le raccourci lecteur « Texte » y ouvre directement les réglages de lecture avec les mêmes variables typographiques que le lecteur
 
 ---
 
-*Droits de diffusion : autorisation confirmée par le propriétaire le 2026-08-13. Le déploiement public de cette version est autorisé.*
+*Droits de diffusion : autorisation confirmée par le propriétaire le 2026-08-13. **R12 reste un candidat contrôlé : sa promotion publique n’est pas autorisée avant clôture des gates physiques/installés explicitement requis.***
 
 
+
+
+## v2.2.10 R12 — Sécurité de stockage, simplification du filtre et recherche complétée (9 septembre 2026)
+
+- Prédécesseur : v2.2.9 R11 SHA-256 `b536cf5fd86a55107b223d484ed20990466ef987a5a3f4a3c0b9694b7b70dcb6`.
+- **Aucun changement de corpus ni de renderer** : `corpus.json` reste strictement byte-identical à R11 ; 136 lettres, 909 paragraphes d’affichage et empreinte globale `274fdaee331984da2a5f965f582663f3bdfb4ae87ab475c2001c227ad0aad66a` préservés.
+- Suppression du contrôle `∅` / filter-off redondant : `Toutes` devient l’unique mécanisme explicite pour revenir à la liste non filtrée.
+- Migrations automatiques durcies : une valeur stockée présente mais invalide n’est plus remplacée silencieusement par une valeur vide ; les états nettoyés de façon potentiellement destructive sont préservés et la migration est différée.
+- Un schéma utilisateur futur est détecté et protégé : R12 ne le rétrograde pas et bloque les écritures personnelles susceptibles de le corrompre jusqu’à mise à jour.
+- Avant toute migration automatique autorisée, R12 écrit une capture brute `lp_pre_migration_snapshot`. Si cette capture échoue, la migration n’a pas autorité à commencer. La même préservation brute est imposée avant la première réécriture utilisateur d’une clé chargée avec nettoyage/perte potentielle ; l’original reste donc récupérable.
+- `SafeStorage.writeBatch()` est entouré d’un journal `lp_pending_transaction` contenant l’état brut antérieur ; une transaction interrompue ou un rollback incomplet peut être restauré au prochain démarrage.
+- Les formulations de Mon Espace/Réglages/Aide distinguent désormais le stockage de l’app installée du stockage d’un contexte navigateur ; l’export JSON reste la sauvegarde de référence.
+- R12 demande au navigateur, en best effort, un stockage persistant quand l’API est disponible et l’indique dans les diagnostics sans le présenter comme une sauvegarde.
+- Recherche : les numéros `1–136` et leurs variantes zéro-remplies (`093`) donnent priorité à la lettre exacte ; les requêtes multi-mots utilisent une logique AND déterministe ; la phrase exacte et les occurrences dans un même paragraphe sont mieux classées ; le thème correspondant reste visible même s’il n’était pas dans les trois premières pastilles ; la position de la liste de résultats est capturée lors de toute sortie de Recherche.
+- Aucun moteur sémantique/IA, aucune synchronisation cloud, aucun changement de Hub et aucune migration IndexedDB ne sont introduits.
+- Candidat contrôlé : validation physique iPhone/iPad/Android, cycle PWA installé R11→R12 et technologies d’assistance restent des gates externes avant promotion publique.
 
 
 ## v2.2.9 R11 — Accessibilité des utilitaires en viewport wide ultra-court (9 septembre 2026)
@@ -321,4 +338,4 @@ git push origin main
 - `Partager` inclut désormais l’URL stable, le titre et la référence ; le repli presse-papiers copie le lien et la référence.
 - Réglages propose également **Copier le lien courant**, **Signaler un problème de texte** et **Copier le diagnostic**. Les notes, surlignages, favoris et positions de lecture ne sont jamais inclus automatiquement.
 - Le contrat de route ne dépend d’aucun transfert spécifique de plateforme. Son comportement réel en navigateur et en PWA installée doit encore être validé sur l’exact candidat avant toute revendication d’équivalence.
-- Le déploiement public est autorisé. Les validations physiques/installées/live restent nécessaires avant un **PASS technique complet** et demeurent des contrôles post-déploiement recommandés.
+- Pour **R12**, la promotion publique reste bloquée jusqu’aux validations physiques/installées/live définies dans son dossier de validation. Cette phrase remplace toute autorisation héritée d’une version antérieure.

@@ -28,7 +28,7 @@
 .ti-check::before{content:"✓"}.ti-sun::before{content:"☼"}.ti-pencil::before{content:"✎"}.ti-heart::before{content:"♡"}.ti-typography::before,.ti-letter-case::before{content:"Aa"}.ti-trash::before{content:"×"}
 .ti-shield-check::before{content:"✓"}.ti-share::before{content:"↗"}.ti-settings::before{content:"⚙"}.ti-highlight::before{content:"▰"}.ti-download::before{content:"↓"}.ti-upload::before{content:"↑"}
 .ti-arrow-left::before{content:"←"}.ti-x::before{content:"×"}.ti-wifi-off::before{content:"⊘"}.ti-route::before{content:"↝"}.ti-restore::before{content:"↶"}.ti-map-pin::before{content:"•"}
-.ti-help-circle::before{content:"?"}.ti-filter-off::before{content:"∅"}.ti-file-text::before{content:"▤"}.ti-calendar::before{content:"□"}.ti-calendar-off::before{content:"∅"}
+.ti-help-circle::before{content:"?"}.ti-file-text::before{content:"▤"}.ti-calendar::before{content:"□"}.ti-calendar-off::before{content:"∅"}
 .ti-arrow-forward::before{content:"→"}.ti-candle::before{content:"✦"}.ti-flower::before{content:"✿"}.ti-heart-handshake::before{content:"♡"}.ti-send::before{content:"↗"}.ti-shield-heart::before{content:"♡"}.ti-star::before{content:"☆"}.ti-wave-sine::before{content:"∿"}.ti-circle-half-2::before{content:"◐"}.ti-moon::before{content:"☾"}.ti-sparkles::before{content:"✦"}
 </style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/tabler-icons.min.css">
@@ -801,9 +801,9 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
         <div class="help-icon"><i class="ti ti-search"></i></div>
         <h2 class="help-title">Recherche</h2>
         <div class="help-body">
-          La recherche porte sur le <strong>texte, le titre, le destinataire, les thèmes, le numéro de lettre, la date et le lieu</strong>. Lorsqu’un passage du texte correspond, le résultat ouvre directement le paragraphe concerné. Pour une correspondance dans le titre, le destinataire, un thème, le numéro, la date ou le lieu, le résultat ouvre la lettre.<br><br>
-          Elle tolère les accents, différentes apostrophes et certaines variantes typographiques : vous n’avez donc pas besoin de reproduire exactement la ponctuation du texte.<br><br>
-          Lorsque vous ouvrez un résultat puis revenez à Recherche, la requête et la position de la liste sont restaurées.
+          La recherche porte sur le <strong>texte, le titre, le destinataire, les thèmes, le numéro de lettre, la date et le lieu</strong>. Plusieurs mots-clés peuvent être saisis ensemble : la lettre doit alors contenir tous les mots recherchés, et les correspondances les plus proches sont affichées d’abord. Lorsqu’un passage du texte correspond, le résultat ouvre directement le paragraphe concerné. Pour une correspondance dans les métadonnées ou répartie dans la lettre, le résultat ouvre la lettre.<br><br>
+          Saisir directement un numéro de <strong>1 à 136</strong> — y compris avec des zéros initiaux, par exemple <strong>093</strong> — place cette lettre en premier. Elle tolère aussi les accents, différentes apostrophes et certaines variantes typographiques : vous n’avez donc pas besoin de reproduire exactement la ponctuation du texte.<br><br>
+          Lorsque vous quittez Recherche puis y revenez, la requête et la position de la liste sont restaurées.
         </div>
       </div>
 
@@ -836,13 +836,13 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
         <div class="help-icon"><i class="ti ti-download"></i></div>
         <h2 class="help-title">Sauvegarder, importer et restaurer</h2>
         <div class="help-body">
-          Vos Favoris, Notes, Surlignages, lettres lues et positions sont conservés dans le <strong>stockage local de cette app sur cet appareil</strong>.<br><br>
+          Vos Favoris, Notes, Surlignages, lettres lues et positions sont conservés dans le <strong>stockage local de cette installation ou de ce contexte de l’app</strong>.<br><br>Sur iPhone/iPad, l’app Lettres ajoutée à l’écran d’accueil et une ouverture de Lettres dans Safari ou depuis Collection Luisa peuvent utiliser des stockages distincts. Pour retrouver les mêmes données, utilisez habituellement le même accès à Lettres.<br><br>
           <strong>Exporter</strong> crée la sauvegarde JSON restaurable.<br>
           <strong>Exporter en texte</strong> crée un journal lisible destiné à la consultation ; ce fichier texte n’est pas le format de restauration.<br>
           <strong>Importer</strong> vérifie la sauvegarde avant de proposer <strong>Fusionner</strong> ou <strong>Remplacer après sauvegarde de secours</strong>.<br>
           Après un remplacement, <strong>Annuler le dernier import</strong> restaure la sauvegarde de secours tant qu’elle est disponible.
         </div>
-        <div class="help-tip">Avant de désinstaller l’app, changer d’appareil, effacer les données du navigateur ou réinitialiser les données du site, exportez la sauvegarde JSON si vous souhaitez conserver vos données personnelles.</div>
+        <div class="help-tip">Avant de désinstaller l’app, changer d’appareil, effacer les données du navigateur ou réinitialiser les données du site, exportez la sauvegarde JSON. Une demande de stockage persistant, lorsqu’elle est acceptée par le navigateur, réduit certains risques d’éviction mais ne remplace jamais une sauvegarde.</div>
       </div>
 
       <div class="help-slide" data-help-key="support">
@@ -866,10 +866,10 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
           <strong>Lettres de Luisa Piccarreta</strong> est une application de lecture, de recherche et d’exploration d’une <strong>collection éditoriale actuelle de 136 entrées</strong> consacrée à la correspondance de Luisa Piccarreta et à la spiritualité de la Divine Volonté.<br><br>
           Cette collection ne constitue pas l’ensemble de la correspondance connue de Luisa ni une édition critique définitive. Le texte français de l’application a historiquement été établi à partir d’une base anglaise, avec des comparaisons françaises. En v2.2.9, certains textes et métadonnées ont fait l’objet d’un <strong>contrôle ciblé à partir des témoins italiens disponibles</strong>, tout en conservant les identifiants et la structure de l’application. Certaines variantes et versions parallèles plus complètes restent à étudier lorsque des témoins de plus haute autorité seront disponibles.<br><br>
           La collection utilise des identifiants stables et des paragraphes d’affichage reliés au texte source afin de permettre la recherche, les liens précis, les notes, les surlignages et la reprise de lecture sans modifier le texte lu.<br><br>
-          <strong>Version de l’app :</strong> v2.2.9<br>
-          <strong>Build :</strong> 8 septembre 2026<br>
+          <strong>Version de l’app :</strong> v2.2.10<br>
+          <strong>Build :</strong> 9 septembre 2026<br>
           <strong>Collection actuelle :</strong> 136 entrées · 909 paragraphes d’affichage<br><br>
-          <strong>Confidentialité :</strong> vos données personnelles restent dans le stockage local de cette app, sauf lorsque vous choisissez vous-même de les exporter. Elles ne sont pas automatiquement partagées avec les autres apps de la Collection Luisa et ne sont pas incluses dans les liens, signalements ou diagnostics.
+          <strong>Confidentialité :</strong> vos données personnelles restent dans le stockage local de cette installation ou de ce contexte de l’app, sauf lorsque vous choisissez vous-même de les exporter. Elles ne sont pas automatiquement partagées avec les autres apps de la Collection Luisa et ne sont pas incluses dans les liens, signalements ou diagnostics.
         </div>
         <div class="help-tip">Pour une assistance technique, utilisez Copier le diagnostic : il n’inclut pas vos notes, surlignages, favoris ni votre position de lecture.</div>
       </div>
@@ -939,7 +939,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
   </div>
   <div class="settings-section" id="settings-data-section">
     <div class="settings-label">Données et sauvegarde</div>
-    <div class="settings-data-note">Vos favoris, notes, surlignages, lettres lues et positions de lecture sont conservés sur cet appareil. Exportez une sauvegarde pour pouvoir les restaurer après un changement d’appareil, une réinstallation ou un effacement des données.</div>
+    <div class="settings-data-note">Vos favoris, notes, surlignages, lettres lues et positions de lecture sont conservés dans cette installation ou ce contexte de l’app. Sur iPhone/iPad, une app Lettres installée et une ouverture dans Safari/depuis Collection Luisa peuvent avoir des stockages distincts. Exportez une sauvegarde pour pouvoir restaurer vos données après un changement d’accès, d’appareil, une réinstallation ou un effacement.</div>
     <div id="settings-export-stats" class="export-stats" aria-live="polite"></div>
     <div class="export-row">
       <button class="export-btn primary" id="settings-export-btn" onclick="exportData()" aria-label="Exporter mes données"><i class="ti ti-download" aria-hidden="true"></i> Exporter</button>
@@ -963,7 +963,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
   <div class="settings-section" id="settings-help-section">
     <div class="settings-label">Aide</div>
     <button class="settings-action" id="settings-help-btn" onclick="openHelpFromSettings()" aria-label="Ouvrir l’aide"><i class="ti ti-help-circle" aria-hidden="true"></i> Ouvrir l’aide</button>
-    <div class="settings-current">À propos se trouve à la fin de l’Aide · v2.2.9 · 2026-09-08</div>
+    <div class="settings-current">À propos se trouve à la fin de l’Aide · v2.2.10 · 2026-09-09</div>
   </div>
 </div>
 
@@ -991,7 +991,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
     <div class="sidebar-bottom">
       <button class="snav-item" id="snav-settings" onclick="openTextBar()" aria-label="Réglages"><i class="ti ti-settings" aria-hidden="true"></i>Réglages</button>
       <button class="snav-item" id="snav-help" onclick="openContextHelp(this)" aria-label="Aide sur l’écran actuel"><i class="ti ti-help-circle" aria-hidden="true"></i>Aide</button>
-      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v2.2.9 · 2026-09-08</div>
+      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v2.2.10 · 2026-09-09</div>
     </div>
   </nav>
 
@@ -1045,7 +1045,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
           <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:16px;color:var(--muted)"></i>
         </button>
         <div style="height:12px"></div>
-        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v2.2.9 · 2026-09-08</div>
+        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v2.2.10 · 2026-09-09</div>
       </div>
     </div>
 
@@ -1055,7 +1055,6 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
         <span class="title" id="list-title" role="heading" aria-level="1">136 Lettres</span>
         <div class="top-actions">
           <button class="btn-icon phone-help-entry" onclick="openHelp('navigation',this)" aria-label="Aide — Lettres"><i class="ti ti-help-circle" aria-hidden="true"></i></button>
-          <button class="btn-icon" onclick="resetFilter()" aria-label="Réinitialiser le filtre"><i class="ti ti-filter-off" aria-hidden="true"></i></button>
         </div>
       </div>
       <div class="filter-row" id="filter-row" role="toolbar" aria-label="Filtres"></div>
@@ -1141,7 +1140,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
         <div class="workspace-status">
           <div class="workspace-status-title">Sauvegarde de mes données</div>
           <div id="workspace-backup-stats" class="workspace-status-text" aria-live="polite"></div>
-          <div class="workspace-status-text">Ces données sont conservées sur cet appareil.</div>
+          <div class="workspace-status-text" id="workspace-storage-context">Ces données sont conservées dans cette installation ou ce contexte de l’app.</div>
           <button class="workspace-tools-btn" id="workspace-backup-btn" onclick="openTextBar('data')" aria-label="Sauvegarder et restaurer mes données"><i class="ti ti-download" aria-hidden="true"></i> Sauvegarder et restaurer</button>
         </div>
       </div>
@@ -1350,8 +1349,18 @@ function validateCuratedPaths() {
 /* ════════════════════════════════════════
    STATE
 ════════════════════════════════════════ */
-const APP_VERSION = '2.2.9';
+const APP_VERSION = '2.2.10';
 const STATE_SCHEMA_VERSION = 5;
+const STORAGE_TRANSACTION_JOURNAL_KEY = 'lp_pending_transaction';
+const PRE_MIGRATION_SNAPSHOT_KEY = 'lp_pre_migration_snapshot';
+const SHELL_CACHE_ID = 'luisa-letters-shell-v2.2.10-r12';
+const CORPUS_CACHE_ID = 'luisa-letters-corpus-v2.2.10-r12';
+const PROTECTED_USER_STORAGE_KEYS = Object.freeze([
+  'lp_favs','lp_notes','lp_highlights','lp_read','lp_positions','lp_last','lp_size','lp_theme',
+  'lp_state_schema','lp_paths','lp_pre_restore_snapshot'
+]);
+let _preMigrationSnapshotReady = false;
+let _storagePersistenceStatus = 'non vérifié';
 const WIDE_VIEWPORT_MIN = 768;
 const TEXT_LEVELS = Object.freeze({small:16, normal:19, large:22, xlarge:26});
 const TEXT_LEVEL_ORDER = Object.freeze(['small','normal','large','xlarge']);
@@ -1361,7 +1370,7 @@ const BACKUP_APP_ID = 'lettres-de-luisa-piccarreta';
 const MAX_IMPORT_BYTES = 5 * 1024 * 1024;
 const LETTER_OF_DAY_KEY = 'lp_letter_of_day';
 const SEARCH_DEBOUNCE_MS = 140;
-let CORPUS = [], TOPICS_INDEX = {}, RECIPIENTS_INDEX = {};
+let CORPUS = [], TOPICS_INDEX = {}, RECIPIENTS_INDEX = {}, SEARCH_INDEX = [];
 let CORPUS_META = { fingerprint: '', version: '', totalLetters: 0, totalDisplayParagraphs: 0 };
 let currentLetterIdx = -1;
 let currentFilter = 'all';
@@ -1517,14 +1526,24 @@ const SafeStorage = {
   },
   readJSON: function(key, fallback, validator, cleaner) {
     var raw = this.readRaw(key);
-    if (!raw.ok || !raw.found) return {ok:raw.ok, found:raw.found, valid:raw.ok, value:fallback, key:key, error:raw.error};
+    if (!raw.ok || !raw.found) return {ok:raw.ok, found:raw.found, valid:raw.ok, value:fallback, key:key, error:raw.error, cleanerChanged:false};
     try {
       var parsed = JSON.parse(raw.value);
       if (hasDangerousKeys(parsed) || (validator && !validator(parsed))) throw new Error('invalid_' + key);
-      return {ok:true, found:true, valid:true, value:cleaner ? cleaner(parsed) : parsed, key:key};
+      var cleaned = cleaner ? cleaner(parsed) : parsed;
+      var cleanerChanged = false;
+      if (cleaner) {
+        try { cleanerChanged = JSON.stringify(cleaned) !== JSON.stringify(parsed); }
+        catch (compareError) { cleanerChanged = true; }
+      }
+      return {
+        ok:true, found:true, valid:true, value:cleaned, key:key, cleanerChanged:cleanerChanged,
+        sourceCount:Array.isArray(parsed)?parsed.length:null,
+        cleanedCount:Array.isArray(cleaned)?cleaned.length:null
+      };
     } catch (error) {
       console.warn('[Luisa] isolated state key ignored:', key, error);
-      return {ok:true, found:true, valid:false, value:fallback, key:key, error:error};
+      return {ok:true, found:true, valid:false, value:fallback, key:key, error:error, cleanerChanged:false};
     }
   },
   write: function(key, value) {
@@ -1545,29 +1564,73 @@ const SafeStorage = {
       return {ok:false, key:key, error:error};
     }
   },
+  restoreSnapshotEntries: function(snapshot) {
+    var ok = true;
+    for (var i = snapshot.length - 1; i >= 0; i--) {
+      var prior = snapshot[i];
+      var result = prior.found ? this.write(prior.key, prior.value) : this.remove(prior.key);
+      if (!result.ok) ok = false;
+    }
+    return ok;
+  },
   writeBatch: function(entries) {
+    if (!Array.isArray(entries) || !entries.length) return {ok:true, keys:[]};
+    if (entries.some(function(entry){return !entry || entry.key === STORAGE_TRANSACTION_JOURNAL_KEY;})) {
+      return {ok:false, phase:'validation', key:STORAGE_TRANSACTION_JOURNAL_KEY, rolledBack:true, error:'invalid_transaction_entry'};
+    }
     var snapshot = [];
     for (var i = 0; i < entries.length; i++) {
       var before = this.readRaw(entries[i].key);
       if (!before.ok) return {ok:false, key:entries[i].key, phase:'snapshot', rolledBack:true, error:before.error};
-      snapshot.push(before);
+      snapshot.push({key:before.key,found:before.found,value:before.value});
     }
+    var journal = {
+      format:'luisa-letters-storage-transaction', version:1, app_version:APP_VERSION,
+      created_at:new Date().toISOString(), entries:snapshot
+    };
+    var journalWrite = this.write(STORAGE_TRANSACTION_JOURNAL_KEY, JSON.stringify(journal));
+    if (!journalWrite.ok) return {ok:false,key:STORAGE_TRANSACTION_JOURNAL_KEY,phase:'journal',rolledBack:true,error:journalWrite.error};
+
     for (var j = 0; j < entries.length; j++) {
       var entry = entries[j];
       var result = entry.remove ? this.remove(entry.key) : this.write(entry.key, entry.value);
       if (!result.ok) {
-        var rollbackOk = true;
-        for (var k = j - 1; k >= 0; k--) {
-          var prior = snapshot[k];
-          var rollback = prior.found ? this.write(prior.key, prior.value) : this.remove(prior.key);
-          if (!rollback.ok) rollbackOk = false;
-        }
-        return {ok:false, key:entry.key, phase:'commit', rolledBack:rollbackOk, error:result.error};
+        var rollbackOk = this.restoreSnapshotEntries(snapshot.slice(0,j));
+        if (rollbackOk) this.remove(STORAGE_TRANSACTION_JOURNAL_KEY);
+        return {ok:false, key:entry.key, phase:'commit', rolledBack:rollbackOk, recoverable:!rollbackOk, error:result.error};
       }
+    }
+
+    var cleanup = this.remove(STORAGE_TRANSACTION_JOURNAL_KEY);
+    if (!cleanup.ok) {
+      var cleanupRollback = this.restoreSnapshotEntries(snapshot);
+      if (cleanupRollback) this.remove(STORAGE_TRANSACTION_JOURNAL_KEY);
+      return {ok:false,key:STORAGE_TRANSACTION_JOURNAL_KEY,phase:'journal_cleanup',rolledBack:cleanupRollback,recoverable:!cleanupRollback,error:cleanup.error};
     }
     return {ok:true, keys:entries.map(function(entry) { return entry.key; })};
   }
 };
+
+function recoverPendingStorageTransaction() {
+  var raw = SafeStorage.readRaw(STORAGE_TRANSACTION_JOURNAL_KEY);
+  if (!raw.ok || !raw.found) return {ok:raw.ok, skipped:true};
+  try {
+    var journal = JSON.parse(raw.value);
+    if (!isPlainObject(journal) || journal.format !== 'luisa-letters-storage-transaction' || journal.version !== 1 ||
+        !Array.isArray(journal.entries) || journal.entries.some(function(entry){
+          return !isPlainObject(entry) || typeof entry.key !== 'string' || entry.key === STORAGE_TRANSACTION_JOURNAL_KEY ||
+            typeof entry.found !== 'boolean' || (entry.found && typeof entry.value !== 'string');
+        })) throw new Error('invalid_storage_transaction_journal');
+    var restored = SafeStorage.restoreSnapshotEntries(journal.entries);
+    if (!restored) return {ok:false, recovered:false, retained:true, reason:'restore_failed'};
+    var removed = SafeStorage.remove(STORAGE_TRANSACTION_JOURNAL_KEY);
+    return removed.ok ? {ok:true,recovered:true} : {ok:false,recovered:true,retained:true,reason:'journal_remove_failed'};
+  } catch (error) {
+    console.warn('[Luisa] invalid storage transaction journal preserved for diagnosis:', error);
+    return {ok:false,recovered:false,retained:true,reason:'invalid_journal',error:error};
+  }
+}
+const STORAGE_RECOVERY_RESULT = recoverPendingStorageTransaction();
 
 function nearestTextLevel(px) {
   var value = Number(px);
@@ -1607,7 +1670,15 @@ function loadState() {
   var rawTheme = SafeStorage.readRaw('lp_theme');
   var theme = rawTheme.ok && rawTheme.found && ['system','light','dark'].indexOf(rawTheme.value) >= 0 ? rawTheme.value : 'system';
   var rawSchema = SafeStorage.readRaw('lp_state_schema');
-  var schema = rawSchema.ok && rawSchema.found ? parseInt(rawSchema.value, 10) : 1;
+  var schemaValid = !rawSchema.found || (rawSchema.ok && /^\d+$/.test(String(rawSchema.value||'')));
+  var schema = rawSchema.ok && rawSchema.found && schemaValid ? Number(rawSchema.value) : 1;
+  var invalidKeys=[favs,notes,lastRead,positions,read,highlights,legacyPaths].filter(function(item) {
+    return item.found && !item.valid;
+  }).map(function(item) { return item.key; });
+  var cleanerChangedKeys=[favs,notes,lastRead,positions,read,highlights].filter(function(item){return item.found && item.valid && item.cleanerChanged;}).map(function(item){return item.key;});
+  if (rawSize.found && !sizeState.valid) invalidKeys.push('lp_size');
+  if (rawTheme.found && ['system','light','dark'].indexOf(rawTheme.value) < 0) invalidKeys.push('lp_theme');
+  if (rawSchema.found && !schemaValid) invalidKeys.push('lp_state_schema');
   return {
     favs:new Set(favs.value), notes:notes.value, lastRead:lastRead.value,
     textLevel:sizeState.level, readerSize:TEXT_LEVELS[sizeState.level], theme:theme,
@@ -1616,14 +1687,73 @@ function loadState() {
     _textSizeValid:sizeState.valid, _rawSizeFound:rawSize.found,
     _legacyPaths:legacyPaths.value, _legacyPathsFound:legacyPaths.found,
     _legacyPathsValid:legacyPaths.valid, _stateSchema:Number.isInteger(schema) ? schema : 1,
-    _isolatedInvalidKeys:[favs,notes,lastRead,positions,read,highlights,legacyPaths].filter(function(item) {
-      return item.found && !item.valid;
-    }).map(function(item) { return item.key; })
+    _stateSchemaValid:schemaValid, _futureStateSchema:schemaValid && schema > STATE_SCHEMA_VERSION,
+    _isolatedInvalidKeys:Array.from(new Set(invalidKeys)),
+    _cleanerChangedKeys:Array.from(new Set(cleanerChangedKeys))
   };
 }
 const STATE = loadState();
 readerTextLevel = STATE.textLevel;
 readerSize = STATE.readerSize;
+
+function futureSchemaWriteGuard(key) {
+  if (!STATE._futureStateSchema) return null;
+  return {ok:false,key:key||'lp_state_schema',phase:'future_schema',rolledBack:true,error:'newer_state_schema_detected'};
+}
+function stateMigrationUnsafe(keys, allowCleanerChangedForLegacy) {
+  var invalid = new Set(STATE._isolatedInvalidKeys || []);
+  var changed = new Set(STATE._cleanerChangedKeys || []);
+  return (keys||[]).filter(function(key) {
+    if (invalid.has(key)) return true;
+    if (changed.has(key) && !(allowCleanerChangedForLegacy && STATE._stateSchema < STATE_SCHEMA_VERSION)) return true;
+    return false;
+  });
+}
+function buildRawStorageSnapshot(reason) {
+  var entries=[];
+  for (var i=0;i<PROTECTED_USER_STORAGE_KEYS.length;i++) {
+    var raw=SafeStorage.readRaw(PROTECTED_USER_STORAGE_KEYS[i]);
+    if (!raw.ok) return {ok:false,key:raw.key,phase:'pre_migration_snapshot_read',error:raw.error};
+    entries.push({key:raw.key,found:raw.found,value:raw.value});
+  }
+  return {ok:true,value:JSON.stringify({
+    format:'luisa-letters-raw-storage-snapshot',version:1,app_version:APP_VERSION,
+    created_at:new Date().toISOString(),reason:String(reason||'automatic_migration'),entries:entries
+  })};
+}
+function ensurePreMigrationSnapshot(reason) {
+  if (_preMigrationSnapshotReady) return {ok:true,skipped:true};
+  var snapshot=buildRawStorageSnapshot(reason);
+  if (!snapshot.ok) return snapshot;
+  var write=SafeStorage.write(PRE_MIGRATION_SNAPSHOT_KEY,snapshot.value);
+  if (!write.ok) return {ok:false,key:PRE_MIGRATION_SNAPSHOT_KEY,phase:'pre_migration_snapshot_write',error:write.error};
+  _preMigrationSnapshotReady=true;
+  return {ok:true,key:PRE_MIGRATION_SNAPSHOT_KEY};
+}
+function automaticMigrationPermission(keys, reason, allowCleanerChangedForLegacy) {
+  if (STATE._futureStateSchema) return {ok:false,skipped:true,reason:'future_schema_preserved',schema:STATE._stateSchema};
+  if (!STATE._stateSchemaValid) return {ok:false,skipped:true,reason:'invalid_schema_preserved'};
+  var requested=new Set(keys||[]), invalid=Array.from(new Set(STATE._isolatedInvalidKeys||[]));
+  if (invalid.length) return {ok:false,skipped:true,reason:'raw_state_preserved',keys:invalid};
+  var unresolvedChanged=(STATE._cleanerChangedKeys||[]).filter(function(key){return !requested.has(key);});
+  if (unresolvedChanged.length) return {ok:false,skipped:true,reason:'cleaned_state_requires_explicit_rewrite',keys:Array.from(new Set(unresolvedChanged))};
+  var unsafe=stateMigrationUnsafe(keys,!!allowCleanerChangedForLegacy);
+  if (unsafe.length) return {ok:false,skipped:true,reason:'raw_state_preserved',keys:unsafe};
+  return ensurePreMigrationSnapshot(reason);
+}
+
+function preparePersonalWrite(key) {
+  var guard=futureSchemaWriteGuard(key); if (guard) return guard;
+  var invalid=new Set(STATE._isolatedInvalidKeys||[]), changed=new Set(STATE._cleanerChangedKeys||[]);
+  if (!invalid.has(key) && !changed.has(key)) return {ok:true,skipped:true};
+  var preserved=ensurePreMigrationSnapshot('before_rewrite_of_'+key);
+  if (!preserved.ok) return {ok:false,key:key,phase:'raw_state_preservation',rolledBack:true,error:preserved.error||'pre_migration_snapshot_failed'};
+  return {ok:true,preserved:true};
+}
+function markPersonalWriteSafe(key) {
+  STATE._isolatedInvalidKeys=(STATE._isolatedInvalidKeys||[]).filter(function(k){return k!==key;});
+  STATE._cleanerChangedKeys=(STATE._cleanerChangedKeys||[]).filter(function(k){return k!==key;});
+}
 
 function fingerprintText(value) {
   var text = String(value || ''), hash = 0x811c9dc5;
@@ -1767,6 +1897,7 @@ function canonicalizeHighlightsForCorpus(items) {
 }
 function migrateLetCUserRecords() {
   if (!CORPUS.length) return {ok:false,reason:'corpus_not_loaded'};
+  if (STATE._futureStateSchema) return {ok:true,skipped:true,reason:'future_schema_preserved'};
   var now = new Date().toISOString(), noteChanged = false, hlChanged = false;
   var notes = STATE.notes.map(function(note,index) {
     var entry = note.dp_id ? corpusDpEntry(note.dp_id) : null;
@@ -1789,6 +1920,8 @@ function migrateLetCUserRecords() {
   if (canonicalHighlights.changed) hlChanged = true;
   var needsSchema = STATE._stateSchema < STATE_SCHEMA_VERSION;
   if (!noteChanged && !hlChanged && !needsSchema) return {ok:true,skipped:true};
+  var permission=automaticMigrationPermission(['lp_notes','lp_highlights','lp_state_schema'],'LET-C user-record migration',false);
+  if (!permission.ok) return permission;
   var result = SafeStorage.writeBatch([
     {key:'lp_notes',value:JSON.stringify(notes)},
     {key:'lp_highlights',value:JSON.stringify(highlights)},
@@ -1798,19 +1931,28 @@ function migrateLetCUserRecords() {
   return result;
 }
 
-function persistJSON(key, value) { return SafeStorage.write(key, JSON.stringify(value)); }
+function guardedStorageWrite(key, value, remove) {
+  var prep=preparePersonalWrite(key); if (!prep.ok) return prep;
+  var result=remove ? SafeStorage.remove(key) : SafeStorage.write(key,value);
+  if (result.ok) markPersonalWriteSafe(key);
+  return result;
+}
+function persistJSON(key, value) { return guardedStorageWrite(key, JSON.stringify(value), false); }
 function saveFavourites(next) { return persistJSON('lp_favs', Array.from(next)); }
 function saveNotes(next) { return persistJSON('lp_notes', next); }
 function saveHighlights(next) { return persistJSON('lp_highlights', next); }
 function saveReadSet(next) { return persistJSON('lp_read', Array.from(next)); }
 function saveLastRead(next) {
-  return next ? persistJSON('lp_last', next) : SafeStorage.remove('lp_last');
+  return next ? persistJSON('lp_last', next) : guardedStorageWrite('lp_last','',true);
 }
-function saveTheme(next) { return SafeStorage.write('lp_theme', next); }
-function saveReaderSize(nextLevel) { return SafeStorage.write('lp_size', nextLevel); }
+function saveTheme(next) { return guardedStorageWrite('lp_theme', next, false); }
+function saveReaderSize(nextLevel) { return guardedStorageWrite('lp_size', nextLevel, false); }
 function saveReadingPosition(n, position) {
+  var futureGuard=futureSchemaWriteGuard('lp_positions'); if (futureGuard) return futureGuard;
   var normalized = normalizePositionValue(n, position);
   if (!normalized) return {ok:false, phase:'validation', key:'lp_positions', error:'invalid_reading_position'};
+  var prepPositions=preparePersonalWrite('lp_positions'); if (!prepPositions.ok) return prepPositions;
+  var prepLast=preparePersonalWrite('lp_last'); if (!prepLast.ok) return prepLast;
   var nextPositions = Object.assign({}, STATE.positions);
   nextPositions[n] = normalized;
   var nextLast = {n:n, scroll:positionLegacyPct(normalized)};
@@ -1821,14 +1963,17 @@ function saveReadingPosition(n, position) {
   if (result.ok) {
     STATE.positions = nextPositions;
     STATE.lastRead = nextLast;
+    markPersonalWriteSafe('lp_positions'); markPersonalWriteSafe('lp_last');
   }
   return result;
 }
 function notifyStorageFailure(result) {
   console.warn('[Luisa] durable save rejected:', result);
+  if (result && result.phase === 'future_schema') { showToast('Données d’une version plus récente détectées — mettez l’app à jour avant d’enregistrer.'); return; }
   showToast('Impossible d’enregistrer. Vos données précédentes sont conservées.');
 }
 function migrateLegacyPathProgress() {
+  if (STATE._futureStateSchema) return {ok:true,skipped:true,reason:'future_schema_preserved'};
   var sizeAlreadySemantic = TEXT_LEVEL_ORDER.indexOf(readerTextLevel) >= 0 && !STATE._legacyTextSizeFound && STATE._rawSizeFound;
   if (STATE._stateSchema >= STATE_SCHEMA_VERSION && !STATE._legacyPathsFound && sizeAlreadySemantic) return {ok:true, skipped:true};
   var nextRead = new Set(STATE.readSet);
@@ -1842,6 +1987,8 @@ function migrateLegacyPathProgress() {
       });
     });
   }
+  var permission=automaticMigrationPermission(['lp_read','lp_paths','lp_size','lp_state_schema'],'legacy progress/text-size migration',true);
+  if (!permission.ok) return permission;
   var entries = [
     {key:'lp_read', value:JSON.stringify(Array.from(nextRead))},
     {key:'lp_size', value:readerTextLevel},
@@ -1975,6 +2122,7 @@ async function loadCorpus() {
     showFatalError();
     return;
   }
+  buildSearchIndex();
   var letCMigration = migrateLetCUserRecords();
   if (!letCMigration.ok) console.warn('[Luisa] LET-C record migration deferred:', letCMigration);
   var letDMigration = migrateLetDReadingPositions();
@@ -2253,6 +2401,8 @@ function initApp() {
   applyInitialRoute(initialRoute, ldj);
 
   checkOnboarding(); // Show onboarding on first launch
+  updateStorageContextUi();
+  refreshStoragePersistenceStatus(true); // Best effort only; never presented as a backup guarantee.
 
   window.addEventListener('beforeinstallprompt', e => {
     e.preventDefault(); deferredInstall = e;
@@ -2353,6 +2503,7 @@ function scheduleReadingPositionRestore(scrollerId, n, position, delay) {
   }, Math.max(0, Number(delay) || 0));
 }
 function migrateLetDReadingPositions() {
+  if (STATE._futureStateSchema) return {ok:true,skipped:true,reason:'future_schema_preserved'};
   var next = {}, changed = STATE._stateSchema < STATE_SCHEMA_VERSION;
   Object.keys(STATE.positions || {}).forEach(function(key) {
     var n = Number(key), p = normalizePositionValue(n, STATE.positions[key]);
@@ -2366,6 +2517,8 @@ function migrateLetDReadingPositions() {
     try { if (JSON.stringify(JSON.parse(raw.value)) !== JSON.stringify(next)) changed = true; } catch (e) { changed = true; }
   }
   if (!changed) return {ok:true, skipped:true};
+  var permission=automaticMigrationPermission(['lp_positions','lp_last','lp_state_schema'],'LET-D reading-position migration',true);
+  if (!permission.ok) return permission;
   var entries = [
     {key:'lp_positions', value:JSON.stringify(next)},
     {key:'lp_state_schema', value:String(STATE_SCHEMA_VERSION)}
@@ -2484,6 +2637,8 @@ function resumeReading() {
    NAVIGATION
 ════════════════════════════════════════ */
 function switchPanel(id) {
+  var activeBefore=document.querySelector('#left-panel .panel.active');
+  if (activeBefore && activeBefore.id==='p-search' && id!=='p-search') captureSearchViewState();
   document.querySelectorAll('#left-panel .panel').forEach(p => p.classList.remove('active'));
   var _el840 = document.getElementById(id); if (_el840) _el840.classList.add('active');
   const MAP = {
@@ -2501,6 +2656,8 @@ function switchPanel(id) {
 }
 
 function phoneNav(panelId, navKey) {
+  var activeBefore=document.querySelector('#left-panel .panel.active');
+  if (activeBefore && activeBefore.id==='p-search' && panelId!=='p-search') captureSearchViewState();
   document.getElementById('phone-reader').classList.remove('open');
   document.querySelectorAll('#left-panel .panel').forEach(p => p.classList.remove('active'));
   var _pn = document.getElementById(panelId); if (_pn) _pn.classList.add('active');
@@ -3018,9 +3175,25 @@ function reportTextIssue() {
   if(navigator.share) return navigator.share({title:'Signaler un problème de texte',text:report,url:safeUrl}).catch(function(err){if(err&&err.name==='AbortError')return false;return clipboardWrite(report,'Signalement copié');});
   return clipboardWrite(report,'Signalement copié');
 }
+function updateStorageContextUi() {
+  var el=document.getElementById('workspace-storage-context'); if(!el)return;
+  var standalone=window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches;
+  el.textContent=standalone
+    ? 'Ces données sont conservées dans cette installation de Lettres.'
+    : 'Vous utilisez Lettres dans un contexte navigateur. Une installation Lettres ajoutée à l’écran d’accueil peut avoir un stockage distinct.';
+}
 function storageDiagnosticStatus() {
   var probe=SafeStorage.readRaw('lp_state_schema');
   return probe.ok?'disponible':'indisponible';
+}
+async function refreshStoragePersistenceStatus(requestPersistence) {
+  if (!navigator.storage || typeof navigator.storage.persisted !== 'function') { _storagePersistenceStatus='non pris en charge'; return _storagePersistenceStatus; }
+  try {
+    var persisted=await navigator.storage.persisted();
+    if (!persisted && requestPersistence && typeof navigator.storage.persist === 'function') persisted=await navigator.storage.persist();
+    _storagePersistenceStatus=persisted?'persistant accordé':'best-effort';
+  } catch (error) { _storagePersistenceStatus='indéterminé'; }
+  return _storagePersistenceStatus;
 }
 function buildDiagnostics() {
   var controller=(navigator.serviceWorker&&navigator.serviceWorker.controller)?'contrôlé':'non contrôlé';
@@ -3030,9 +3203,11 @@ function buildDiagnostics() {
     'Diagnostic — Lettres de Luisa Piccarreta',
     'App: v'+APP_VERSION,
     'Corpus: '+(CORPUS_META.version||'—')+' · '+(CORPUS_META.fingerprint||'—'),
-    'SW: '+controller+' · shell=luisa-letters-shell-v'+APP_VERSION+'-r11 · corpus=luisa-letters-corpus-v'+APP_VERSION+'-r4',
+    'SW: '+controller+' · shell='+SHELL_CACHE_ID+' · corpus='+CORPUS_CACHE_ID,
     'Mode: '+standalone,
-    'Stockage local: '+storageDiagnosticStatus(),
+    'Stockage local: '+storageDiagnosticStatus()+' · '+_storagePersistenceStatus,
+    'Schéma état: '+STATE._stateSchema+(STATE._futureStateSchema?' (plus récent — écriture protégée)':''),
+    'Récupération transaction: '+(STORAGE_RECOVERY_RESULT.recovered?'effectuée':(STORAGE_RECOVERY_RESULT.ok?'aucune':'à vérifier')),
     'Thème: '+STATE.theme,
     'Texte: '+readerTextLevel+' · '+readerSize+'px',
     'Layout: '+(isWide()?'wide':'phone'),
@@ -3141,7 +3316,6 @@ function setFilter(val, el) {
   if(el) el.classList.add('active');
   renderList();
 }
-function resetFilter() { currentFilter='all'; currentListView={kind:'base',value:'all'}; buildFilterChips(); renderList(); }
 function filterByTopic(topic, matchMode) {
   var exact = matchMode === 'exact';
   currentFilter = exact ? topic : '__custom__';
@@ -3247,18 +3421,75 @@ function highlightNormalized(text, rawQuery) {
   out += esc(source.slice(cursor));
   return out;
 }
+function buildSearchIndex() {
+  SEARCH_INDEX=CORPUS.map(function(letter){
+    var paragraphs=(letter.display_paragraphs||[]).map(function(dp){return {dp:dp,norm:normalizeFrench(dp.text_fr||'')};});
+    var topics=(letter.topics_fr||[]).map(function(topic){return {raw:topic,norm:normalizeFrench(topic)};});
+    var index={
+      n:letter.canonical_number,title:normalizeFrench(letter.title_fr||''),recipient:normalizeFrench(letter.recipient_display_fr||''),
+      dateText:normalizeFrench(letter.date_text_fr||''),dateIso:normalizeFrench(letter.date_iso||''),place:normalizeFrench(letter.place||''),
+      topics:topics,paragraphs:paragraphs
+    };
+    index.document=[index.title,index.recipient,index.dateText,index.dateIso,index.place,topics.map(function(t){return t.norm;}).join(' '),paragraphs.map(function(p){return p.norm;}).join(' ')].join(' ');
+    return index;
+  });
+  return SEARCH_INDEX.length;
+}
 function searchFieldMatch(value, qNorm) { return !!qNorm && normalizeFrench(value).indexOf(qNorm) >= 0; }
+function searchTokens(rawQuery) {
+  return Array.from(new Set(normalizeFrench(rawQuery).split(/\s+/).filter(function(token){return token.length>0;})));
+}
+function allTokensMatchNormalized(normalizedValue, tokens) {
+  return tokens.length>0 && tokens.every(function(token){return normalizedValue.indexOf(token)>=0;});
+}
+function fieldMatchAllTokens(value, tokens) { return allTokensMatchNormalized(normalizeFrench(value),tokens); }
 function firstParagraphHit(letter, qNorm) {
   var dps = letter.display_paragraphs || [];
   for (var i=0; i<dps.length; i++) if (searchFieldMatch(dps[i].text_fr || '', qNorm)) return dps[i];
   return null;
 }
+function firstParagraphAllTokens(letter, tokens) {
+  var dps=letter.display_paragraphs||[];
+  for(var i=0;i<dps.length;i++) if(fieldMatchAllTokens(dps[i].text_fr||'',tokens)) return dps[i];
+  return null;
+}
+function bestParagraphTokenHit(letter,tokens) {
+  var dps=letter.display_paragraphs||[],best=null,bestCount=0;
+  dps.forEach(function(dp){
+    var n=normalizeFrench(dp.text_fr||''),count=tokens.reduce(function(total,t){return total+(n.indexOf(t)>=0?1:0);},0);
+    if(count>bestCount){best=dp;bestCount=count;}
+  });
+  return {dp:best,count:bestCount};
+}
+function queryHighlightRanges(text,rawQuery) {
+  var source=String(text==null?'':text), phrase=normalizedMatchRanges(source,rawQuery);
+  if (phrase.length) return phrase;
+  var ranges=[];
+  searchTokens(rawQuery).forEach(function(token){ranges=ranges.concat(normalizedMatchRanges(source,token));});
+  ranges.sort(function(a,b){return a.start-b.start || b.end-a.end;});
+  var merged=[];
+  ranges.forEach(function(r){
+    if(!merged.length || r.start>merged[merged.length-1].end) merged.push({start:r.start,end:r.end});
+    else merged[merged.length-1].end=Math.max(merged[merged.length-1].end,r.end);
+  });
+  return merged;
+}
+function highlightSearchQuery(text,rawQuery) {
+  var source=String(text==null?'':text),ranges=queryHighlightRanges(source,rawQuery);
+  if(!ranges.length)return esc(source);
+  var out='',cursor=0;
+  ranges.forEach(function(range){
+    if(range.start<cursor)return;
+    out+=esc(source.slice(cursor,range.start));out+='<mark class="hl">'+esc(source.slice(range.start,range.end))+'</mark>';cursor=range.end;
+  });
+  return out+esc(source.slice(cursor));
+}
 function buildSearchExcerpt(text, rawQuery, maxLen) {
-  var source=String(text||''), ranges=normalizedMatchRanges(source,rawQuery), limit=maxLen||220;
+  var source=String(text||''), ranges=queryHighlightRanges(source,rawQuery), limit=maxLen||220;
   if (!ranges.length) return source.length>limit ? esc(source.slice(0,limit))+'…' : esc(source);
   var hit=ranges[0], start=Math.max(0,hit.start-70), end=Math.min(source.length,Math.max(hit.end+120,start+limit));
   if (end-start>limit+70) end=start+limit+70;
-  var piece=source.slice(start,end), html=highlightNormalized(piece,rawQuery);
+  var piece=source.slice(start,end), html=highlightSearchQuery(piece,rawQuery);
   return (start>0?'…':'') + html + (end<source.length?'…':'');
 }
 function searchFor(q) { document.getElementById('search-input').value=q; scheduleSearch(true); }
@@ -3288,8 +3519,6 @@ function restoreSearchViewState() {
     var desired=_searchViewState.scrollTop||0, before=results.scrollTop;
     results.scrollTop=desired;
     requestAnimationFrame(function(){
-      // Retry only when layout prevented the first assignment. Never overwrite a user scroll
-      // that happened after navigation began.
       if (results.scrollTop===desired || results.scrollTop===before) results.scrollTop=desired;
     });
   }
@@ -3298,27 +3527,60 @@ function openSearchResult(n, dpId) {
   captureSearchViewState();
   openLetterAtDP(n, dpId || '');
 }
+function directLetterNumber(raw) {
+  var trimmed=String(raw||'').trim(), match=/^(?:LP\.LETTER\.)?(\d{1,3})$/i.exec(trimmed);
+  if(!match)return 0;
+  var n=Number(match[1]);return isCanonicalNumber(n)?n:0;
+}
+function buildLetterSearchDocument(letter) {
+  return normalizeFrench([
+    letter.title_fr||'',letter.recipient_display_fr||'',letter.date_text_fr||'',letter.date_iso||'',letter.place||'',
+    (letter.topics_fr||[]).join(' '),(letter.display_paragraphs||[]).map(function(dp){return dp.text_fr||'';}).join(' ')
+  ].join(' '));
+}
+function matchingTopic(letter,qNorm,tokens) {
+  var topics=letter.topics_fr||[];
+  for(var i=0;i<topics.length;i++) if(searchFieldMatch(topics[i],qNorm)||fieldMatchAllTokens(topics[i],tokens)) return topics[i];
+  return '';
+}
 function doSearch(generation) {
   if (generation !== undefined && generation !== _searchGeneration) return false;
   var raw = document.getElementById('search-input').value.trim();
-  var q = normalizeFrench(raw);
+  var q = normalizeFrench(raw), tokens=searchTokens(raw), directN=directLetterNumber(raw);
   var hint=document.getElementById('search-hint'), res=document.getElementById('search-results');
   if (!q) { hint.style.display=''; res.innerHTML=''; _searchViewState.query=raw; return true; }
   hint.style.display='none';
   var letterHits=[];
   for (var li=0; li<CORPUS.length; li++) {
     if (generation !== undefined && generation !== _searchGeneration) return false;
-    var l=CORPUS[li], dp=firstParagraphHit(l,q);
-    var numMatch=String(l.canonical_number)===raw.trim() || String(l.canonical_number)===q;
-    var titleMatch=searchFieldMatch(l.title_fr,q), destMatch=searchFieldMatch(l.recipient_display_fr,q);
-    var topicMatch=(l.topics_fr||[]).some(function(t){return searchFieldMatch(t,q);});
-    var dateTextMatch=searchFieldMatch(l.date_text_fr||'',q), dateIsoMatch=searchFieldMatch(l.date_iso||'',q);
-    var placeMatch=searchFieldMatch(l.place||'',q);
-    if (numMatch||titleMatch||destMatch||topicMatch||dateTextMatch||dateIsoMatch||placeMatch||dp) {
-      letterHits.push({l:l,dp:dp,meta:{num:numMatch,title:titleMatch,dest:destMatch,topic:topicMatch,date:dateTextMatch||dateIsoMatch,place:placeMatch}});
-    }
+    var l=CORPUS[li], idx=SEARCH_INDEX[li] || null;
+    if (!idx) { buildSearchIndex(); idx=SEARCH_INDEX[li]; }
+    var phraseEntry=null,sameEntry=null;
+    for(var pi=0;pi<idx.paragraphs.length;pi++) { if(idx.paragraphs[pi].norm.indexOf(q)>=0){phraseEntry=idx.paragraphs[pi];break;} }
+    if(!phraseEntry) for(var ai=0;ai<idx.paragraphs.length;ai++) { if(allTokensMatchNormalized(idx.paragraphs[ai].norm,tokens)){sameEntry=idx.paragraphs[ai];break;} }
+    var phraseDp=phraseEntry?phraseEntry.dp:null, sameDp=phraseDp||(sameEntry?sameEntry.dp:null);
+    var numMatch=directN===l.canonical_number;
+    var titlePhrase=idx.title.indexOf(q)>=0,destPhrase=idx.recipient.indexOf(q)>=0;
+    var topicValue='',topicPhrase=false;
+    for(var ti=0;ti<idx.topics.length;ti++){if(idx.topics[ti].norm.indexOf(q)>=0||allTokensMatchNormalized(idx.topics[ti].norm,tokens)){topicValue=idx.topics[ti].raw;topicPhrase=idx.topics[ti].norm.indexOf(q)>=0;break;}}
+    var datePhrase=idx.dateText.indexOf(q)>=0||idx.dateIso.indexOf(q)>=0,placePhrase=idx.place.indexOf(q)>=0;
+    var documentMatch=allTokensMatchNormalized(idx.document,tokens);
+    if (!(numMatch||titlePhrase||destPhrase||topicValue||datePhrase||placePhrase||phraseDp||sameDp||documentMatch)) continue;
+
+    var score=0, reason='', dp=null;
+    if(numMatch){score=10000;reason='number';dp=null;}
+    else if(phraseDp){score=9000;reason='body_phrase';dp=phraseDp;}
+    else if(titlePhrase){score=8500;reason='title_phrase';}
+    else if(topicPhrase){score=8300;reason='topic_phrase';}
+    else if(destPhrase){score=8200;reason='recipient_phrase';}
+    else if(datePhrase||placePhrase){score=8000;reason=datePhrase?'date_phrase':'place_phrase';}
+    else if(sameDp){score=7000;reason='body_all_terms';dp=sameDp;}
+    else if(documentMatch){score=6000;reason='letter_all_terms';var bestCount=0,bestDp=null;idx.paragraphs.forEach(function(pe){var c=tokens.reduce(function(total,t){return total+(pe.norm.indexOf(t)>=0?1:0);},0);if(c>bestCount){bestCount=c;bestDp=pe.dp;}});dp=bestCount===tokens.length?bestDp:null;}
+    else {score=5000;reason='metadata_all_terms';}
+    letterHits.push({l:l,dp:dp,score:score,reason:reason,matchedTopic:topicValue,meta:{num:numMatch,title:titlePhrase,dest:destPhrase,topic:!!topicValue,date:datePhrase,place:placePhrase}});
   }
   if (generation !== undefined && generation !== _searchGeneration) return false;
+  letterHits.sort(function(a,b){return b.score-a.score || a.l.canonical_number-b.l.canonical_number;});
   if (!letterHits.length) {
     res.innerHTML='<div class="empty-state" role="status"><i class="ti ti-search-off" aria-hidden="true"></i>Aucun résultat pour « '+esc(raw)+' »</div>';
     _searchViewState.query=raw; return true;
@@ -3328,15 +3590,19 @@ function doSearch(generation) {
       var l=hit.l, dp=hit.dp, excerpt=dp ? buildSearchExcerpt(dp.text_fr,raw,210) : '';
       var dpId=dp ? dp.display_paragraph_id : '';
       var meta=[];
-      if (l.date_text_fr) meta.push(highlightNormalized(l.date_text_fr,raw));
-      if (l.place) meta.push(highlightNormalized(l.place,raw));
+      if (l.date_text_fr) meta.push(highlightSearchQuery(l.date_text_fr,raw));
+      if (l.place) meta.push(highlightSearchQuery(l.place,raw));
       var metaLine=meta.length ? '<div class="li-dest">'+meta.join(' · ')+'</div>' : '';
+      var visibleTopics=(l.topics_fr||[]).slice(0,3);
+      if(hit.matchedTopic && visibleTopics.indexOf(hit.matchedTopic)<0) visibleTopics=[hit.matchedTopic].concat(visibleTopics.slice(0,2));
+      var reasonLine=hit.meta.num?'<div class="li-dest"><strong>Correspondance :</strong> Lettre '+l.canonical_number+'</div>':
+        (hit.matchedTopic?'<div class="li-dest"><strong>Thème :</strong> '+highlightSearchQuery(hit.matchedTopic,raw)+'</div>':'');
       return '<button class="letter-item" data-n="'+l.canonical_number+'" data-search-dp="'+esc(dpId)+'" data-action="search-result" role="listitem" aria-label="'+esc(l.title_fr)+'">'
         + '<div class="li-num'+(STATE.favs.has(l.canonical_number)?' is-fav':'')+'" aria-hidden="true">'+l.canonical_number+'</div>'
-        + '<div class="li-body"><div class="li-title">'+highlightNormalized(l.title_fr,raw)+'</div>'
-        + '<div class="li-dest">'+highlightNormalized(l.recipient_display_fr,raw)+'</div>' + metaLine
+        + '<div class="li-body"><div class="li-title">'+highlightSearchQuery(l.title_fr,raw)+'</div>'
+        + '<div class="li-dest">'+highlightSearchQuery(l.recipient_display_fr,raw)+'</div>' + metaLine + reasonLine
         + (excerpt?'<div style="font-size:12px;color:var(--muted);font-family:var(--body);font-style:italic;margin-top:4px;line-height:1.55">'+excerpt+'</div>':'')
-        + '<div class="li-topics" aria-hidden="true">'+(l.topics_fr||[]).slice(0,3).map(function(t){return '<span class="topic-pill">'+highlightNormalized(t,raw)+'</span>';}).join('')+'</div></div></button>';
+        + '<div class="li-topics" aria-hidden="true">'+visibleTopics.map(function(t){return '<span class="topic-pill">'+highlightSearchQuery(t,raw)+'</span>';}).join('')+'</div></div></button>';
     }).join('');
   _searchViewState.query=raw;
   return true;
@@ -4306,6 +4572,11 @@ function prepareImportedState(parsed, mode) {
 }
 function commitImportedState(parsed, mode) {
   if (!parsed || !parsed.ok || ['merge','replace'].indexOf(mode) < 0) return {ok:false, phase:'validation'};
+  var schemaGuard=futureSchemaWriteGuard('lp_state_schema'); if (schemaGuard) return schemaGuard;
+  if ((STATE._isolatedInvalidKeys||[]).length || (STATE._cleanerChangedKeys||[]).length) {
+    var rawPreserve=ensurePreMigrationSnapshot('before_import_over_unsafe_raw_state');
+    if (!rawPreserve.ok) return {ok:false,phase:'raw_state_preservation',key:rawPreserve.key,error:rawPreserve.error};
+  }
   var next = prepareImportedState(parsed, mode);
   var preRestore = buildBackupEnvelope();
   preRestore.snapshot_reason = 'before_' + mode + '_import';
@@ -4432,7 +4703,10 @@ window.__LET_A_TEST = Object.freeze({
   parseImportPayload:parseImportPayload,
   commitImportedState:commitImportedState,
   migrateLegacyPathProgress:migrateLegacyPathProgress,
-  constants:{appVersion:APP_VERSION,stateSchema:STATE_SCHEMA_VERSION,maxImportBytes:MAX_IMPORT_BYTES}
+  recoverPendingStorageTransaction:recoverPendingStorageTransaction,
+  ensurePreMigrationSnapshot:ensurePreMigrationSnapshot,
+  futureSchemaWriteGuard:futureSchemaWriteGuard,
+  constants:{appVersion:APP_VERSION,stateSchema:STATE_SCHEMA_VERSION,maxImportBytes:MAX_IMPORT_BYTES,transactionJournalKey:STORAGE_TRANSACTION_JOURNAL_KEY,preMigrationSnapshotKey:PRE_MIGRATION_SNAPSHOT_KEY}
 });
 window.__LET_B_TEST = Object.freeze({
   getState:snapshotState,
@@ -4489,6 +4763,10 @@ window.__LET_E_TEST = Object.freeze({
   normalizeFrenchWithMap:normalizeFrenchWithMap,
   normalizedMatchRanges:normalizedMatchRanges,
   highlightNormalized:highlightNormalized,
+  highlightSearchQuery:highlightSearchQuery,
+  searchTokens:searchTokens,
+  directLetterNumber:directLetterNumber,
+  buildSearchIndex:buildSearchIndex,
   scheduleSearch:scheduleSearch,
   doSearch:doSearch,
   captureSearchViewState:captureSearchViewState,
