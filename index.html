@@ -78,6 +78,7 @@ body{overflow:hidden;}
 .top-bar .title{font-family:var(--serif);font-style:italic;font-size:17px;color:var(--night);}
 .top-actions{display:flex;align-items:center;gap:2px;}
 .phone-help-entry{display:flex;}
+.phone-settings-entry{display:flex;}
 
 /* Letter list item */
 .letter-item{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;
@@ -360,6 +361,7 @@ mark.hl:hover{opacity:.7;}
 .settings-preview-title{font-family:var(--serif);font-size:var(--reader-title-size,22px);line-height:1.25;color:var(--night);margin-bottom:6px;}
 .settings-preview-text{font-family:var(--body);font-size:var(--reader-size);line-height:1.82;color:var(--ink);}
 .settings-current{font-size:12px;color:var(--muted);margin-top:6px;text-align:center;}
+.settings-data-note{font-size:12px;color:var(--muted);line-height:1.55;margin:0 0 10px;}
 .text-size-bar{max-height:min(90vh,760px);overflow-y:auto;}
 .settings-action{width:100%;border:0.5px solid var(--border);background:var(--white);border-radius:9px;padding:10px 12px;
   font-family:var(--body);font-size:13px;color:var(--night);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;}
@@ -529,6 +531,7 @@ mark.hl:hover{opacity:.7;}
    layout follows the current viewport width so narrow iPad Split View becomes phone mode. */
 html[data-layout="wide"] .phone-nav{display:none!important;}
 html[data-layout="wide"] .phone-help-entry{display:none!important;}
+html[data-layout="wide"] .phone-settings-entry{display:none!important;}
 html[data-layout="wide"] #phone-reader{display:none!important;position:relative!important;}
 
 html[data-layout="wide"] #app{flex-direction:row;}
@@ -545,6 +548,30 @@ html[data-layout="wide"] .snav-item .ti{font-size:22px;}
 html[data-layout="wide"] .snav-item:hover,html[data-layout="wide"] .snav-item:focus-visible{background:rgba(255,255,255,.08);color:rgba(255,255,255,.85);outline:none;}
 html[data-layout="wide"] .snav-item.active{background:rgba(201,168,76,.18);color:var(--gold);}
 html[data-layout="wide"] .sidebar-bottom{margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:4px;}
+
+/* R10 — preserve all seven ≥44px sidebar actions on short wide viewports. */
+@media (max-height:479px){
+  html[data-layout="wide"] #sidebar{padding-top:8px;padding-bottom:6px;gap:2px;}
+  html[data-layout="wide"] .sidebar-logo{margin-bottom:4px;}
+  html[data-layout="wide"] .sidebar-bottom{gap:2px;}
+  html[data-layout="wide"] .sidebar-bottom .snav-item{height:44px;min-height:44px;padding:4px;}
+}
+@media (max-height:419px){
+  html[data-layout="wide"] .sidebar-bottom>div{display:none;}
+}
+@media (max-height:379px){
+  html[data-layout="wide"] #sidebar{padding-top:2px;padding-bottom:2px;gap:0;}
+  html[data-layout="wide"] .sidebar-logo{display:none;}
+  html[data-layout="wide"] .sidebar-bottom{gap:0;}
+}
+@media (max-height:319px){
+  html[data-layout="wide"] #sidebar{
+    overflow-y:auto;overscroll-behavior:contain;scroll-padding-block:2px;scrollbar-width:thin;
+  }
+  html[data-layout="wide"] .snav-item{height:44px;min-height:44px;padding:4px;flex-shrink:0;}
+  html[data-layout="wide"] #sidebar::-webkit-scrollbar{width:3px;}
+  html[data-layout="wide"] #sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.22);border-radius:3px;}
+}
 
 html[data-layout="wide"] #left-panel{width:var(--list-w);display:flex;flex-direction:column;
     border-right:0.5px solid var(--border);background:var(--ivory);overflow:hidden;flex-shrink:0;}
@@ -795,7 +822,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
         <div class="help-icon"><i class="ti ti-settings"></i></div>
         <h2 class="help-title">Taille du texte et thème</h2>
         <div class="help-body">
-          Dans <strong>Réglages et aide</strong>, choisissez directement :<br><br>
+          Dans <strong>Réglages</strong>, choisissez directement :<br><br>
           <strong>Petit · 16 px</strong><br>
           <strong>Normal · 19 px</strong><br>
           <strong>Grand · 22 px</strong><br>
@@ -822,7 +849,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
         <div class="help-icon"><i class="ti ti-share"></i></div>
         <h2 class="help-title">Liens, support, mises à jour et hors ligne</h2>
         <div class="help-body">
-          Dans <strong>Réglages et aide → Liens et support</strong> :<br><br>
+          Dans <strong>Réglages → Liens et support</strong> :<br><br>
           <strong>Copier le lien courant</strong> crée un lien stable vers l’écran, la lettre ou le paragraphe pertinent.<br>
           <strong>Signaler un problème de texte</strong> prépare une référence technique à compléter avec votre description.<br>
           <strong>Copier le diagnostic</strong> copie la version, l’état du service worker, le thème, la taille et une route sûre.<br><br>
@@ -884,7 +911,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
 <div class="settings-overlay" id="settings-overlay" onclick="closeTextBar()" aria-hidden="true"></div>
 <div class="text-size-bar" id="text-size-bar" role="dialog" aria-modal="true" aria-labelledby="reading-settings-title" aria-hidden="true" tabindex="-1">
   <div class="settings-head">
-    <div class="settings-title" id="reading-settings-title">Réglages et aide</div>
+    <div class="settings-title" id="reading-settings-title">Réglages</div>
     <button class="settings-close" onclick="closeTextBar()" aria-label="Fermer les réglages">✕</button>
   </div>
   <div class="settings-preview" aria-label="Aperçu de lecture">
@@ -912,6 +939,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
   </div>
   <div class="settings-section" id="settings-data-section">
     <div class="settings-label">Données et sauvegarde</div>
+    <div class="settings-data-note">Vos favoris, notes, surlignages, lettres lues et positions de lecture sont conservés sur cet appareil. Exportez une sauvegarde pour pouvoir les restaurer après un changement d’appareil, une réinstallation ou un effacement des données.</div>
     <div id="settings-export-stats" class="export-stats" aria-live="polite"></div>
     <div class="export-row">
       <button class="export-btn primary" id="settings-export-btn" onclick="exportData()" aria-label="Exporter mes données"><i class="ti ti-download" aria-hidden="true"></i> Exporter</button>
@@ -961,6 +989,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
     <button class="snav-item" onclick="switchPanel('p-notes')" id="snav-notes" aria-label="Mon Espace"><i class="ti ti-user-circle" aria-hidden="true"></i>Mon Espace</button>
     <button class="snav-item" onclick="switchPanel('p-explore')" id="snav-explore" aria-label="Explorer"><i class="ti ti-layout-grid" aria-hidden="true"></i>Explorer</button>
     <div class="sidebar-bottom">
+      <button class="snav-item" id="snav-settings" onclick="openTextBar()" aria-label="Réglages"><i class="ti ti-settings" aria-hidden="true"></i>Réglages</button>
       <button class="snav-item" id="snav-help" onclick="openContextHelp(this)" aria-label="Aide sur l’écran actuel"><i class="ti ti-help-circle" aria-hidden="true"></i>Aide</button>
       <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v2.2.9 · 2026-09-08</div>
     </div>
@@ -973,7 +1002,10 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
     <div class="panel active" id="p-home">
       <div class="top-bar">
         <span class="title" role="heading" aria-level="1">Lettres de Luisa</span>
-        <button class="btn-icon phone-help-entry" onclick="openHelp('navigation',this)" aria-label="Aide — Accueil"><i class="ti ti-help-circle" aria-hidden="true"></i></button>
+        <div class="top-actions">
+          <button class="btn-icon phone-settings-entry" id="home-settings-btn" onclick="openTextBar()" aria-label="Réglages"><i class="ti ti-settings" aria-hidden="true"></i></button>
+          <button class="btn-icon phone-help-entry" onclick="openHelp('navigation',this)" aria-label="Aide — Accueil"><i class="ti ti-help-circle" aria-hidden="true"></i></button>
+        </div>
       </div>
       <div class="scroll" id="home-scroll">
         <div class="install-banner" id="install-banner" role="banner">
@@ -1093,8 +1125,8 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
       <div class="top-bar">
         <span class="title" role="heading" aria-level="1">Mon Espace</span>
         <div class="top-actions">
+          <button class="btn-icon" id="workspace-settings-btn" onclick="openTextBar()" aria-label="Réglages"><i class="ti ti-settings" aria-hidden="true"></i></button>
           <button class="btn-icon phone-help-entry" onclick="openHelp('workspace',this)" aria-label="Aide — Mon Espace"><i class="ti ti-help-circle" aria-hidden="true"></i></button>
-          <button class="btn-icon" onclick="openTextBar('data')" aria-label="Réglages, aide et sauvegarde"><i class="ti ti-settings" aria-hidden="true"></i></button>
         </div>
       </div>
       <div class="tab-row" role="tablist">
@@ -1107,9 +1139,10 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
         <div id="t-notes" style="display:none" role="tabpanel" aria-labelledby="tab-notes"></div>
         <div id="t-highlights" style="display:none" role="tabpanel" aria-labelledby="tab-highlights"></div>
         <div class="workspace-status">
-          <div class="workspace-status-title">Sauvegarde</div>
+          <div class="workspace-status-title">Sauvegarde de mes données</div>
           <div id="workspace-backup-stats" class="workspace-status-text" aria-live="polite"></div>
-          <button class="workspace-tools-btn" onclick="openTextBar('data')" aria-label="Ouvrir les réglages, l’aide et la sauvegarde"><i class="ti ti-settings" aria-hidden="true"></i> Réglages, aide et sauvegarde</button>
+          <div class="workspace-status-text">Ces données sont conservées sur cet appareil.</div>
+          <button class="workspace-tools-btn" id="workspace-backup-btn" onclick="openTextBar('data')" aria-label="Sauvegarder et restaurer mes données"><i class="ti ti-download" aria-hidden="true"></i> Sauvegarder et restaurer</button>
         </div>
       </div>
     </div>
@@ -1159,7 +1192,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
         <button class="action-btn" id="wr-read-btn" onclick="toggleRead()" aria-label="Marquer comme lu"><i class="ti ti-check" aria-hidden="true"></i><span>Lu</span></button>
         <button class="action-btn" onclick="addNote()" aria-label="Ajouter une note"><i class="ti ti-pencil" aria-hidden="true"></i><span>Note</span></button>
         <button class="action-btn" onclick="shareLetter()" aria-label="Partager"><i class="ti ti-share" aria-hidden="true"></i><span>Partager</span></button>
-        <button class="action-btn" onclick="openTextBar()" aria-label="Taille du texte"><i class="ti ti-typography" aria-hidden="true"></i><span>Texte</span></button>
+        <button class="action-btn" onclick="openTextBar()" aria-label="Réglages de lecture"><i class="ti ti-typography" aria-hidden="true"></i><span>Texte</span></button>
       </div>
     </div>
   </div>
@@ -1210,7 +1243,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
       <button class="action-btn" id="pr-read-btn" onclick="toggleRead()" aria-label="Marquer comme lu"><i class="ti ti-check" aria-hidden="true"></i><span>Lu</span></button>
       <button class="action-btn" onclick="addNote()" aria-label="Ajouter une note"><i class="ti ti-pencil" aria-hidden="true"></i><span>Note</span></button>
       <button class="action-btn" onclick="shareLetter()" aria-label="Partager"><i class="ti ti-share" aria-hidden="true"></i><span>Partager</span></button>
-      <button class="action-btn" onclick="openTextBar()" aria-label="Taille du texte"><i class="ti ti-typography" aria-hidden="true"></i><span>Texte</span></button>
+      <button class="action-btn" onclick="openTextBar()" aria-label="Réglages de lecture"><i class="ti ti-typography" aria-hidden="true"></i><span>Texte</span></button>
     </div>
   </div>
 
@@ -2997,7 +3030,7 @@ function buildDiagnostics() {
     'Diagnostic — Lettres de Luisa Piccarreta',
     'App: v'+APP_VERSION,
     'Corpus: '+(CORPUS_META.version||'—')+' · '+(CORPUS_META.fingerprint||'—'),
-    'SW: '+controller+' · shell=luisa-letters-shell-v'+APP_VERSION+'-r8 · corpus=luisa-letters-corpus-v'+APP_VERSION+'-r4',
+    'SW: '+controller+' · shell=luisa-letters-shell-v'+APP_VERSION+'-r11 · corpus=luisa-letters-corpus-v'+APP_VERSION+'-r4',
     'Mode: '+standalone,
     'Stockage local: '+storageDiagnosticStatus(),
     'Thème: '+STATE.theme,

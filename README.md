@@ -8,7 +8,7 @@ Application de lecture, recherche et exploration d’une collection éditoriale 
 ## Version courante : v2.2.9
 
 - Collection actuelle : 136 entrées (`luisa-letters-corpus-v2.2.9`) — IDs et 909 paragraphes d’affichage préservés ; elle ne représente pas l’ensemble de la correspondance connue ni une édition critique définitive
-- SW cache : `luisa-letters-shell-v2.2.9-r8` · corpus cache : `luisa-letters-corpus-v2.2.9-r4` (corpus inchangé depuis R4)
+- SW cache : `luisa-letters-shell-v2.2.9-r11` · corpus cache : `luisa-letters-corpus-v2.2.9-r4` (corpus inchangé depuis R4)
 - LET-A : stockage isolé par domaine, import strict et transactionnel
 - LET-B : tailles sémantiques Petit 16 / Normal 19 / Grand 22 / Très grand 26, aperçu, thème Automatique/Clair/Sombre, champs iOS ≥16px
 - Candidat de déploiement contrôlé ; validation physique iPhone/iPad/Android et cycle PWA installé restent requis avant un PASS technique complet
@@ -34,7 +34,7 @@ Push sur `main` → GitHub Actions valide + déploie automatiquement sur GitHub 
 
 ```bash
 git add -A
-git commit -m "fix: v2.2.9 R8 HTTP fallback hardening"
+git commit -m "fix: v2.2.9 R11 settings ultrashort hardening"
 git push origin main
 ```
 
@@ -66,13 +66,46 @@ git push origin main
 - Sauvegarde machine : format `luisa-letters-user-data`, schéma 5; import compatible avec les sauvegardes schémas 2, 3 et 4 ainsi que l’ancien format v1.
 - Un remplacement crée `lp_pre_restore_snapshot`; le dernier import peut être annulé depuis « Mon espace »
 - Les surfaces sombres principales utilisent `#1A2A4A` fixe (jamais `var(--night)` qui s'inverse en dark mode) ; la barre contextuelle de sélection conserve intentionnellement son fond distinct `#1C1830`.
-- `text-size-bar` est la feuille « Réglages de lecture » (z-index:550) avec aperçu utilisant les mêmes variables typographiques que le lecteur
+- `text-size-bar` est la feuille « Réglages » (z-index:550) ; le raccourci lecteur « Texte » y ouvre directement les réglages de lecture avec les mêmes variables typographiques que le lecteur
 
 ---
 
 *Droits de diffusion : autorisation confirmée par le propriétaire le 2026-08-13. Le déploiement public de cette version est autorisé.*
 
 
+
+
+## v2.2.9 R11 — Accessibilité des utilitaires en viewport wide ultra-court (9 septembre 2026)
+
+- Prédécesseur immédiat : v2.2.9 R10 ZIP SHA-256 `93431771fe1874eceb21bb19d42034e7a99c57765f7e778efc689bfc209f1e84`.
+- Un nouvel audit hostile a étendu la frontière R10 sous son plancher de test de 320 px et a reproduit un défaut sur un écran de classe desktop en layout wide : lorsque la hauteur CSS tombe sous environ 311 px, les sept cibles de sidebar de 44 px ne peuvent physiquement plus tenir simultanément. Avec `body{overflow:hidden}` et une sidebar non scrollable, les utilitaires inférieurs pouvaient devenir inaccessibles.
+- R11 conserve les cibles ≥44 px et, **uniquement sous 320 px de hauteur en layout wide**, rend la sidebar verticalement scrollable. À ces hauteurs impossibles à contenir sans réduction de cible, tous les contrôles restent atteignables par défilement, molette/tactile et navigation clavier ; à partir de 320 px, le rendu R10 demeure inchangé.
+- Aucun changement de corpus, renderer, Help, ordre des utilitaires, schéma utilisateur, sauvegarde/import ou logique de repli HTTP du Service Worker. Le cache shell passe à `luisa-letters-shell-v2.2.9-r11`; le cache corpus reste `luisa-letters-corpus-v2.2.9-r4`.
+- La validation R11 ajoute des contextes desktop-class réels (screen 1920×1080) aux hauteurs 220/240/256/280/300/308/311/319/320/321 px, vérifie la possibilité de faire défiler jusqu'à Réglages/Aide puis de revenir à Accueil, et vérifie l'auto-défilement par focus clavier. Les tests physiques/installés et les technologies d'assistance restent externes.
+
+
+## v2.2.9 R10 — Durcissement des Réglages en viewport wide court (8 septembre 2026)
+
+- Prédécesseur immédiat : v2.2.9 R9 ZIP SHA-256 `f63e6cbfcd08dc96375d4ce1f9cb2cf2c0b623e5e2fed423ccb21c0f752ecf17`.
+- Un contrôle hostile post-R9 a trouvé une régression de reflow vertical : l'ajout de **Réglages** dans la sidebar pouvait pousser **Aide** et la version sous le viewport sur un layout wide de hauteur approximativement 400–457 px, alors que R8 restait contenu à 400 px. Le test R9 commençait à 480 px et n'exerçait donc pas cette frontière.
+- R10 ajoute un mode compact **uniquement pour les viewports wide courts**. Les sept actions de sidebar (5 destinations + Réglages + Aide) conservent des cibles d'au moins 44 px ; les espacements deviennent compacts sous 480 px, la version décorative est masquée sous 420 px et le logo décoratif sous 380 px afin de préserver d'abord les actions fonctionnelles.
+- À **Mon Espace**, l'ordre des deux utilitaires téléphone est harmonisé avec Accueil et la sidebar : **Réglages puis Aide**. Aucun contrôle ni comportement fonctionnel n'est ajouté.
+- **Aucun changement de corpus, renderer, Help, schéma utilisateur, sauvegarde/import ou logique Service Worker** : seul le cache shell passe à `luisa-letters-shell-v2.2.9-r10`; le cache corpus reste `luisa-letters-corpus-v2.2.9-r4`.
+- Les validations ajoutées couvrent les hauteurs wide 320/360/400/420/440/460/480/568/600/768 px, le maintien ≥44 px, l'absence de débordement des contrôles fonctionnels et l'ordre cohérent Réglages→Aide. Les validations physiques/installées/accessibilité assistée restent externes.
+
+
+## v2.2.9 R9 — Accès global aux Réglages et sauvegarde explicite (8 septembre 2026)
+
+- Prédécesseur immédiat : v2.2.9 R8 ZIP SHA-256 `f43735bbc346f535da59886b2d55ff0b2b380cd6721d0d371a95f2af539b86e7`.
+- **Aucun changement de corpus, de renderer ou de schéma utilisateur** : `corpus.json` reste byte-identical à R8/R4 ; 136 lettres, 909 DPs, 45 mutations gouvernées, 17 lettres mutées, 7 loci HOLD et 5 DPs / 19 géométries de migration restent inchangés.
+- Téléphone : Accueil reçoit un accès explicite **Réglages** (⚙) à côté de l’Aide ; Mon Espace conserve un engrenage mais celui-ci signifie désormais simplement **Réglages**. Aucun engrenage supplémentaire n’est ajouté à Lettres, Recherche ou Explorer.
+- Tablette/ordinateur : **Réglages** devient un utilitaire global permanent en bas de la sidebar, juste au-dessus de **Aide** ; la navigation primaire reste Accueil · Lettres · Recherche · Mon Espace · Explorer.
+- Lecteur : le raccourci visible **Texte** est conservé ; son nom accessible devient **Réglages de lecture** et il continue d’ouvrir la même feuille sur la taille de texte courante.
+- La feuille est renommée **Réglages**. Les textes d’Aide correspondants sont harmonisés sans modifier les 11 rubriques ni leur routage.
+- Mon Espace présente désormais **Sauvegarde de mes données**, précise que ces données sont locales à l’appareil et propose l’action explicite **Sauvegarder et restaurer**. La section Données et sauvegarde de Réglages explique également la portée du stockage local.
+- Export/import, restauration pré-import, thème, taille de texte, liens/support, Aide, focus/modal, Service Worker R8 et repli HTTP non-OK restent fonctionnellement inchangés.
+- Le cache shell passe à `luisa-letters-shell-v2.2.9-r9`; le cache corpus reste `luisa-letters-corpus-v2.2.9-r4`.
+- Validation physique iPhone/iPad/Samsung, cycle PWA installé R8→R9 sur origine HTTPS et VoiceOver/TalkBack/NVDA restent externes.
 
 
 ## v2.2.9 R8 — Durcissement du repli HTTP du Service Worker (8 septembre 2026)
@@ -244,7 +277,7 @@ git push origin main
 
 - Navigation principale : Accueil · Lettres · Recherche · Mon Espace · Explorer.
 - Mon Espace conserve Favoris · Notes · Surlignages, avec totaux explicites et section À réancrer.
-- Réglages, aide et sauvegarde sont regroupés dans une surface unique.
+- Réglages et sauvegarde restent regroupés dans une surface unique ; l’Aide demeure accessible depuis cette surface et dispose aussi de ses accès contextuels dédiés.
 - Le corpus de la collection reste inchangé.
 
 
@@ -286,6 +319,6 @@ git push origin main
   - Lettre du jour : `?screen=home&action=letter-of-day`
 - Les paramètres inconnus ou invalides sont ignorés ou reçoivent un message non bloquant ; aucune valeur de lien n’est injectée comme HTML exécutable.
 - `Partager` inclut désormais l’URL stable, le titre et la référence ; le repli presse-papiers copie le lien et la référence.
-- Réglages et aide propose également **Copier le lien courant**, **Signaler un problème de texte** et **Copier le diagnostic**. Les notes, surlignages, favoris et positions de lecture ne sont jamais inclus automatiquement.
+- Réglages propose également **Copier le lien courant**, **Signaler un problème de texte** et **Copier le diagnostic**. Les notes, surlignages, favoris et positions de lecture ne sont jamais inclus automatiquement.
 - Le contrat de route ne dépend d’aucun transfert spécifique de plateforme. Son comportement réel en navigateur et en PWA installée doit encore être validé sur l’exact candidat avant toute revendication d’équivalence.
 - Le déploiement public est autorisé. Les validations physiques/installées/live restent nécessaires avant un **PASS technique complet** et demeurent des contrôles post-déploiement recommandés.

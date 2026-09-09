@@ -6,7 +6,7 @@
    - optional Google Fonts / pinned Tabler CDN → stale-while-revalidate; local typography/icon fallbacks exist
    - a failed install fails closed, leaving the previously active worker/app intact
 */
-const SHELL_CACHE = 'luisa-letters-shell-v2.2.9-r8';
+const SHELL_CACHE = 'luisa-letters-shell-v2.2.9-r11';
 const CORPUS_CACHE = 'luisa-letters-corpus-v2.2.9-r4';
 const APP_CACHE_PREFIX = 'luisa-letters-';
 const CANONICAL_SHELL_URL = './index.html';
