@@ -1,17 +1,25 @@
-/* Luisa Piccarreta PWA — Service Worker v2.2.10
-   LET-G strategy:
+/* Luisa Piccarreta PWA — Service Worker v2.2.17 R1
+   Stage 8 CACHE-SCOPE-COLL-01:
    - index.html / navigation shell → network-first with HTTP-cache bypass, cache fallback
    - corpus.json → network-first with HTTP-cache bypass, cache fallback
    - local static assets → cache-first
-   - optional Google Fonts / pinned Tabler CDN → stale-while-revalidate; local typography/icon fallbacks exist
+   - all UI fonts and Tabler icons are local, exact-version assets precached in the scoped shell
+   - Cache Storage ownership is bound to the exact Service Worker registration scope
+   - ambiguous legacy unscoped caches are intentionally not globally deleted on first transition
    - a failed install fails closed, leaving the previously active worker/app intact
 */
-const SHELL_CACHE = 'luisa-letters-shell-v2.2.10-r12';
-const CORPUS_CACHE = 'luisa-letters-corpus-v2.2.10-r12';
-const APP_CACHE_PREFIX = 'luisa-letters-';
+function scopeFingerprint(scope) {
+  let h = 2166136261;
+  const text = String(scope || '');
+  for (let i = 0; i < text.length; i++) { h ^= text.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return (h >>> 0).toString(16).padStart(8, '0');
+}
+const SCOPE_FINGERPRINT = scopeFingerprint(self.registration.scope);
+const APP_CACHE_PREFIX = `luisa-letters-${SCOPE_FINGERPRINT}-`;
+const SHELL_CACHE = `${APP_CACHE_PREFIX}shell-v2.2.17-r1`;
+const CORPUS_CACHE = `${APP_CACHE_PREFIX}corpus-v2.2.17-r1`;
 const CANONICAL_SHELL_URL = './index.html';
 const CORPUS_URL = './corpus.json';
-const LEGACY_OWNED_CACHE_PATTERNS = [/^luisa-v1\./, /^luisa-corpus-v1\./];
 
 const APP_SHELL = [
   './',
@@ -26,10 +34,19 @@ const APP_SHELL = [
   './icons/favicon-16.png',
   './icons/favicon-32.png',
   './icons/favicon.ico',
+  './fonts/crimson-text-400.woff2',
+  './fonts/crimson-text-600.woff2',
+  './fonts/crimson-text-400-italic.woff2',
+  './fonts/im-fell-english-400.woff2',
+  './fonts/im-fell-english-400-italic.woff2',
+  './fonts/OFL-Crimson-Text.txt',
+  './fonts/OFL-IM-Fell-English.txt',
+  './vendor/tabler/tabler-sprite.svg',
+  './vendor/tabler/LICENSE.txt',
 ];
 
 function isOwnedCacheName(name) {
-  return name.startsWith(APP_CACHE_PREFIX) || LEGACY_OWNED_CACHE_PATTERNS.some(rx => rx.test(name));
+  return name.startsWith(APP_CACHE_PREFIX);
 }
 
 async function freshFetch(urlOrRequest) {
@@ -78,10 +95,6 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  if (url.hostname.includes('fonts.googleapis.com') || url.hostname.includes('fonts.gstatic.com') || url.hostname.includes('jsdelivr.net')) {
-    event.respondWith(staleWhileRevalidate(event.request));
-    return;
-  }
 
   if (url.origin === self.location.origin && (url.pathname === '/' || url.pathname.endsWith('/index.html') || url.pathname.endsWith('/'))) {
     event.respondWith(networkFirstShell(event.request));
@@ -106,7 +119,8 @@ async function networkFirstCorpus(request) {
   } catch (e) {
     // Fall through to the last known-good cached corpus.
   }
-  const cached = await caches.match(request) || await caches.match(CORPUS_URL);
+  const cache = await caches.open(CORPUS_CACHE);
+  const cached = await cache.match(request) || await cache.match(CORPUS_URL);
   if (cached) return cached;
   if (networkResponse) return networkResponse;
   return new Response(JSON.stringify({error:'corpus_unavailable',letters:[]}), {status:503,headers:{'Content-Type':'application/json'}});
@@ -129,37 +143,24 @@ async function networkFirstShell(request) {
   }
   // A deep link such as ?letter=... or a manifest shortcut must still open from the cached
   // canonical shell when the network is unreachable or returns a non-OK HTTP response.
-  const cached = await caches.match(request) || await caches.match(CANONICAL_SHELL_URL) || await caches.match('./');
+  const cache = await caches.open(SHELL_CACHE);
+  const cached = await cache.match(request) || await cache.match(CANONICAL_SHELL_URL) || await cache.match('./');
   if (cached) return cached;
   if (networkResponse) return networkResponse;
   return new Response('Offline', {status:503,headers:{'Content-Type':'text/plain; charset=utf-8'}});
 }
 
 async function cacheFirst(request) {
-  const cached = await caches.match(request);
+  const cache = await caches.open(SHELL_CACHE);
+  const cached = await cache.match(request);
   if (cached) return cached;
   try {
     const response = await fetch(request);
-    if (response.ok) {
-      const cache = await caches.open(SHELL_CACHE);
-      await cache.put(request, response.clone());
-    }
+    if (response.ok) await cache.put(request, response.clone());
     return response;
   } catch (e) {
     return new Response('Offline — ressource non disponible', {status:503,headers:{'Content-Type':'text/plain; charset=utf-8'}});
   }
-}
-
-async function staleWhileRevalidate(request) {
-  const cached = await caches.match(request);
-  const networkPromise = fetch(request).then(async response => {
-    if (response.ok) {
-      const cache = await caches.open(SHELL_CACHE);
-      await cache.put(request, response.clone());
-    }
-    return response;
-  }).catch(() => null);
-  return cached || await networkPromise || new Response('', {status:503});
 }
 
 self.addEventListener('message', event => {

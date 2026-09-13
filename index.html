@@ -16,22 +16,14 @@
 <link rel="apple-touch-icon" sizes="60x60" href="icons/icon-60.png">
 <link rel="apple-touch-icon" sizes="120x120" href="icons/icon-120.png">
 <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-<style id="local-icon-fallback">
-/* LET-G: local text-glyph fallback keeps controls visible when the optional icon CDN is unavailable.
-   The pinned Tabler stylesheet follows this block and replaces these glyphs when online/cached. */
-.ti::before{display:inline-block;min-width:1em;text-align:center;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-style:normal;font-weight:600;line-height:1}
-.ti-home::before{content:"⌂"}.ti-books::before{content:"▤"}.ti-book-open::before{content:"▣"}.ti-search::before{content:"⌕"}.ti-search-off::before{content:"∅"}
-.ti-user-circle::before,.ti-user::before{content:"●"}.ti-layout-grid::before{content:"▦"}.ti-compass::before{content:"◇"}.ti-chevron-right::before{content:"›"}.ti-chevron-left::before{content:"‹"}.ti-chevron-down::before{content:"⌄"}
-.ti-check::before{content:"✓"}.ti-sun::before{content:"☼"}.ti-pencil::before{content:"✎"}.ti-heart::before{content:"♡"}.ti-typography::before,.ti-letter-case::before{content:"Aa"}.ti-trash::before{content:"×"}
-.ti-shield-check::before{content:"✓"}.ti-share::before{content:"↗"}.ti-settings::before{content:"⚙"}.ti-highlight::before{content:"▰"}.ti-download::before{content:"↓"}.ti-upload::before{content:"↑"}
-.ti-arrow-left::before{content:"←"}.ti-x::before{content:"×"}.ti-wifi-off::before{content:"⊘"}.ti-route::before{content:"↝"}.ti-restore::before{content:"↶"}.ti-map-pin::before{content:"•"}
-.ti-help-circle::before{content:"?"}.ti-file-text::before{content:"▤"}.ti-calendar::before{content:"□"}.ti-calendar-off::before{content:"∅"}
-.ti-arrow-forward::before{content:"→"}.ti-candle::before{content:"✦"}.ti-flower::before{content:"✿"}.ti-heart-handshake::before{content:"♡"}.ti-send::before{content:"↗"}.ti-shield-heart::before{content:"♡"}.ti-star::before{content:"☆"}.ti-wave-sine::before{content:"∿"}.ti-circle-half-2::before{content:"◐"}.ti-moon::before{content:"☾"}.ti-sparkles::before{content:"✦"}
+<style id="local-ui-assets">
+@font-face{font-family:'Crimson Text';src:url('./fonts/crimson-text-400.woff2') format('woff2');font-style:normal;font-weight:400;font-display:swap}
+@font-face{font-family:'Crimson Text';src:url('./fonts/crimson-text-600.woff2') format('woff2');font-style:normal;font-weight:600;font-display:swap}
+@font-face{font-family:'Crimson Text';src:url('./fonts/crimson-text-400-italic.woff2') format('woff2');font-style:italic;font-weight:400;font-display:swap}
+@font-face{font-family:'IM Fell English';src:url('./fonts/im-fell-english-400.woff2') format('woff2');font-style:normal;font-weight:400;font-display:swap}
+@font-face{font-family:'IM Fell English';src:url('./fonts/im-fell-english-400-italic.woff2') format('woff2');font-style:italic;font-weight:400;font-display:swap}
+svg.ti{width:1em;height:1em;display:inline-block;vertical-align:-.125em;overflow:visible;flex-shrink:0}
 </style>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/tabler-icons.min.css">
 <style>
 /* ══════════════════════════════════════════════════════
    TOKENS — system, light, dark
@@ -669,6 +661,28 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;}
 }
+
+/* v2.2.16 R1 — 200% zoom/reflow closure. Narrow-only; preserves normal layouts. */
+@media (max-width:280px){
+  #phone-reader .reader-top{flex-wrap:wrap;justify-content:center;padding:6px 8px;}
+  #phone-reader .reader-top>.btn-back{flex:1 1 100%;justify-content:center;width:100%;}
+  #phone-reader .reader-counter{display:grid;grid-template-columns:44px minmax(36px,1fr) 44px 44px;gap:0;width:100%;align-items:center;justify-items:center;}
+  #phone-reader #pr-pos{min-width:0!important;width:100%;}
+  #phone-reader .letter-body .dp{overflow-wrap:anywhere;}
+  #phone-reader .lh-title{overflow-wrap:anywhere;}
+}
+@media (max-width:183px){
+  #phone-reader .reader-counter{grid-template-columns:44px minmax(36px,1fr) 44px;}
+  #phone-reader .reader-counter .phone-help-entry{grid-column:2;grid-row:2;}
+}
+@media (max-width:219px){
+  .phone-nav{display:grid;grid-template-columns:repeat(3,minmax(44px,1fr));}
+  .phone-nav .pnav-item{min-width:44px;width:auto;}
+  #phone-reader .action-bar{display:grid;grid-template-columns:repeat(3,minmax(44px,1fr));}
+  #phone-reader .action-bar .action-btn{min-width:44px;width:auto;}
+  .panel>.scroll{padding-bottom:calc(108px + env(safe-area-inset-bottom));}
+}
+
 @media (max-width:520px){
   .reader-top,.top-bar{gap:4px;}
   .reader-counter{min-width:0;}
@@ -866,8 +880,8 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
           <strong>Lettres de Luisa Piccarreta</strong> est une application de lecture, de recherche et d’exploration d’une <strong>collection éditoriale actuelle de 136 entrées</strong> consacrée à la correspondance de Luisa Piccarreta et à la spiritualité de la Divine Volonté.<br><br>
           Cette collection ne constitue pas l’ensemble de la correspondance connue de Luisa ni une édition critique définitive. Le texte français de l’application a historiquement été établi à partir d’une base anglaise, avec des comparaisons françaises. En v2.2.9, certains textes et métadonnées ont fait l’objet d’un <strong>contrôle ciblé à partir des témoins italiens disponibles</strong>, tout en conservant les identifiants et la structure de l’application. Certaines variantes et versions parallèles plus complètes restent à étudier lorsque des témoins de plus haute autorité seront disponibles.<br><br>
           La collection utilise des identifiants stables et des paragraphes d’affichage reliés au texte source afin de permettre la recherche, les liens précis, les notes, les surlignages et la reprise de lecture sans modifier le texte lu.<br><br>
-          <strong>Version de l’app :</strong> v2.2.10<br>
-          <strong>Build :</strong> 9 septembre 2026<br>
+          <strong>Version de l’app :</strong> v2.2.17<br>
+          <strong>Build :</strong> 13 septembre 2026<br>
           <strong>Collection actuelle :</strong> 136 entrées · 909 paragraphes d’affichage<br><br>
           <strong>Confidentialité :</strong> vos données personnelles restent dans le stockage local de cette installation ou de ce contexte de l’app, sauf lorsque vous choisissez vous-même de les exporter. Elles ne sont pas automatiquement partagées avec les autres apps de la Collection Luisa et ne sont pas incluses dans les liens, signalements ou diagnostics.
         </div>
@@ -963,7 +977,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
   <div class="settings-section" id="settings-help-section">
     <div class="settings-label">Aide</div>
     <button class="settings-action" id="settings-help-btn" onclick="openHelpFromSettings()" aria-label="Ouvrir l’aide"><i class="ti ti-help-circle" aria-hidden="true"></i> Ouvrir l’aide</button>
-    <div class="settings-current">À propos se trouve à la fin de l’Aide · v2.2.10 · 2026-09-09</div>
+    <div class="settings-current">À propos se trouve à la fin de l’Aide · v2.2.17 · 2026-09-13</div>
   </div>
 </div>
 
@@ -991,7 +1005,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
     <div class="sidebar-bottom">
       <button class="snav-item" id="snav-settings" onclick="openTextBar()" aria-label="Réglages"><i class="ti ti-settings" aria-hidden="true"></i>Réglages</button>
       <button class="snav-item" id="snav-help" onclick="openContextHelp(this)" aria-label="Aide sur l’écran actuel"><i class="ti ti-help-circle" aria-hidden="true"></i>Aide</button>
-      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v2.2.10 · 2026-09-09</div>
+      <div style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v2.2.17 · 2026-09-13</div>
     </div>
   </nav>
 
@@ -1045,7 +1059,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
           <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:16px;color:var(--muted)"></i>
         </button>
         <div style="height:12px"></div>
-        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v2.2.10 · 2026-09-09</div>
+        <div style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v2.2.17 · 2026-09-13</div>
       </div>
     </div>
 
@@ -1349,12 +1363,29 @@ function validateCuratedPaths() {
 /* ════════════════════════════════════════
    STATE
 ════════════════════════════════════════ */
-const APP_VERSION = '2.2.10';
+const APP_VERSION = '2.2.17';
 const STATE_SCHEMA_VERSION = 5;
 const STORAGE_TRANSACTION_JOURNAL_KEY = 'lp_pending_transaction';
 const PRE_MIGRATION_SNAPSHOT_KEY = 'lp_pre_migration_snapshot';
-const SHELL_CACHE_ID = 'luisa-letters-shell-v2.2.10-r12';
-const CORPUS_CACHE_ID = 'luisa-letters-corpus-v2.2.10-r12';
+const PERSONAL_STATE_LOCK_NAME = 'luisa-letters:personal-state:v1';
+const PERSONAL_STATE_EVENT_KEYS = Object.freeze(new Set([
+  'lp_favs','lp_notes','lp_highlights','lp_read','lp_positions','lp_last','lp_size','lp_theme',
+  'lp_state_schema','lp_paths','lp_pre_restore_snapshot','lp_pending_transaction','lp_pre_migration_snapshot','lp_backup_restore_pending_v1'
+]));
+let _personalMutationQueue = Promise.resolve();
+let _personalLockDepth = 0;
+let _peerReconcileTimer = null;
+function lettersScopeFingerprint(scope) {
+  let h = 2166136261;
+  const text = String(scope || '');
+  for (let i = 0; i < text.length; i++) { h ^= text.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return (h >>> 0).toString(16).padStart(8, '0');
+}
+const LETTERS_SCOPE_FINGERPRINT = lettersScopeFingerprint(new URL('./', window.location.href).href);
+const SHELL_CACHE_ID = `luisa-letters-${LETTERS_SCOPE_FINGERPRINT}-shell-v2.2.17-r1`;
+const CORPUS_CACHE_ID = `luisa-letters-${LETTERS_SCOPE_FINGERPRINT}-corpus-v2.2.17-r1`;
+const TABLER_SPRITE_URL = './vendor/tabler/tabler-sprite.svg';
+const TABLER_ICON_ALIASES = Object.freeze({'book-open':'book'});
 const PROTECTED_USER_STORAGE_KEYS = Object.freeze([
   'lp_favs','lp_notes','lp_highlights','lp_read','lp_positions','lp_last','lp_size','lp_theme',
   'lp_state_schema','lp_paths','lp_pre_restore_snapshot'
@@ -1367,7 +1398,18 @@ const TEXT_LEVEL_ORDER = Object.freeze(['small','normal','large','xlarge']);
 const TEXT_LEVEL_LABELS = Object.freeze({small:'Petit', normal:'Normal', large:'Grand', xlarge:'Très grand'});
 const BACKUP_FORMAT = 'luisa-letters-user-data';
 const BACKUP_APP_ID = 'lettres-de-luisa-piccarreta';
-const MAX_IMPORT_BYTES = 5 * 1024 * 1024;
+const NORMAL_BACKUP_MAX_BYTES = 24 * 1024 * 1024;
+const MAX_IMPORT_BYTES = NORMAL_BACKUP_MAX_BYTES;
+const BACKUP_RECOVERY_DB_NAME = 'collection-luisa-lettres-backup-recovery-v1';
+const BACKUP_RECOVERY_STORE = 'snapshots';
+const BACKUP_RECOVERY_DB_VERSION = 1;
+const BACKUP_RECOVERY_ACTIVE_ID = 'active_restore';
+const BACKUP_RECOVERY_LAST_IMPORT_ID = 'last_import_before';
+const BACKUP_RESTORE_PENDING_KEY = 'lp_backup_restore_pending_v1';
+const BACKUP_RESTORE_ORPHAN_QUARANTINE_KEY = 'lp_backup_restore_orphan_quarantine_v1';
+const IMPORT_TARGET_KEYS = Object.freeze([
+  'lp_favs','lp_notes','lp_highlights','lp_read','lp_positions','lp_last','lp_size','lp_theme','lp_state_schema','lp_paths'
+]);
 const LETTER_OF_DAY_KEY = 'lp_letter_of_day';
 const SEARCH_DEBOUNCE_MS = 140;
 let CORPUS = [], TOPICS_INDEX = {}, RECIPIENTS_INDEX = {}, SEARCH_INDEX = [];
@@ -1578,6 +1620,10 @@ const SafeStorage = {
     if (entries.some(function(entry){return !entry || entry.key === STORAGE_TRANSACTION_JOURNAL_KEY;})) {
       return {ok:false, phase:'validation', key:STORAGE_TRANSACTION_JOURNAL_KEY, rolledBack:true, error:'invalid_transaction_entry'};
     }
+    var seenKeys = new Set();
+    if (entries.some(function(entry){if (seenKeys.has(entry.key)) return true; seenKeys.add(entry.key); return false;})) {
+      return {ok:false,phase:'validation',rolledBack:true,error:'duplicate_transaction_key'};
+    }
     var snapshot = [];
     for (var i = 0; i < entries.length; i++) {
       var before = this.readRaw(entries[i].key);
@@ -1595,9 +1641,20 @@ const SafeStorage = {
       var entry = entries[j];
       var result = entry.remove ? this.remove(entry.key) : this.write(entry.key, entry.value);
       if (!result.ok) {
-        var rollbackOk = this.restoreSnapshotEntries(snapshot.slice(0,j));
+        var rollbackOk = this.restoreSnapshotEntries(snapshot);
         if (rollbackOk) this.remove(STORAGE_TRANSACTION_JOURNAL_KEY);
         return {ok:false, key:entry.key, phase:'commit', rolledBack:rollbackOk, recoverable:!rollbackOk, error:result.error};
+      }
+    }
+
+    for (var k = 0; k < entries.length; k++) {
+      var verifyEntry = entries[k], actual = this.readRaw(verifyEntry.key);
+      var expectedFound = !verifyEntry.remove;
+      var matches = actual.ok && actual.found === expectedFound && (!expectedFound || actual.value === verifyEntry.value);
+      if (!matches) {
+        var verifyRollback = this.restoreSnapshotEntries(snapshot);
+        if (verifyRollback) this.remove(STORAGE_TRANSACTION_JOURNAL_KEY);
+        return {ok:false,key:verifyEntry.key,phase:'verify',rolledBack:verifyRollback,recoverable:!verifyRollback,error:'post_write_verification_failed'};
       }
     }
 
@@ -1609,7 +1666,263 @@ const SafeStorage = {
     }
     return {ok:true, keys:entries.map(function(entry) { return entry.key; })};
   }
-};
+ };
+
+function backupRecoveryOpenDb() {
+  return new Promise(function(resolve,reject) {
+    if (typeof indexedDB === 'undefined') { reject(new Error('indexeddb_unavailable')); return; }
+    var request;
+    try { request = indexedDB.open(BACKUP_RECOVERY_DB_NAME, BACKUP_RECOVERY_DB_VERSION); }
+    catch (error) { reject(error); return; }
+    request.onupgradeneeded = function() {
+      var db = request.result;
+      if (!db.objectStoreNames.contains(BACKUP_RECOVERY_STORE)) db.createObjectStore(BACKUP_RECOVERY_STORE, {keyPath:'id'});
+    };
+    request.onsuccess = function() { resolve(request.result); };
+    request.onerror = function() { reject(request.error || new Error('backup_recovery_db_open_failed')); };
+    request.onblocked = function() { reject(new Error('backup_recovery_db_blocked')); };
+  });
+}
+function backupRecoveryGet(id) {
+  return backupRecoveryOpenDb().then(function(db) {
+    return new Promise(function(resolve,reject) {
+      var tx;
+      try { tx=db.transaction(BACKUP_RECOVERY_STORE,'readonly'); }
+      catch(error){db.close();reject(error);return;}
+      var request=tx.objectStore(BACKUP_RECOVERY_STORE).get(id);
+      request.onsuccess=function(){resolve(request.result||null);};
+      request.onerror=function(){reject(request.error||new Error('backup_recovery_get_failed'));};
+      tx.oncomplete=function(){db.close();};
+      tx.onabort=function(){db.close();};
+      tx.onerror=function(){};
+    });
+  });
+}
+function backupRecoveryPutVerified(record) {
+  return backupRecoveryOpenDb().then(function(db) {
+    return new Promise(function(resolve,reject) {
+      var tx;
+      try { tx=db.transaction(BACKUP_RECOVERY_STORE,'readwrite'); }
+      catch(error){db.close();reject(error);return;}
+      var store=tx.objectStore(BACKUP_RECOVERY_STORE), expected=JSON.stringify(record), verified=false;
+      var put=store.put(record);
+      put.onsuccess=function(){
+        var get=store.get(record.id);
+        get.onsuccess=function(){verified=JSON.stringify(get.result)===expected;if(!verified){try{tx.abort();}catch(e){}};};
+        get.onerror=function(){try{tx.abort();}catch(e){}};
+      };
+      tx.oncomplete=function(){db.close();verified?resolve({ok:true}):reject(new Error('backup_recovery_verify_failed'));};
+      tx.onabort=function(){var error=tx.error||new Error('backup_recovery_put_aborted');db.close();reject(error);};
+      tx.onerror=function(){};
+    });
+  });
+}
+function backupRecoveryDelete(id) {
+  return backupRecoveryOpenDb().then(function(db) {
+    return new Promise(function(resolve,reject) {
+      var tx;
+      try { tx=db.transaction(BACKUP_RECOVERY_STORE,'readwrite'); }
+      catch(error){db.close();reject(error);return;}
+      tx.objectStore(BACKUP_RECOVERY_STORE).delete(id);
+      tx.oncomplete=function(){db.close();resolve({ok:true});};
+      tx.onabort=function(){var error=tx.error||new Error('backup_recovery_delete_aborted');db.close();reject(error);};
+      tx.onerror=function(){};
+    });
+  });
+}
+function backupRecoveryFinalize(preRestoreText,transactionId) {
+  return backupRecoveryOpenDb().then(function(db) {
+    return new Promise(function(resolve,reject) {
+      var tx;
+      try { tx=db.transaction(BACKUP_RECOVERY_STORE,'readwrite'); }
+      catch(error){db.close();reject(error);return;}
+      var store=tx.objectStore(BACKUP_RECOVERY_STORE);
+      store.put({id:BACKUP_RECOVERY_LAST_IMPORT_ID,format:'luisa-letters-last-import-before',version:1,app_version:APP_VERSION,transaction_id:transactionId,saved_at:new Date().toISOString(),payload:preRestoreText});
+      store.delete(BACKUP_RECOVERY_ACTIVE_ID);
+      tx.oncomplete=function(){db.close();resolve({ok:true,transactionId:transactionId});};
+      tx.onabort=function(){var error=tx.error||new Error('backup_recovery_finalize_aborted');db.close();reject(error);};
+      tx.onerror=function(){};
+    });
+  });
+}
+function newBackupRestoreTransactionId() {
+  if (typeof crypto !== 'undefined' && crypto && typeof crypto.randomUUID === 'function') return crypto.randomUUID();
+  return 'restore-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2) + '-' + Math.random().toString(36).slice(2);
+}
+function validBackupRestoreTransactionId(value) {
+  return typeof value === 'string' && value.length >= 12 && value.length <= 160 && /^[A-Za-z0-9._:-]+$/.test(value);
+}
+function buildBackupRestorePendingMarker(transactionId) {
+  return {format:'luisa-letters-backup-restore-pending',version:1,transaction_id:transactionId};
+}
+function readBackupRestorePendingMarker() {
+  var raw=SafeStorage.readRaw(BACKUP_RESTORE_PENDING_KEY);
+  if(!raw.ok)return {ok:false,phase:'recovery_marker_read',error:raw.error};
+  if(!raw.found)return {ok:true,found:false};
+  try {
+    var marker=JSON.parse(raw.value);
+    if(!isPlainObject(marker)||marker.format!=='luisa-letters-backup-restore-pending'||marker.version!==1||!validBackupRestoreTransactionId(marker.transaction_id))throw new Error('invalid_backup_restore_pending_marker');
+    return {ok:true,found:true,marker:marker,raw:raw.value};
+  } catch(error) { return {ok:false,phase:'recovery_marker_validation',error:error}; }
+}
+function writeBackupRestorePendingMarker(transactionId) {
+  var marker=buildBackupRestorePendingMarker(transactionId),text=JSON.stringify(marker);
+  var write=SafeStorage.write(BACKUP_RESTORE_PENDING_KEY,text);
+  if(!write.ok)return {ok:false,phase:'recovery_marker_write',error:write.error};
+  var check=SafeStorage.readRaw(BACKUP_RESTORE_PENDING_KEY);
+  if(!check.ok||!check.found||check.value!==text)return {ok:false,phase:'recovery_marker_verify',error:'backup_restore_pending_marker_verify_failed'};
+  return {ok:true,marker:marker};
+}
+function clearBackupRestorePendingMarker() {
+  var removed=SafeStorage.remove(BACKUP_RESTORE_PENDING_KEY);
+  if(!removed.ok)return {ok:false,phase:'recovery_marker_cleanup',error:removed.error};
+  var check=SafeStorage.readRaw(BACKUP_RESTORE_PENDING_KEY);
+  if(!check.ok||check.found)return {ok:false,phase:'recovery_marker_cleanup_verify',error:'backup_restore_pending_marker_cleanup_verify_failed'};
+  return {ok:true};
+}
+function validImportRawSnapshot(entries) {
+  if (!Array.isArray(entries) || entries.length !== IMPORT_TARGET_KEYS.length) return false;
+  var seen=new Set();
+  for (var i=0;i<entries.length;i++) {
+    var entry=entries[i];
+    if(!isPlainObject(entry)||IMPORT_TARGET_KEYS.indexOf(entry.key)<0||seen.has(entry.key)||typeof entry.found!=='boolean'||(entry.found&&typeof entry.value!=='string'))return false;
+    seen.add(entry.key);
+  }
+  return IMPORT_TARGET_KEYS.every(function(key){return seen.has(key);});
+}
+function captureImportRawSnapshot() {
+  var entries=[];
+  for(var i=0;i<IMPORT_TARGET_KEYS.length;i++){
+    var raw=SafeStorage.readRaw(IMPORT_TARGET_KEYS[i]);
+    if(!raw.ok)return {ok:false,key:IMPORT_TARGET_KEYS[i],phase:'backup_snapshot',error:raw.error};
+    entries.push({key:raw.key,found:raw.found,value:raw.value});
+  }
+  return {ok:true,entries:entries};
+}
+function verifyRawSnapshotEntries(entries) {
+  if(!validImportRawSnapshot(entries))return false;
+  for(var i=0;i<entries.length;i++){
+    var actual=SafeStorage.readRaw(entries[i].key);
+    if(!actual.ok||actual.found!==entries[i].found||(entries[i].found&&actual.value!==entries[i].value))return false;
+  }
+  return true;
+}
+function restoreImportRawSnapshot(entries) {
+  if(!validImportRawSnapshot(entries))return false;
+  if(!SafeStorage.restoreSnapshotEntries(entries))return false;
+  return verifyRawSnapshotEntries(entries);
+}
+function writeImportEntriesVerified(entries) {
+  for(var i=0;i<entries.length;i++){
+    var entry=entries[i];
+    var result=entry.remove?SafeStorage.remove(entry.key):SafeStorage.write(entry.key,entry.value);
+    if(!result.ok)return {ok:false,key:entry.key,phase:'commit',error:result.error};
+    var actual=SafeStorage.readRaw(entry.key),expectedFound=!entry.remove;
+    if(!actual.ok||actual.found!==expectedFound||(expectedFound&&actual.value!==entry.value))return {ok:false,key:entry.key,phase:'verify',error:'post_write_verification_failed'};
+  }
+  return {ok:true};
+}
+function backupRecoveryRecordForSnapshot(phase,entries,transactionId) {
+  return {id:BACKUP_RECOVERY_ACTIVE_ID,format:'luisa-letters-import-recovery',version:1,app_version:APP_VERSION,transaction_id:transactionId,phase:phase,created_at:new Date().toISOString(),entries:entries};
+}
+async function prepareBackupRecoverySnapshot(entries) {
+  if(!validImportRawSnapshot(entries))return {ok:false,phase:'recovery_prepare',error:'invalid_import_snapshot'};
+  var transactionId=newBackupRestoreTransactionId();
+  try {
+    var prepared=backupRecoveryRecordForSnapshot('prepared',entries,transactionId);
+    await backupRecoveryPutVerified(prepared);
+    var committing=Object.assign({},prepared,{phase:'committing'});
+    await backupRecoveryPutVerified(committing);
+    var check=await backupRecoveryGet(BACKUP_RECOVERY_ACTIVE_ID);
+    if(!check||check.phase!=='committing'||check.transaction_id!==transactionId||!validImportRawSnapshot(check.entries))throw new Error('recovery_committing_verify_failed');
+    var marker=writeBackupRestorePendingMarker(transactionId);
+    if(!marker.ok)throw marker.error||new Error(marker.phase||'recovery_marker_prepare_failed');
+    return {ok:true,transactionId:transactionId};
+  } catch(error) {
+    var markerState=readBackupRestorePendingMarker();
+    if(markerState.ok&&markerState.found&&markerState.marker.transaction_id===transactionId)clearBackupRestorePendingMarker();
+    try { await backupRecoveryDelete(BACKUP_RECOVERY_ACTIVE_ID); } catch(cleanupError) {}
+    return {ok:false,phase:'recovery_prepare',error:error};
+  }
+}
+async function recoverPendingBackupRestoreLocked() {
+  var markerState=readBackupRestorePendingMarker();
+  if(!markerState.ok)return markerState;
+  if(!markerState.found)return {ok:true,skipped:true};
+  var transactionId=markerState.marker.transaction_id,record,lastImport;
+  try {
+    record=await backupRecoveryGet(BACKUP_RECOVERY_ACTIVE_ID);
+    lastImport=await backupRecoveryGet(BACKUP_RECOVERY_LAST_IMPORT_ID);
+  } catch(error){return {ok:false,phase:'recovery_db',error:error};}
+  if(record){
+    if(!isPlainObject(record)||record.format!=='luisa-letters-import-recovery'||record.version!==1||record.transaction_id!==transactionId||!validImportRawSnapshot(record.entries))return {ok:false,phase:'recovery_validation',error:'invalid_backup_recovery_record'};
+    if(record.phase!=='prepared'&&record.phase!=='committing')return {ok:false,phase:'recovery_validation',error:'invalid_backup_recovery_phase'};
+    if(!restoreImportRawSnapshot(record.entries))return {ok:false,phase:'recovery_restore',error:'backup_recovery_restore_failed'};
+    var cleared=clearBackupRestorePendingMarker();
+    if(!cleared.ok)return cleared;
+    try{await backupRecoveryDelete(BACKUP_RECOVERY_ACTIVE_ID);}catch(cleanupError){console.warn('[Luisa] stale restored recovery record cleanup deferred:',cleanupError);}
+    return {ok:true,recovered:true,transactionId:transactionId};
+  }
+  if(lastImport&&lastImport.format==='luisa-letters-last-import-before'&&lastImport.version===1&&lastImport.transaction_id===transactionId){
+    var staleMarkerCleared=clearBackupRestorePendingMarker();
+    return staleMarkerCleared.ok?{ok:true,recovered:false,finalized:true,clearedStaleMarker:true,transactionId:transactionId}:staleMarkerCleared;
+  }
+  return {ok:false,phase:'recovery_validation',error:'backup_restore_marker_without_matching_recovery'};
+}
+function isOrphanBackupRestoreFailure(result) {
+  return !!(result && result.phase==='backup_restore_recovery' && result.detail && result.detail.phase==='recovery_validation' && result.detail.error==='backup_restore_marker_without_matching_recovery');
+}
+async function clearOrphanedBackupRestoreMarkerAfterUserApproval() {
+  var markerState=readBackupRestorePendingMarker();
+  if(!markerState.ok||!markerState.found){showToast('Aucun marqueur de récupération à débloquer');return false;}
+  var transactionId=markerState.marker.transaction_id,record,lastImport;
+  try {
+    record=await backupRecoveryGet(BACKUP_RECOVERY_ACTIVE_ID);
+    lastImport=await backupRecoveryGet(BACKUP_RECOVERY_LAST_IMPORT_ID);
+  } catch(error){showToast('Impossible de vérifier la récupération');return false;}
+  if(record || (lastImport&&lastImport.format==='luisa-letters-last-import-before'&&lastImport.version===1&&lastImport.transaction_id===transactionId)) {
+    showToast('Une récupération correspondante existe encore — rechargez l’application');
+    return false;
+  }
+  var quarantine={format:'luisa-letters-orphan-recovery-marker',version:1,app_version:APP_VERSION,captured_at:new Date().toISOString(),transaction_id:transactionId,marker_raw:markerState.raw,last_import_transaction_id:lastImport&&typeof lastImport.transaction_id==='string'?lastImport.transaction_id:''};
+  var qtext=JSON.stringify(quarantine),qwrite=SafeStorage.write(BACKUP_RESTORE_ORPHAN_QUARANTINE_KEY,qtext);
+  if(!qwrite.ok){showToast('Impossible de conserver le diagnostic');return false;}
+  var qcheck=SafeStorage.readRaw(BACKUP_RESTORE_ORPHAN_QUARANTINE_KEY);
+  if(!qcheck.ok||!qcheck.found||qcheck.value!==qtext){showToast('Le diagnostic n’a pas pu être vérifié');return false;}
+  var cleared=clearBackupRestorePendingMarker();
+  if(!cleared.ok){showToast('Le marqueur n’a pas pu être retiré');return false;}
+  window.location.reload();
+  return true;
+}
+async function migrateLegacyPreRestoreSnapshotLocked() {
+  var legacy=SafeStorage.readRaw('lp_pre_restore_snapshot');
+  if(!legacy.ok||!legacy.found)return {ok:legacy.ok,skipped:true,error:legacy.error};
+  try{
+    parseImportPayload(legacy.value);
+    var existing=await backupRecoveryGet(BACKUP_RECOVERY_LAST_IMPORT_ID);
+    if(!existing){
+      var record={id:BACKUP_RECOVERY_LAST_IMPORT_ID,format:'luisa-letters-last-import-before',version:1,app_version:APP_VERSION,saved_at:new Date().toISOString(),payload:legacy.value};
+      await backupRecoveryPutVerified(record);
+      var verify=await backupRecoveryGet(BACKUP_RECOVERY_LAST_IMPORT_ID);
+      if(!verify||verify.payload!==legacy.value)throw new Error('legacy_snapshot_copy_verify_failed');
+    }
+    var removed=SafeStorage.remove('lp_pre_restore_snapshot');
+    if(!removed.ok)throw removed.error||new Error('legacy_snapshot_remove_failed');
+    var after=SafeStorage.readRaw('lp_pre_restore_snapshot');
+    if(!after.ok||after.found)throw new Error('legacy_snapshot_remove_verify_failed');
+    return {ok:true,migrated:true};
+  }catch(error){
+    return {ok:false,phase:'legacy_pre_restore_migration',error:error,preserved:true};
+  }
+}
+function refreshPreImportUndoAvailability() {
+  var row=document.getElementById('pre-restore-row');
+  if(!row)return;
+  backupRecoveryGet(BACKUP_RECOVERY_LAST_IMPORT_ID).then(function(record){
+    if(record&&typeof record.payload==='string'){row.style.display='';return;}
+    var legacy=SafeStorage.readRaw('lp_pre_restore_snapshot');row.style.display=legacy.ok&&legacy.found?'':'none';
+  }).catch(function(){var legacy=SafeStorage.readRaw('lp_pre_restore_snapshot');row.style.display=legacy.ok&&legacy.found?'':'none';});
+}
 
 function recoverPendingStorageTransaction() {
   var raw = SafeStorage.readRaw(STORAGE_TRANSACTION_JOURNAL_KEY);
@@ -1630,7 +1943,98 @@ function recoverPendingStorageTransaction() {
     return {ok:false,recovered:false,retained:true,reason:'invalid_journal',error:error};
   }
 }
-const STORAGE_RECOVERY_RESULT = recoverPendingStorageTransaction();
+let STORAGE_RECOVERY_RESULT = {ok:true,skipped:true,recovered:false};
+
+function personalLocksSupported() {
+  return typeof navigator !== 'undefined' && navigator.locks && typeof navigator.locks.request === 'function' &&
+    (typeof window === 'undefined' || window.isSecureContext !== false);
+}
+function runPersonalSerialized(label, task) {
+  var execute = async function() {
+    if (_personalLockDepth > 0) return task();
+    var inside = async function() {
+      _personalLockDepth++;
+      try {
+        var pending=readBackupRestorePendingMarker();
+        if(!pending.ok)return {ok:false,phase:pending.phase||'backup_restore_recovery',detail:pending,error:pending.error};
+        if(pending.found){
+          var recovery=await recoverPendingBackupRestoreLocked();
+          if(!recovery.ok)return {ok:false,phase:'backup_restore_recovery',detail:recovery,error:recovery.error};
+        }
+        return await task();
+      }
+      finally { _personalLockDepth--; }
+    };
+    if (personalLocksSupported()) return navigator.locks.request(PERSONAL_STATE_LOCK_NAME, {mode:'exclusive'}, inside);
+    return inside();
+  };
+  var queued = _personalMutationQueue.then(execute, execute);
+  _personalMutationQueue = queued.then(function(){}, function(){});
+  return queued;
+}
+function jsonEqual(a,b) {
+  try { return JSON.stringify(a) === JSON.stringify(b); }
+  catch (error) { return false; }
+}
+function cloneJson(value) {
+  return value === undefined ? undefined : JSON.parse(JSON.stringify(value));
+}
+function conflictResult(key, reason, durableValue) {
+  return {ok:false,phase:'conflict',key:key,conflict:true,rolledBack:true,reason:reason,durable:cloneJson(durableValue)};
+}
+function adoptDurableState(next) {
+  if (!next) return;
+  STATE = next;
+  readerTextLevel = STATE.textLevel;
+  readerSize = STATE.readerSize;
+}
+function ensurePreMigrationSnapshotLocked(reason) {
+  var existing = SafeStorage.readRaw(PRE_MIGRATION_SNAPSHOT_KEY);
+  if (existing.ok && existing.found) { _preMigrationSnapshotReady=true; return {ok:true,skipped:true,key:PRE_MIGRATION_SNAPSHOT_KEY}; }
+  var snapshot=buildRawStorageSnapshot(reason);
+  if (!snapshot.ok) return snapshot;
+  var write=SafeStorage.write(PRE_MIGRATION_SNAPSHOT_KEY,snapshot.value);
+  if (!write.ok) return {ok:false,key:PRE_MIGRATION_SNAPSHOT_KEY,phase:'pre_migration_snapshot_write',error:write.error};
+  _preMigrationSnapshotReady=true;
+  return {ok:true,key:PRE_MIGRATION_SNAPSHOT_KEY};
+}
+function freshPersonalWritePermission(durable, key) {
+  if (durable._futureStateSchema) return {ok:false,key:key||'lp_state_schema',phase:'future_schema',rolledBack:true,error:'newer_state_schema_detected'};
+  var invalid=new Set(durable._isolatedInvalidKeys||[]), changed=new Set(durable._cleanerChangedKeys||[]);
+  if (!invalid.has(key) && !changed.has(key)) return {ok:true,skipped:true};
+  var preserved=ensurePreMigrationSnapshotLocked('before_rewrite_of_'+key);
+  if (!preserved.ok) return {ok:false,key:key,phase:'raw_state_preservation',rolledBack:true,error:preserved.error||'pre_migration_snapshot_failed'};
+  return {ok:true,preserved:true};
+}
+function refreshPersonalUiAfterPeerState() {
+  if (!STATE || !CORPUS.length) return;
+  document.documentElement.setAttribute('data-theme', STATE.theme);
+  applyReaderTypographyVariables();
+  syncThemeUi();
+  updateReadingSettingsUi();
+  renderNotes();
+  renderHighlights();
+  updateHomeProgress();
+  updateHomePaths();
+  updateContinueCard();
+  updateExportStats();
+  if (currentLetterIdx >= 0 && CORPUS[currentLetterIdx]) {
+    var n=CORPUS[currentLetterIdx].canonical_number;
+    updateReadBtn(n); updateFavBtns(n);
+  }
+  if (isWide() || prevPhonePanel === 'p-list') renderList();
+}
+function schedulePeerReconciliation() {
+  clearTimeout(_peerReconcileTimer);
+  _peerReconcileTimer=setTimeout(function(){
+    runPersonalSerialized('peer-reconcile', async function(){ adoptDurableState(loadState()); return {ok:true}; })
+      .then(function(){refreshPersonalUiAfterPeerState();})
+      .catch(function(error){console.warn('[Luisa] peer reconciliation failed:',error);});
+  },40);
+}
+window.addEventListener('storage', function(event) {
+  if (event && PERSONAL_STATE_EVENT_KEYS.has(event.key)) schedulePeerReconciliation();
+});
 
 function nearestTextLevel(px) {
   var value = Number(px);
@@ -1692,7 +2096,7 @@ function loadState() {
     _cleanerChangedKeys:Array.from(new Set(cleanerChangedKeys))
   };
 }
-const STATE = loadState();
+let STATE = loadState();
 readerTextLevel = STATE.textLevel;
 readerSize = STATE.readerSize;
 
@@ -1722,13 +2126,7 @@ function buildRawStorageSnapshot(reason) {
   })};
 }
 function ensurePreMigrationSnapshot(reason) {
-  if (_preMigrationSnapshotReady) return {ok:true,skipped:true};
-  var snapshot=buildRawStorageSnapshot(reason);
-  if (!snapshot.ok) return snapshot;
-  var write=SafeStorage.write(PRE_MIGRATION_SNAPSHOT_KEY,snapshot.value);
-  if (!write.ok) return {ok:false,key:PRE_MIGRATION_SNAPSHOT_KEY,phase:'pre_migration_snapshot_write',error:write.error};
-  _preMigrationSnapshotReady=true;
-  return {ok:true,key:PRE_MIGRATION_SNAPSHOT_KEY};
+  return ensurePreMigrationSnapshotLocked(reason);
 }
 function automaticMigrationPermission(keys, reason, allowCleanerChangedForLegacy) {
   if (STATE._futureStateSchema) return {ok:false,skipped:true,reason:'future_schema_preserved',schema:STATE._stateSchema};
@@ -1931,45 +2329,110 @@ function migrateLetCUserRecords() {
   return result;
 }
 
-function guardedStorageWrite(key, value, remove) {
-  var prep=preparePersonalWrite(key); if (!prep.ok) return prep;
-  var result=remove ? SafeStorage.remove(key) : SafeStorage.write(key,value);
-  if (result.ok) markPersonalWriteSafe(key);
-  return result;
-}
-function persistJSON(key, value) { return guardedStorageWrite(key, JSON.stringify(value), false); }
-function saveFavourites(next) { return persistJSON('lp_favs', Array.from(next)); }
-function saveNotes(next) { return persistJSON('lp_notes', next); }
-function saveHighlights(next) { return persistJSON('lp_highlights', next); }
-function saveReadSet(next) { return persistJSON('lp_read', Array.from(next)); }
-function saveLastRead(next) {
-  return next ? persistJSON('lp_last', next) : guardedStorageWrite('lp_last','',true);
-}
-function saveTheme(next) { return guardedStorageWrite('lp_theme', next, false); }
-function saveReaderSize(nextLevel) { return guardedStorageWrite('lp_size', nextLevel, false); }
-function saveReadingPosition(n, position) {
-  var futureGuard=futureSchemaWriteGuard('lp_positions'); if (futureGuard) return futureGuard;
-  var normalized = normalizePositionValue(n, position);
-  if (!normalized) return {ok:false, phase:'validation', key:'lp_positions', error:'invalid_reading_position'};
-  var prepPositions=preparePersonalWrite('lp_positions'); if (!prepPositions.ok) return prepPositions;
-  var prepLast=preparePersonalWrite('lp_last'); if (!prepLast.ok) return prepLast;
-  var nextPositions = Object.assign({}, STATE.positions);
-  nextPositions[n] = normalized;
-  var nextLast = {n:n, scroll:positionLegacyPct(normalized)};
-  var result = SafeStorage.writeBatch([
-    {key:'lp_positions', value:JSON.stringify(nextPositions)},
-    {key:'lp_last', value:JSON.stringify(nextLast)}
-  ]);
-  if (result.ok) {
-    STATE.positions = nextPositions;
-    STATE.lastRead = nextLast;
-    markPersonalWriteSafe('lp_positions'); markPersonalWriteSafe('lp_last');
+function persistJSON(key, value) {
+  if (PROTECTED_USER_STORAGE_KEYS.indexOf(key) >= 0 || key === PRE_MIGRATION_SNAPSHOT_KEY || key === STORAGE_TRANSACTION_JOURNAL_KEY) {
+    return {ok:false,key:key,phase:'validation',rolledBack:true,error:'protected_key_requires_personal_transaction'};
   }
-  return result;
+  return SafeStorage.write(key, JSON.stringify(value));
+}
+
+function deriveSetIntent(beforeSet, nextSet) {
+  var before=new Set(beforeSet||[]), next=new Set(nextSet||[]), changed=[];
+  var all=new Set(Array.from(before).concat(Array.from(next)));
+  all.forEach(function(value){if(before.has(value)!==next.has(value))changed.push(value);});
+  if (changed.length !== 1) return {ok:false,phase:'validation',error:'non_atomic_set_delta'};
+  var value=changed[0];
+  return {ok:true,value:value,expected:before.has(value),intended:next.has(value)};
+}
+async function saveMembershipSet(key, stateField, nextSet) {
+  var intent=deriveSetIntent(STATE[stateField],nextSet); if(!intent.ok)return intent;
+  return runPersonalSerialized(key, async function(){
+    var durable=loadState(), permission=freshPersonalWritePermission(durable,key); if(!permission.ok)return permission;
+    var durableSet=new Set(durable[stateField]);
+    var current=durableSet.has(intent.value);
+    if (current !== intent.expected && current !== intent.intended) return conflictResult(key,'same_record_changed',current);
+    if (intent.intended) durableSet.add(intent.value); else durableSet.delete(intent.value);
+    var result=SafeStorage.writeBatch([{key:key,value:JSON.stringify(Array.from(durableSet).sort(function(a,b){return a-b;}))}]);
+    if(!result.ok)return result;
+    durable[stateField]=durableSet; adoptDurableState(durable);
+    return {ok:true,value:new Set(durableSet),idempotent:current===intent.intended};
+  });
+}
+function noteById(items,id){return (items||[]).find(function(item){return item.id===id;})||null;}
+function deriveArrayRecordIntent(before,next) {
+  before=before||[];next=next||[];
+  var beforeMap=new Map(before.map(function(x){return [x.id,x];})),nextMap=new Map(next.map(function(x){return [x.id,x];}));
+  var ids=new Set(Array.from(beforeMap.keys()).concat(Array.from(nextMap.keys()))), changes=[];
+  ids.forEach(function(id){var a=beforeMap.get(id)||null,b=nextMap.get(id)||null;if(!jsonEqual(a,b))changes.push({id:id,expected:cloneJson(a),intended:cloneJson(b),index:b?next.findIndex(function(x){return x.id===id;}):-1});});
+  if(changes.length!==1)return {ok:false,phase:'validation',error:'non_atomic_record_delta',count:changes.length};
+  return Object.assign({ok:true},changes[0]);
+}
+async function saveRecordArray(key,stateField,next,validateInsert) {
+  var intent=deriveArrayRecordIntent(STATE[stateField],next); if(!intent.ok)return intent;
+  return runPersonalSerialized(key,async function(){
+    var durable=loadState(),permission=freshPersonalWritePermission(durable,key);if(!permission.ok)return permission;
+    var items=durable[stateField].slice(),idx=items.findIndex(function(x){return x.id===intent.id;}),current=idx>=0?items[idx]:null;
+    if(!jsonEqual(current,intent.expected)) {
+      if(jsonEqual(current,intent.intended)){adoptDurableState(durable);return {ok:true,value:items,idempotent:true};}
+      return conflictResult(key,'same_record_changed',current);
+    }
+    if(intent.intended) {
+      if(validateInsert){var validation=validateInsert(intent.intended,items,intent.id);if(validation&&!validation.ok)return validation;}
+      if(idx>=0)items[idx]=intent.intended;else items.splice(Math.max(0,Math.min(intent.index,items.length)),0,intent.intended);
+    } else if(idx>=0) items.splice(idx,1);
+    var result=SafeStorage.writeBatch([{key:key,value:JSON.stringify(items)}]);if(!result.ok)return result;
+    durable[stateField]=items;adoptDurableState(durable);return {ok:true,value:items};
+  });
+}
+function validateHighlightInsert(record,items,id) {
+  var duplicate=items.some(function(h){return h.id!==id&&h.dp_id===record.dp_id&&h.offset_start===record.offset_start&&h.offset_end===record.offset_end;});
+  if(duplicate)return conflictResult('lp_highlights','duplicate_highlight',record);
+  var overlap=items.some(function(h){return h.id!==id&&h.dp_id===record.dp_id&&!h.stale&&Math.max(h.offset_start,record.offset_start)<Math.min(h.offset_end,record.offset_end);});
+  if(overlap)return conflictResult('lp_highlights','overlapping_highlight',record);
+  return {ok:true};
+}
+async function saveFavourites(next){return saveMembershipSet('lp_favs','favs',next);}
+async function saveReadSet(next){return saveMembershipSet('lp_read','readSet',next);}
+async function saveNotes(next){return saveRecordArray('lp_notes','notes',next,null);}
+async function saveHighlights(next){return saveRecordArray('lp_highlights','highlights',next,validateHighlightInsert);}
+async function saveScalarPersonal(key,stateField,next,encode) {
+  var expected=cloneJson(STATE[stateField]);
+  return runPersonalSerialized(key,async function(){
+    var durable=loadState(),permission=freshPersonalWritePermission(durable,key);if(!permission.ok)return permission;
+    var current=cloneJson(durable[stateField]);
+    if(!jsonEqual(current,expected)&&!jsonEqual(current,next))return conflictResult(key,'same_record_changed',current);
+    var entry=next===null||next===undefined?{key:key,remove:true}:{key:key,value:encode?encode(next):String(next)};
+    var result=SafeStorage.writeBatch([entry]);if(!result.ok)return result;
+    durable[stateField]=cloneJson(next);
+    if(stateField==='textLevel'){durable.readerSize=TEXT_LEVELS[next];durable._rawSizeFound=true;durable._legacyTextSizeFound=false;}
+    adoptDurableState(durable);return {ok:true,value:cloneJson(next),idempotent:jsonEqual(current,next)};
+  });
+}
+async function saveLastRead(next){return saveScalarPersonal('lp_last','lastRead',next,function(v){return JSON.stringify(v);});}
+async function saveTheme(next){return saveScalarPersonal('lp_theme','theme',next,String);}
+async function saveReaderSize(nextLevel){return saveScalarPersonal('lp_size','textLevel',nextLevel,String);}
+async function saveReadingPosition(n, position) {
+  var expectedPosition=cloneJson(STATE.positions[n]||null),expectedLast=cloneJson(STATE.lastRead);
+  var intendedPosition=cloneJson(position),intendedLast={n:n,scroll:positionLegacyPct(position)};
+  return runPersonalSerialized('reading-position',async function(){
+    var durable=loadState(),pp=freshPersonalWritePermission(durable,'lp_positions');if(!pp.ok)return pp;
+    var pl=freshPersonalWritePermission(durable,'lp_last');if(!pl.ok)return pl;
+    var currentPosition=cloneJson(durable.positions[n]||null),currentLast=cloneJson(durable.lastRead);
+    if(!jsonEqual(currentPosition,expectedPosition)&&!jsonEqual(currentPosition,intendedPosition))return conflictResult('lp_positions','same_letter_position_changed',currentPosition);
+    var lastConflict=!jsonEqual(currentLast,expectedLast)&&!jsonEqual(currentLast,intendedLast);
+    var nextPositions=Object.assign({},durable.positions);nextPositions[n]=intendedPosition;
+    var entries=[{key:'lp_positions',value:JSON.stringify(nextPositions)}];
+    if(!lastConflict)entries.push({key:'lp_last',value:JSON.stringify(intendedLast)});
+    var result=SafeStorage.writeBatch(entries);if(!result.ok)return result;
+    durable.positions=nextPositions;if(!lastConflict)durable.lastRead=intendedLast;adoptDurableState(durable);
+    if(lastConflict)console.warn('[Luisa] newer durable last-read pointer preserved during position save');
+    return {ok:true,position:intendedPosition,lastRead:cloneJson(durable.lastRead),conflictPreserved:lastConflict?['lp_last']:[]};
+  });
 }
 function notifyStorageFailure(result) {
   console.warn('[Luisa] durable save rejected:', result);
   if (result && result.phase === 'future_schema') { showToast('Données d’une version plus récente détectées — mettez l’app à jour avant d’enregistrer.'); return; }
+  if (result && result.phase === 'conflict') { showToast('Modification non enregistrée : ces données ont changé dans une autre fenêtre.'); return; }
   showToast('Impossible d’enregistrer. Vos données précédentes sont conservées.');
 }
 function migrateLegacyPathProgress() {
@@ -2007,7 +2470,6 @@ function migrateLegacyPathProgress() {
   }
   return result;
 }
-migrateLegacyPathProgress();
 
 /* ════════════════════════════════════════
    THEME — P0 fix: real CSS data-theme attr
@@ -2035,10 +2497,10 @@ function syncThemeUi() {
   var meta = document.querySelector('meta[name="theme-color"]');
   if (meta) meta.setAttribute('content', effectiveTheme() === 'dark' ? '#1A1612' : '#F9F6F0');
 }
-function applyTheme(t, persist) {
+async function applyTheme(t, persist) {
   if (THEMES.indexOf(t) < 0) t = 'system';
   if (persist !== false) {
-    var result = saveTheme(t);
+    var result = await saveTheme(t);
     if (!result.ok) { notifyStorageFailure(result); return false; }
   }
   document.documentElement.setAttribute('data-theme', t);
@@ -2046,15 +2508,15 @@ function applyTheme(t, persist) {
   syncThemeUi();
   return true;
 }
-function setThemeFromSettings(t) {
-  if (applyTheme(t)) {
+async function setThemeFromSettings(t) {
+  if (await applyTheme(t)) {
     updateReadingSettingsUi();
     showToast({system:'Thème automatique',light:'Mode clair',dark:'Mode sombre'}[t]);
   }
 }
-function cycleTheme() {
+async function cycleTheme() {
   const next = THEMES[(THEMES.indexOf(STATE.theme) + 1) % THEMES.length];
-  if (applyTheme(next)) showToast({system:'Thème automatique',light:'Mode clair',dark:'Mode sombre'}[next]);
+  if (await applyTheme(next)) showToast({system:'Thème automatique',light:'Mode clair',dark:'Mode sombre'}[next]);
 }
 function onSystemThemeChange() {
   if (STATE.theme === 'system') syncThemeUi();
@@ -2063,7 +2525,7 @@ if (_systemThemeMedia) {
   if (typeof _systemThemeMedia.addEventListener === 'function') _systemThemeMedia.addEventListener('change', onSystemThemeChange);
   else if (typeof _systemThemeMedia.addListener === 'function') _systemThemeMedia.addListener(onSystemThemeChange);
 }
-applyTheme(STATE.theme, false);
+void applyTheme(STATE.theme, false);
 
 /* ════════════════════════════════════════
    RESPONSIVE
@@ -2096,6 +2558,24 @@ function applyLayout() {
 /* ════════════════════════════════════════
    CORPUS LOAD — P0 fix: clear error state
 ════════════════════════════════════════ */
+async function bootstrapPersonalState() {
+  return runPersonalSerialized('startup',async function(){
+    var backupRecovery={ok:true,checkedBySerializationBoundary:true};
+    STORAGE_RECOVERY_RESULT=recoverPendingStorageTransaction();
+    if(!STORAGE_RECOVERY_RESULT.ok)return {ok:false,phase:'storage_transaction_recovery',detail:STORAGE_RECOVERY_RESULT};
+    var legacyUndo=await migrateLegacyPreRestoreSnapshotLocked();
+    if(!legacyUndo.ok)console.warn('[Luisa] legacy pre-import snapshot migration deferred:',legacyUndo);
+    adoptDurableState(loadState());
+    var legacy=migrateLegacyPathProgress();if(!legacy.ok)console.warn('[Luisa] legacy migration deferred:',legacy);
+    adoptDurableState(loadState());
+    var c=migrateLetCUserRecords();if(!c.ok)console.warn('[Luisa] LET-C record migration deferred:',c);
+    adoptDurableState(loadState());
+    var d=migrateLetDReadingPositions();if(!d.ok)console.warn('[Luisa] LET-D reading-position migration deferred:',d);
+    adoptDurableState(loadState());
+    return {ok:true,backupRecovery:backupRecovery,legacyUndo:legacyUndo,legacy:legacy,letC:c,letD:d};
+  });
+}
+
 async function loadCorpus() {
   try {
     const r = await fetch('./corpus.json');
@@ -2123,11 +2603,30 @@ async function loadCorpus() {
     return;
   }
   buildSearchIndex();
-  var letCMigration = migrateLetCUserRecords();
-  if (!letCMigration.ok) console.warn('[Luisa] LET-C record migration deferred:', letCMigration);
-  var letDMigration = migrateLetDReadingPositions();
-  if (!letDMigration.ok) console.warn('[Luisa] LET-D reading-position migration deferred:', letDMigration);
+  var personalBootstrap = await bootstrapPersonalState();
+  if (!personalBootstrap.ok) {
+    console.error('[Luisa] personal-state recovery failed closed:', personalBootstrap);
+    showPersonalRecoveryError(personalBootstrap);
+    return;
+  }
+  await applyTheme(STATE.theme, false);
+  updateReadingSettingsUi();
   initApp();
+}
+
+function showPersonalRecoveryError(result) {
+  const ld = document.getElementById('loading');
+  if (ld) { ld.classList.add('hide'); setTimeout(function(){if(ld&&ld.parentNode)ld.remove();},350); }
+  const target = document.getElementById('home-scroll') || document.body;
+  const orphan=isOrphanBackupRestoreFailure(result);
+  target.innerHTML = `<div class="error-state">
+    <i class="ti ti-shield-exclamation" aria-hidden="true"></i>
+    <p>${orphan
+      ? 'Un ancien marqueur de restauration subsiste, mais aucun instantané de récupération correspondant n’existe. Vos données de site ne seront pas effacées. Vous pouvez conserver ce marqueur comme diagnostic puis le retirer pour rouvrir l’app.'
+      : 'La récupération de vos données personnelles n’a pas pu être vérifiée.<br>Aucune nouvelle donnée n’a été chargée. Rechargez l’application ; si le message persiste, conservez vos données de site et contactez le support.'}</p>
+    <button data-action="reload-app">Recharger</button>
+    ${orphan?'<button type="button" onclick="void clearOrphanedBackupRestoreMarkerAfterUserApproval()">Conserver le diagnostic et débloquer</button>':''}
+  </div>`;
 }
 
 function showFatalError() {
@@ -2536,6 +3035,22 @@ function migrateLetDReadingPositions() {
 }
 
 var _resizeTimer = null, _resizeInProgress = false, _resizeSnapshot = null, _resizeFromLayout = null, _resizePhoneReaderWasOpen = false;
+function phoneReaderBackgroundTargets() {
+  return [document.getElementById('sidebar'),document.getElementById('left-panel'),document.getElementById('right-panel'),document.querySelector('.phone-nav')].filter(Boolean);
+}
+function setPhoneReaderBackgroundIsolation(active) {
+  phoneReaderBackgroundTargets().forEach(function(el) {
+    if (active) { el.setAttribute('inert',''); el.setAttribute('aria-hidden','true'); }
+    else { el.removeAttribute('inert'); el.removeAttribute('aria-hidden'); }
+  });
+}
+function setPhoneReaderOpenState(open, focusReader) {
+  var reader=document.getElementById('phone-reader');
+  if(!reader)return;
+  reader.classList.toggle('open',!!open);
+  setPhoneReaderBackgroundIsolation(!!open && !isWide());
+  if(open && focusReader!==false) requestAnimationFrame(function(){var back=reader.querySelector('.btn-back');if(back)back.focus();});
+}
 function activeReaderPrefix() {
   return document.documentElement.getAttribute('data-layout') === 'wide' ? 'wr' : 'pr';
 }
@@ -2578,18 +3093,18 @@ function onResize() {
       var bucketChanged = wasWide !== wide;
       if (bucketChanged) {
         if (wide) {
-          document.getElementById('phone-reader').classList.remove('open');
+          setPhoneReaderOpenState(false,false);
           renderWideReader(l, true);
         } else {
           renderPhoneReader(l, true);
-          document.getElementById('phone-reader').classList.add('open');
+          setPhoneReaderOpenState(true,false);
         }
         document.querySelectorAll('.letter-item').forEach(function(el) {
           el.classList.toggle('selected', parseInt(el.dataset.n) === n);
         });
       } else if (!wide && !phoneReaderWasOpen) {
         // Keyboard-height changes or phone-panel resize must not unexpectedly reopen a closed reader.
-        document.getElementById('phone-reader').classList.remove('open');
+        setPhoneReaderOpenState(false,false);
       }
 
       var targetScrollerId = wide ? 'wide-reader-scroll' : 'phone-reader-scroll';
@@ -2658,7 +3173,7 @@ function switchPanel(id) {
 function phoneNav(panelId, navKey) {
   var activeBefore=document.querySelector('#left-panel .panel.active');
   if (activeBefore && activeBefore.id==='p-search' && panelId!=='p-search') captureSearchViewState();
-  document.getElementById('phone-reader').classList.remove('open');
+  setPhoneReaderOpenState(false,false);
   document.querySelectorAll('#left-panel .panel').forEach(p => p.classList.remove('active'));
   var _pn = document.getElementById(panelId); if (_pn) _pn.classList.add('active');
   document.querySelectorAll('.pnav-item').forEach(b => {
@@ -2681,10 +3196,10 @@ function openLetterFromHome() {
   openLetter(parseInt(document.getElementById('ldj-card').dataset.n || '1'));
 }
 
-function openLetter(n) {
+async function openLetter(n) {
   const idx = CORPUS.findIndex(l => l.canonical_number === n);
   if (idx < 0) { showToast('Lettre introuvable'); return; }
-  if (currentLetterIdx >= 0 && CORPUS[currentLetterIdx] && CORPUS[currentLetterIdx].canonical_number !== n) flushReadProgress();
+  if (currentLetterIdx >= 0 && CORPUS[currentLetterIdx] && CORPUS[currentLetterIdx].canonical_number !== n) await flushReadProgress();
   currentLetterIdx = idx;
   const l = CORPUS[idx];
   if (isWide()) {
@@ -2695,19 +3210,19 @@ function openLetter(n) {
     });
   } else {
     renderPhoneReader(l);
-    document.getElementById('phone-reader').classList.add('open');
+    setPhoneReaderOpenState(true,true);
   }
   var nextLastRead = { n: n, scroll: positionLegacyPct(STATE.positions[n]) || 5 };
-  var lastReadResult = saveLastRead(nextLastRead);
-  if (lastReadResult.ok) STATE.lastRead = nextLastRead;
+  var lastReadResult = await saveLastRead(nextLastRead);
+  if (lastReadResult.ok) STATE.lastRead = lastReadResult.value;
   else notifyStorageFailure(lastReadResult);
   updateContinueCard();
   // Restore semantic paragraph/fraction after render; percentage is fallback only.
   scheduleReadingPositionRestore(isWide() ? 'wide-reader-scroll' : 'phone-reader-scroll', n, STATE.positions[n], 80);
 }
 
-function openLetterAtDP(n, dpId) {
-  openLetter(n);
+async function openLetterAtDP(n, dpId) {
+  await openLetter(n);
   if (!dpId) return;
   setTimeout(function() {
     var scroller = isWide()
@@ -2724,8 +3239,8 @@ function openLetterAtDP(n, dpId) {
 }
 
 function closePhoneReader() {
-  flushReadProgress();
-  document.getElementById('phone-reader').classList.remove('open');
+  void flushReadProgress();
+  setPhoneReaderOpenState(false,false);
   // Refresh list so read/unread state and progress bar update immediately
   if (prevPhonePanel === 'p-list') renderList();
   if (prevPhonePanel === 'p-search') restoreSearchViewState();
@@ -2903,20 +3418,19 @@ function updateReadProgressMemory(prefix) {
   const n = CORPUS[currentLetterIdx].canonical_number;
   var position = captureSemanticReadingPosition(prefix === 'wr' ? 'wide-reader-scroll' : 'phone-reader-scroll', n);
   if (position) {
-    STATE.positions[n] = position;
-    STATE.lastRead = {n:n, scroll:positionLegacyPct(position)};
     document.getElementById('cont-bar').style.width = Math.max(5, positionLegacyPct(position)) + '%';
   }
   return position;
 }
-function captureReadProgress(prefix) {
+async function captureReadProgress(prefix) {
   if (_resizeInProgress) return {ok:true, skipped:true, reason:'resize_in_progress'};
   if (prefix !== activeReaderPrefix()) return {ok:true, skipped:true, reason:'inactive_reader'};
   if (prefix === 'pr' && !document.getElementById('phone-reader').classList.contains('open')) return {ok:true, skipped:true, reason:'phone_reader_closed'};
   var position = updateReadProgressMemory(prefix);
   if (!position || currentLetterIdx < 0 || !CORPUS[currentLetterIdx]) return {ok:true, skipped:true};
-  var result = saveReadingPosition(CORPUS[currentLetterIdx].canonical_number, position);
+  var result = await saveReadingPosition(CORPUS[currentLetterIdx].canonical_number, position);
   if (!result.ok) console.warn('[Luisa] reading position not persisted:', result);
+  else if(result.conflictPreserved&&result.conflictPreserved.length)console.warn('[Luisa] reading position saved with durable conflict preserved:',result.conflictPreserved);
   return result;
 }
 function updateReadProgress(prefix) {
@@ -2924,15 +3438,15 @@ function updateReadProgress(prefix) {
   if (prefix === 'pr' && !document.getElementById('phone-reader').classList.contains('open')) return;
   updateReadProgressMemory(prefix);
   clearTimeout(_progressDebounce[prefix]);
-  _progressDebounce[prefix] = setTimeout(function() { captureReadProgress(prefix); }, 750);
+  _progressDebounce[prefix] = setTimeout(function() { void captureReadProgress(prefix); }, 750);
 }
-function flushReadProgress() {
-  if (currentLetterIdx < 0) return;
-  captureReadProgress(isWide() ? 'wr' : 'pr');
+async function flushReadProgress() {
+  if (currentLetterIdx < 0) return {ok:true,skipped:true};
+  return captureReadProgress(isWide() ? 'wr' : 'pr');
 }
-window.addEventListener('pagehide', flushReadProgress);
+window.addEventListener('pagehide', function(){ void flushReadProgress(); });
 document.addEventListener('visibilitychange', function() {
-  if (document.visibilityState === 'hidden') flushReadProgress();
+  if (document.visibilityState === 'hidden') void flushReadProgress();
 });
 
 /* ════════════════════════════════════════
@@ -3022,15 +3536,15 @@ function updateHomePaths() {
   }).join('');
 }
 
-function toggleRead() {
+async function toggleRead() {
   var l = CORPUS[currentLetterIdx]; if (!l) return;
   var n = l.canonical_number;
   var nextRead = new Set(STATE.readSet);
   var willBeRead = !nextRead.has(n);
   if (willBeRead) nextRead.add(n); else nextRead.delete(n);
-  var result = saveReadSet(nextRead);
+  var result = await saveReadSet(nextRead);
   if (!result.ok) { notifyStorageFailure(result); return; }
-  STATE.readSet = nextRead;
+  STATE.readSet = result.value || STATE.readSet;
   showToast(willBeRead ? 'Marqué comme lu ✓' : 'Marqué comme non lu');
   updateReadBtn(n);
   updateHomeProgress();
@@ -3041,14 +3555,14 @@ function toggleRead() {
 }
 
 
-function toggleFav() {
+async function toggleFav() {
   const l = CORPUS[currentLetterIdx]; if (!l) return;
   const n = l.canonical_number;
   var nextFavs = new Set(STATE.favs);
   if (nextFavs.has(n)) nextFavs.delete(n); else nextFavs.add(n);
-  var result = saveFavourites(nextFavs);
+  var result = await saveFavourites(nextFavs);
   if (!result.ok) { notifyStorageFailure(result); return; }
-  STATE.favs = nextFavs;
+  STATE.favs = result.value || STATE.favs;
   updateFavBtns(n);
   showToast(STATE.favs.has(n) ? '♥ Ajouté aux favoris' : 'Retiré des favoris');
   const el = document.querySelector(`.letter-item[data-n="${n}"] .li-num`);
@@ -3107,7 +3621,7 @@ function closeNoteSheet() {
   document.getElementById('note-sheet').style.display = 'none'; deactivateDialog('note-sheet');
   _notePendingSelection = null;
 }
-function saveNoteSheet() {
+async function saveNoteSheet() {
   const l = CORPUS[currentLetterIdx]; if (!l) return false;
   const txt = document.getElementById('note-input').value.trim();
   if (!txt) { closeNoteSheet(); return true; }
@@ -3123,9 +3637,9 @@ function saveNoteSheet() {
   var entry = _notePendingDpId ? corpusDpEntry(_notePendingDpId) : null;
   if (entry) { note.paragraph_fingerprint=fingerprintText(entry.dp.text_fr||''); note.corpus_fingerprint=CORPUS_META.fingerprint||''; }
   if (_notePendingSelection) Object.assign(note,{selection_text:_notePendingSelection.text,offset_start:_notePendingSelection.offset_start,offset_end:_notePendingSelection.offset_end,paragraph_fingerprint:_notePendingSelection.paragraph_fingerprint,corpus_fingerprint:_notePendingSelection.corpus_fingerprint});
-  var nextNotes=[note].concat(STATE.notes); var result=saveNotes(nextNotes);
+  var nextNotes=[note].concat(STATE.notes); var result=await saveNotes(nextNotes);
   if(!result.ok){notifyStorageFailure(result);return false;}
-  STATE.notes=nextNotes; showToast('Note enregistrée'); closeNoteSheet(); return true;
+  STATE.notes=result.value||STATE.notes; showToast('Note enregistrée'); closeNoteSheet(); return true;
 }
 
 /* ════════════════════════════════════════
@@ -3258,16 +3772,16 @@ function closeTextBar(suppressReturnFocus) {
   document.getElementById('settings-overlay').setAttribute('aria-hidden','true');
   document.getElementById('text-size-bar').classList.remove('open'); deactivateDialog('text-size-bar', !!suppressReturnFocus);
 }
-function setTextLevel(level) {
+async function setTextLevel(level) {
   if (TEXT_LEVEL_ORDER.indexOf(level) < 0 || level === readerTextLevel) { updateReadingSettingsUi(); return true; }
   var scrollerId = currentReaderScrollerId();
   var currentN = currentLetterIdx >= 0 && CORPUS[currentLetterIdx] ? CORPUS[currentLetterIdx].canonical_number : 0;
   var semanticPosition = scrollerId && currentN ? (captureSemanticReadingPosition(scrollerId, currentN) || STATE.positions[currentN]) : null;
-  var result = saveReaderSize(level);
+  var result = await saveReaderSize(level);
   if (!result.ok) { notifyStorageFailure(result); return false; }
-  readerTextLevel = level;
-  readerSize = TEXT_LEVELS[level];
-  STATE.textLevel = level;
+  readerTextLevel = result.value || level;
+  readerSize = TEXT_LEVELS[readerTextLevel];
+  STATE.textLevel = readerTextLevel;
   STATE.readerSize = readerSize;
   applyReaderTypographyVariables();
   ['wr-body','pr-body'].forEach(function(id) {
@@ -3523,9 +4037,9 @@ function restoreSearchViewState() {
     });
   }
 }
-function openSearchResult(n, dpId) {
+async function openSearchResult(n, dpId) {
   captureSearchViewState();
-  openLetterAtDP(n, dpId || '');
+  await openLetterAtDP(n, dpId || '');
 }
 function directLetterNumber(raw) {
   var trimmed=String(raw||'').trim(), match=/^(?:LP\.LETTER\.)?(\d{1,3})$/i.exec(trimmed);
@@ -3750,17 +4264,17 @@ function setTab(el, target) {
   document.getElementById(target).style.display='';
   if (target === 't-highlights') renderHighlights();
 }
-function deleteNote(e, idx) {
+async function deleteNote(e, idx) {
   e.stopPropagation();
   if (idx < 0 || idx >= STATE.notes.length) return;
   var removed=STATE.notes[idx];
   var nextNotes=STATE.notes.filter(function(item,index){return index!==idx;});
-  var result=saveNotes(nextNotes); if(!result.ok){notifyStorageFailure(result);return;}
-  STATE.notes=nextNotes; renderNotes();
-  showUndoToast('Note supprimée',function(){
+  var result=await saveNotes(nextNotes); if(!result.ok){notifyStorageFailure(result);return;}
+  STATE.notes=result.value||STATE.notes; renderNotes();
+  showUndoToast('Note supprimée',async function(){
     var restored=STATE.notes.slice(); restored.splice(Math.min(idx,restored.length),0,removed);
-    var undo=saveNotes(restored); if(!undo.ok){notifyStorageFailure(undo);return false;}
-    STATE.notes=restored; renderNotes(); return true;
+    var undo=await saveNotes(restored); if(!undo.ok){notifyStorageFailure(undo);return false;}
+    STATE.notes=undo.value||STATE.notes; renderNotes(); return true;
   });
 }
 
@@ -3811,11 +4325,11 @@ function showUndoToast(msg, undoFn) {
   t.classList.add('show');
   _undoTimer=setTimeout(function(){_undoAction=null;t.classList.remove('show');},6500);
 }
-function performUndo() {
+async function performUndo() {
   if (!_undoAction) return false;
   var action=_undoAction; _undoAction=null;
   if (_undoTimer) clearTimeout(_undoTimer); _undoTimer=null;
-  var ok=action();
+  var ok=await action();
   if (ok) showToast('Suppression annulée');
   return !!ok;
 }
@@ -3867,7 +4381,7 @@ document.addEventListener('click', function(e) {
   } else if (action === 'highlight-delete') {
     deleteHighlight(e, Number(btn.getAttribute('data-highlight-index')));
   } else if (action === 'highlight-remove') {
-    e.stopPropagation(); removeHighlightById(btn.getAttribute('data-hl-id'), true);
+    e.stopPropagation(); void removeHighlightById(btn.getAttribute('data-hl-id'), true);
   } else if (action === 'path-letter') {
     var pathN = Number(btn.getAttribute('data-n')); if (isCanonicalNumber(pathN)) openLetterFromPath(pathN);
   } else if (action === 'reload-app') {
@@ -3940,7 +4454,7 @@ function onTextSelected(){
   positionHlPopup(range.getBoundingClientRect());
 }
 function confirmHighlightColor(color){_hlColor=color||'gold';return confirmHighlight();}
-function confirmHighlight(){
+async function confirmHighlight(){
   if(!_hlPendingText||_hlPendingLetterN<0){hideHlPopup();return false;}
   var l=CORPUS.find(function(x){return x.canonical_number===_hlPendingLetterN;});var entry=corpusDpEntry(_hlPendingDpId);if(!l||!entry){hideHlPopup();return false;}
   var source=entry.dp.text_fr||'';if(source.slice(_hlPendingStart,_hlPendingEnd)!==_hlPendingText){hideHlPopup();showToast('Sélection devenue invalide');return false;}
@@ -3949,7 +4463,7 @@ function confirmHighlight(){
   var overlap=STATE.highlights.some(function(h){return h.dp_id===_hlPendingDpId&&!h.stale&&Math.max(h.offset_start,_hlPendingStart)<Math.min(h.offset_end,_hlPendingEnd);});
   if(overlap){showToast('Ce passage chevauche un surlignage existant');hideHlPopup();return false;}
   var hl=enrichHighlightRecord({id:makeRecordId('hl_',l.letter_id+'|'+_hlPendingDpId+'|'+_hlPendingStart),letter_id:l.letter_id,n:l.canonical_number,dp_id:_hlPendingDpId,text:_hlPendingText,offset_start:_hlPendingStart,offset_end:_hlPendingEnd,color:_hlColor,date:new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'})},source);
-  var next=[hl].concat(STATE.highlights);var result=saveHighlights(next);if(!result.ok){notifyStorageFailure(result);hideHlPopup();return false;}STATE.highlights=next;
+  var next=[hl].concat(STATE.highlights);var result=await saveHighlights(next);if(!result.ok){notifyStorageFailure(result);hideHlPopup();return false;}STATE.highlights=result.value||STATE.highlights;
   hideHlPopup();showToast('Passage surligné');rerenderCurrentReaderKeepingScroll();return true;
 }
 function copySelectedPassage(){
@@ -3963,12 +4477,12 @@ function rerenderCurrentReaderKeepingScroll(){
   if(isWide())renderWideReader(CORPUS[currentLetterIdx],true);else renderPhoneReader(CORPUS[currentLetterIdx],true);
   requestAnimationFrame(function(){requestAnimationFrame(function(){var s=document.getElementById(scrollerId);if(s)s.scrollTop=saved;});});
 }
-function removeHighlightById(hlId,withUndo){
-  var idx=STATE.highlights.findIndex(function(h){return h.id===hlId;});if(idx<0)return false;var removed=STATE.highlights[idx];var next=STATE.highlights.filter(function(h){return h.id!==hlId;});var result=saveHighlights(next);if(!result.ok){notifyStorageFailure(result);return false;}STATE.highlights=next;renderHighlights();rerenderCurrentReaderKeepingScroll();
-  if(withUndo)showUndoToast('Surlignage supprimé',function(){var restored=STATE.highlights.slice();restored.splice(Math.min(idx,restored.length),0,removed);var undo=saveHighlights(restored);if(!undo.ok){notifyStorageFailure(undo);return false;}STATE.highlights=restored;renderHighlights();rerenderCurrentReaderKeepingScroll();return true;});
+async function removeHighlightById(hlId,withUndo){
+  var idx=STATE.highlights.findIndex(function(h){return h.id===hlId;});if(idx<0)return false;var removed=STATE.highlights[idx];var next=STATE.highlights.filter(function(h){return h.id!==hlId;});var result=await saveHighlights(next);if(!result.ok){notifyStorageFailure(result);return false;}STATE.highlights=result.value||STATE.highlights;renderHighlights();rerenderCurrentReaderKeepingScroll();
+  if(withUndo)showUndoToast('Surlignage supprimé',async function(){var restored=STATE.highlights.slice();restored.splice(Math.min(idx,restored.length),0,removed);var undo=await saveHighlights(restored);if(!undo.ok){notifyStorageFailure(undo);return false;}STATE.highlights=undo.value||STATE.highlights;renderHighlights();rerenderCurrentReaderKeepingScroll();return true;});
   return true;
 }
-function hlClick(e,hlId){e.stopPropagation();removeHighlightById(hlId,true);}
+function hlClick(e,hlId){e.stopPropagation();void removeHighlightById(hlId,true);}
 function renderHighlights(){
   var el=document.getElementById('t-highlights');if(!el)return;if(!STATE.highlights.length){el.innerHTML='<div class="empty-state"><i class="ti ti-highlight" aria-hidden="true"></i>Sélectionnez du texte dans une lettre pour le surligner.</div>';return;}
   var colorBg={gold:'rgba(214,177,61,.32)',blue:'rgba(80,140,220,.28)',green:'rgba(80,180,120,.28)',purple:'rgba(130,91,190,.28)',pink:'rgba(236,100,120,.28)'};
@@ -3979,7 +4493,7 @@ function renderHighlights(){
   if(stale.length){out+='<div class="hl-section-head">À réancrer ('+stale.length+')</div>'+stale.map(function(x){return itemHtml(x.h,x.i);}).join('');}
   el.innerHTML=out;
 }
-function deleteHighlight(e,idx){e.stopPropagation();if(idx<0||idx>=STATE.highlights.length)return;removeHighlightById(STATE.highlights[idx].id,true);}
+function deleteHighlight(e,idx){e.stopPropagation();if(idx<0||idx>=STATE.highlights.length)return;void removeHighlightById(STATE.highlights[idx].id,true);}
 
 
 
@@ -4238,9 +4752,9 @@ function renderPathModal(path) {
   document.getElementById('path-letter-list').innerHTML = html;
 }
 
-function openLetterFromPath(n) {
+async function openLetterFromPath(n) {
   // Open the letter — letter opens in phone-reader or wide reader
-  openLetter(n);
+  await openLetter(n);
   // Close path modal after short delay so user sees letter open
   setTimeout(function() {
     closePath(true);
@@ -4268,11 +4782,7 @@ function updateExportStats() {
   var text = parts.length ? parts.join(' · ') : 'Aucune donnée à exporter pour l\'instant.';
   ['settings-export-stats','workspace-backup-stats'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=text;});
   updateWorkspaceCounts();
-  var restoreRow = document.getElementById('pre-restore-row');
-  if (restoreRow) {
-    var snapshot = SafeStorage.readRaw('lp_pre_restore_snapshot');
-    restoreRow.style.display = snapshot.ok && snapshot.found ? '' : 'none';
-  }
+  refreshPreImportUndoAvailability();
 }
 
 function snapshotState() {
@@ -4321,10 +4831,15 @@ function downloadBlob(blob, filename) {
 }
 function exportData() {
   var envelope = buildBackupEnvelope();
-  var blob = new Blob([JSON.stringify(envelope, null, 2)], {type:'application/json;charset=utf-8'});
-  var filename = 'luisa-sauvegarde-v5-' + envelope.exported_at.slice(0,10) + '.json';
-  if (downloadBlob(blob, filename)) showToast('Sauvegarde complète créée');
-  else showToast('Impossible de créer la sauvegarde');
+  var text = JSON.stringify(envelope);
+  var blob = new Blob([text], {type:'application/json;charset=utf-8'});
+  var normal = blob.size <= NORMAL_BACKUP_MAX_BYTES;
+  var filename = normal
+    ? 'luisa-sauvegarde-v5-' + envelope.exported_at.slice(0,10) + '.json'
+    : 'luisa-archive-secours-v5-' + envelope.exported_at.slice(0,10) + '.json';
+  if (!downloadBlob(blob, filename)) { showToast('Impossible de créer la sauvegarde'); return; }
+  if (normal) showToast('Sauvegarde complète créée');
+  else showToast('Archive de secours créée : trop volumineuse pour une restauration directe dans cette version');
 }
 
 function exportText() {
@@ -4539,6 +5054,40 @@ function ensureUniqueHighlightIds(items) {
     return candidate === item.id ? item : Object.assign({}, item, {id:candidate});
   });
 }
+function snapshotPersonalConcurrencyState(state) {
+  state=state||STATE;
+  var raw={};
+  PROTECTED_USER_STORAGE_KEYS.forEach(function(key){var item=SafeStorage.readRaw(key);raw[key]=item.ok?{found:item.found,value:item.value}:{found:false,error:true};});
+  return {
+    favourites:Array.from(state.favs).sort(function(a,b){return a-b;}),notes:cloneJson(state.notes),highlights:cloneJson(state.highlights),
+    read_state:Array.from(state.readSet).sort(function(a,b){return a-b;}),positions:cloneJson(state.positions),last_read:cloneJson(state.lastRead),
+    text_size:state.textLevel,theme:state.theme,state_schema:state._stateSchema,protected_raw:raw
+  };
+}
+function personalSnapshotEqual(a,b){return jsonEqual(a,b);}
+function backupEnvelopeFromState(state) {
+  return buildBackupEnvelope({
+    favourites:Array.from(state.favs).sort(function(a,b){return a-b;}),notes:cloneJson(state.notes),highlights:cloneJson(state.highlights),
+    read_state:Array.from(state.readSet).sort(function(a,b){return a-b;}),positions:cloneJson(state.positions),last_read:cloneJson(state.lastRead),
+    text_size:state.textLevel,theme:state.theme
+  });
+}
+function mergeImportedAgainstDurable(parsed,durable,initiating) {
+  var incoming=parsed.data,next={
+    favourites:Array.from(durable.favs),notes:durable.notes.slice(),highlights:durable.highlights.slice(),read_state:Array.from(durable.readSet),
+    positions:Object.assign({},durable.positions),last_read:cloneJson(durable.lastRead),text_size:durable.textLevel,theme:durable.theme
+  };
+  next.favourites=cleanNumberArray(next.favourites.concat(incoming.favourites));
+  next.read_state=cleanNumberArray(next.read_state.concat(incoming.read_state));
+  if(parsed.present.notes){for(var i=0;i<incoming.notes.length;i++){var note=incoming.notes[i],same=noteById(next.notes,note.id);if(same&&!jsonEqual(same,note))return conflictResult('lp_notes','import_note_collision',same);if(!same)next.notes.push(note);}}
+  if(parsed.present.highlights){for(var j=0;j<incoming.highlights.length;j++){var hl=incoming.highlights[j],sameHl=next.highlights.find(function(x){return x.id===hl.id;});if(sameHl&&!jsonEqual(sameHl,hl))return conflictResult('lp_highlights','import_highlight_collision',sameHl);if(!sameHl){var hv=validateHighlightInsert(hl,next.highlights,hl.id);if(!hv.ok)return hv;next.highlights.push(hl);}}}
+  if(parsed.present.positions){var keys=Object.keys(incoming.positions);for(var k=0;k<keys.length;k++){var key=keys[k],base=initiating&&initiating.positions?initiating.positions[key]:undefined,current=durable.positions[key],value=incoming.positions[key];if(!jsonEqual(current,base)&&!jsonEqual(current,value))return conflictResult('lp_positions','import_position_collision',current);next.positions[key]=value;}}
+  if(parsed.present.last_read&&incoming.last_read){if(initiating&&!jsonEqual(durable.lastRead,initiating.last_read)&&!jsonEqual(durable.lastRead,incoming.last_read))return conflictResult('lp_last','import_last_read_collision',durable.lastRead);next.last_read=incoming.last_read;}
+  if(parsed.present.text_size){if(initiating&&durable.textLevel!==initiating.text_size&&durable.textLevel!==incoming.text_size)return conflictResult('lp_size','import_text_size_collision',durable.textLevel);next.text_size=incoming.text_size;}
+  if(parsed.present.theme){if(initiating&&durable.theme!==initiating.theme&&durable.theme!==incoming.theme)return conflictResult('lp_theme','import_theme_collision',durable.theme);next.theme=incoming.theme;}
+  next.highlights=ensureUniqueHighlightIds(next.highlights);next.highlights=canonicalizeHighlightsForCorpus(next.highlights).highlights;
+  return {ok:true,next:next};
+}
 function prepareImportedState(parsed, mode) {
   var incoming = parsed.data;
   var replace = mode === 'replace';
@@ -4570,64 +5119,63 @@ function prepareImportedState(parsed, mode) {
   next.highlights = canonicalizeHighlightsForCorpus(next.highlights).highlights;
   return next;
 }
-function commitImportedState(parsed, mode) {
+async function commitImportedState(parsed, mode) {
   if (!parsed || !parsed.ok || ['merge','replace'].indexOf(mode) < 0) return {ok:false, phase:'validation'};
-  var schemaGuard=futureSchemaWriteGuard('lp_state_schema'); if (schemaGuard) return schemaGuard;
-  if ((STATE._isolatedInvalidKeys||[]).length || (STATE._cleanerChangedKeys||[]).length) {
-    var rawPreserve=ensurePreMigrationSnapshot('before_import_over_unsafe_raw_state');
-    if (!rawPreserve.ok) return {ok:false,phase:'raw_state_preservation',key:rawPreserve.key,error:rawPreserve.error};
-  }
-  var next = prepareImportedState(parsed, mode);
-  var preRestore = buildBackupEnvelope();
-  preRestore.snapshot_reason = 'before_' + mode + '_import';
-  var entries = [
-    {key:'lp_pre_restore_snapshot', value:JSON.stringify(preRestore)},
-    {key:'lp_favs', value:JSON.stringify(next.favourites)},
-    {key:'lp_notes', value:JSON.stringify(next.notes)},
-    {key:'lp_highlights', value:JSON.stringify(next.highlights)},
-    {key:'lp_read', value:JSON.stringify(next.read_state)},
-    {key:'lp_positions', value:JSON.stringify(next.positions)},
-    next.last_read ? {key:'lp_last', value:JSON.stringify(next.last_read)} : {key:'lp_last', remove:true},
-    {key:'lp_size', value:next.text_size},
-    {key:'lp_theme', value:next.theme},
-    {key:'lp_state_schema', value:String(STATE_SCHEMA_VERSION)},
-    {key:'lp_paths', remove:true}
-  ];
-  var result = SafeStorage.writeBatch(entries);
-  if (!result.ok) return result;
-  STATE.favs = new Set(next.favourites);
-  STATE.notes = next.notes;
-  STATE.highlights = next.highlights;
-  STATE.readSet = new Set(next.read_state);
-  STATE.positions = next.positions;
-  STATE.lastRead = next.last_read;
-  STATE.textLevel = next.text_size;
-  readerTextLevel = next.text_size;
-  readerSize = TEXT_LEVELS[readerTextLevel];
-  STATE.readerSize = readerSize;
-  STATE.theme = next.theme;
-  STATE._stateSchema = STATE_SCHEMA_VERSION;
-  applyTheme(next.theme, false);
-  applyReaderTypographyVariables();
-  ['wr-body','pr-body'].forEach(function(id) {
-    var body = document.getElementById(id);
-    if (body) body.style.setProperty('--reader-size', readerSize + 'px');
+  var initiating=parsed._concurrency_snapshot||snapshotPersonalConcurrencyState(STATE);
+  return runPersonalSerialized('import-'+mode,async function(){
+    var durable=loadState();
+    if(durable._futureStateSchema)return {ok:false,key:'lp_state_schema',phase:'future_schema',rolledBack:true,error:'newer_state_schema_detected'};
+    if ((durable._isolatedInvalidKeys||[]).length || (durable._cleanerChangedKeys||[]).length) {
+      var rawPreserve=ensurePreMigrationSnapshotLocked('before_import_over_unsafe_raw_state');
+      if (!rawPreserve.ok) return {ok:false,phase:'raw_state_preservation',key:rawPreserve.key,error:rawPreserve.error};
+    }
+    if(mode==='replace'&&!personalSnapshotEqual(snapshotPersonalConcurrencyState(durable),initiating))return conflictResult('import','protected_state_advanced_since_preview',snapshotPersonalConcurrencyState(durable));
+    var prepared=mode==='replace'?{ok:true,next:prepareImportedStateAgainstState(parsed,'replace',durable)}:mergeImportedAgainstDurable(parsed,durable,initiating);
+    if(!prepared.ok)return prepared;
+    var next=prepared.next;
+    var rawSnapshot=captureImportRawSnapshot();
+    if(!rawSnapshot.ok)return rawSnapshot;
+    var recovery=await prepareBackupRecoverySnapshot(rawSnapshot.entries);
+    if(!recovery.ok)return recovery;
+    var recoveryTransactionId=recovery.transactionId;
+    var preRestore=backupEnvelopeFromState(durable);preRestore.snapshot_reason='before_'+mode+'_import';
+    var preRestoreText=JSON.stringify(preRestore);
+    var entries=[
+      {key:'lp_favs',value:JSON.stringify(next.favourites)},{key:'lp_notes',value:JSON.stringify(next.notes)},{key:'lp_highlights',value:JSON.stringify(next.highlights)},
+      {key:'lp_read',value:JSON.stringify(next.read_state)},{key:'lp_positions',value:JSON.stringify(next.positions)},
+      next.last_read?{key:'lp_last',value:JSON.stringify(next.last_read)}:{key:'lp_last',remove:true},{key:'lp_size',value:next.text_size},{key:'lp_theme',value:next.theme},
+      {key:'lp_state_schema',value:String(STATE_SCHEMA_VERSION)},{key:'lp_paths',remove:true}
+    ];
+    var result=writeImportEntriesVerified(entries);
+    if(!result.ok){
+      var rolledBack=restoreImportRawSnapshot(rawSnapshot.entries);
+      if(rolledBack){
+        var markerCleanup=clearBackupRestorePendingMarker();
+        if(markerCleanup.ok){try{await backupRecoveryDelete(BACKUP_RECOVERY_ACTIVE_ID);}catch(cleanupError){console.warn('[Luisa] rolled-back recovery record cleanup deferred:',cleanupError);}}
+      }
+      return {ok:false,key:result.key,phase:result.phase,rolledBack:rolledBack,recoverable:!rolledBack||readBackupRestorePendingMarker().found,error:result.error};
+    }
+    try {
+      await backupRecoveryFinalize(preRestoreText,recoveryTransactionId);
+    } catch(finalizeError) {
+      var finalRollback=restoreImportRawSnapshot(rawSnapshot.entries);
+      if(finalRollback){
+        var finalMarkerCleanup=clearBackupRestorePendingMarker();
+        if(finalMarkerCleanup.ok){try{await backupRecoveryDelete(BACKUP_RECOVERY_ACTIVE_ID);}catch(cleanupError){console.warn('[Luisa] finalization rollback recovery cleanup deferred:',cleanupError);}}
+      }
+      return {ok:false,phase:'recovery_finalize',rolledBack:finalRollback,recoverable:!finalRollback||readBackupRestorePendingMarker().found,error:finalizeError};
+    }
+    var committedMarkerCleanup=clearBackupRestorePendingMarker();
+    if(!committedMarkerCleanup.ok)console.warn('[Luisa] finalized import marker cleanup deferred:',committedMarkerCleanup.error||committedMarkerCleanup.phase);
+    adoptDurableState(loadState());
+    refreshPreImportUndoAvailability();
+    return {ok:true,next:next};
   });
-  updateReadingSettingsUi();
-  renderNotes();
-  renderHighlights();
-  updateHomeProgress();
-  updateHomePaths();
-  updateContinueCard();
-  updateExportStats();
-  if (currentLetterIdx >= 0 && CORPUS[currentLetterIdx]) {
-    updateReadBtn(CORPUS[currentLetterIdx].canonical_number);
-    updateFavBtns(CORPUS[currentLetterIdx].canonical_number);
-    rerenderCurrentReaderKeepingScroll();
-  }
-  return result;
 }
-
+function prepareImportedStateAgainstState(parsed, mode, baseState) {
+  var oldState=STATE,oldLevel=readerTextLevel,oldSize=readerSize;STATE=baseState;readerTextLevel=baseState.textLevel;readerSize=baseState.readerSize;
+  try{return prepareImportedState(parsed,mode);}finally{STATE=oldState;readerTextLevel=oldLevel;readerSize=oldSize;}
+}
 var _pendingImport = null;
 var _importReadInProgress = false;
 function closeImportPreview() {
@@ -4636,6 +5184,7 @@ function closeImportPreview() {
   _pendingImport = null;
 }
 function showImportPreview(parsed) {
+  parsed._concurrency_snapshot = snapshotPersonalConcurrencyState(STATE);
   _pendingImport = parsed;
   var data = parsed.data;
   document.getElementById('import-preview-summary').textContent =
@@ -4647,23 +5196,31 @@ function showImportPreview(parsed) {
   document.getElementById('import-overlay').style.display = ''; document.getElementById('import-overlay').setAttribute('aria-hidden','false');
   document.getElementById('import-sheet').style.display = ''; activateDialog('import-sheet','import-merge-btn');
 }
-function restorePreImportSnapshot() {
-  var snapshot = SafeStorage.readRaw('lp_pre_restore_snapshot');
-  if (!snapshot.ok || !snapshot.found) { showToast('Aucune sauvegarde de secours disponible'); return; }
+async function restorePreImportSnapshot() {
+  var value='';
   try {
-    var parsed = parseImportPayload(snapshot.value);
+    var stored=await backupRecoveryGet(BACKUP_RECOVERY_LAST_IMPORT_ID);
+    if(stored&&typeof stored.payload==='string')value=stored.payload;
+  } catch(error) { console.warn('[Luisa] recovery store unavailable for last import:',error); }
+  if(!value){
+    var legacy=SafeStorage.readRaw('lp_pre_restore_snapshot');
+    if(legacy.ok&&legacy.found)value=legacy.value;
+  }
+  if(!value){showToast('Aucune sauvegarde de secours disponible');return;}
+  try {
+    var parsed=parseImportPayload(value);
     showImportPreview(parsed);
-    document.getElementById('import-preview-details').textContent =
-      'Sauvegarde créée avant le dernier import. Choisissez Remplacer pour revenir à cet état.';
-  } catch (error) {
-    console.warn('[Luisa] pre-restore snapshot rejected:', error);
+    document.getElementById('import-preview-details').textContent='Sauvegarde créée avant le dernier import. Choisissez Remplacer pour revenir à cet état.';
+  } catch(error) {
+    console.warn('[Luisa] pre-restore snapshot rejected:',error);
     showToast('Sauvegarde de secours invalide');
   }
 }
-function commitImport(mode) {
+async function commitImport(mode) {
   if (!_pendingImport) return;
-  var result = commitImportedState(_pendingImport, mode);
+  var result = await commitImportedState(_pendingImport, mode);
   if (!result.ok) { notifyStorageFailure(result); return; }
+  refreshPersonalUiAfterPeerState();
   closeImportPreview();
   showToast(mode === 'replace' ? 'Données remplacées et sauvegardées' : 'Données fusionnées et sauvegardées');
 }
@@ -4673,7 +5230,7 @@ function importData(event) {
   if (!file) return;
   if (file.size > MAX_IMPORT_BYTES) {
     input.value = '';
-    showToast('Fichier trop volumineux (maximum 5 Mo)');
+    showToast('Fichier trop volumineux pour une restauration directe (maximum 24 Mo). Conservez-le comme archive de secours.');
     return;
   }
   var reader = new FileReader();
@@ -4696,17 +5253,28 @@ function importData(event) {
   reader.readAsText(file);
 }
 
+window.__CONC_LETTRES_01_TEST = Object.freeze({
+  SafeStorage:SafeStorage,runPersonalSerialized:runPersonalSerialized,loadState:loadState,saveFavourites:saveFavourites,saveReadSet:saveReadSet,
+  saveNotes:saveNotes,saveHighlights:saveHighlights,saveLastRead:saveLastRead,saveTheme:saveTheme,saveReaderSize:saveReaderSize,saveReadingPosition:saveReadingPosition,
+  commitImportedState:commitImportedState,recoverPendingStorageTransaction:recoverPendingStorageTransaction,bootstrapPersonalState:bootstrapPersonalState,
+  recoverPendingBackupRestoreLocked:recoverPendingBackupRestoreLocked,readBackupRestorePendingMarker:readBackupRestorePendingMarker,
+  isOrphanBackupRestoreFailure:isOrphanBackupRestoreFailure,clearOrphanedBackupRestoreMarkerAfterUserApproval:clearOrphanedBackupRestoreMarkerAfterUserApproval,
+  personalLocksSupported:personalLocksSupported,lockName:PERSONAL_STATE_LOCK_NAME,constants:{appVersion:APP_VERSION,stateSchema:STATE_SCHEMA_VERSION,backupRestorePendingKey:BACKUP_RESTORE_PENDING_KEY,orphanQuarantineKey:BACKUP_RESTORE_ORPHAN_QUARANTINE_KEY}
+});
+
 window.__LET_A_TEST = Object.freeze({
   SafeStorage:SafeStorage,
   getState:snapshotState,
   buildBackupEnvelope:buildBackupEnvelope,
   parseImportPayload:parseImportPayload,
   commitImportedState:commitImportedState,
+  recoverPendingBackupRestoreLocked:recoverPendingBackupRestoreLocked,
+  readBackupRestorePendingMarker:readBackupRestorePendingMarker,
   migrateLegacyPathProgress:migrateLegacyPathProgress,
   recoverPendingStorageTransaction:recoverPendingStorageTransaction,
   ensurePreMigrationSnapshot:ensurePreMigrationSnapshot,
   futureSchemaWriteGuard:futureSchemaWriteGuard,
-  constants:{appVersion:APP_VERSION,stateSchema:STATE_SCHEMA_VERSION,maxImportBytes:MAX_IMPORT_BYTES,transactionJournalKey:STORAGE_TRANSACTION_JOURNAL_KEY,preMigrationSnapshotKey:PRE_MIGRATION_SNAPSHOT_KEY}
+  constants:{appVersion:APP_VERSION,stateSchema:STATE_SCHEMA_VERSION,maxImportBytes:MAX_IMPORT_BYTES,normalBackupMaxBytes:NORMAL_BACKUP_MAX_BYTES,transactionJournalKey:STORAGE_TRANSACTION_JOURNAL_KEY,preMigrationSnapshotKey:PRE_MIGRATION_SNAPSHOT_KEY,recoveryDbName:BACKUP_RECOVERY_DB_NAME,recoveryStore:BACKUP_RECOVERY_STORE,backupRestorePendingKey:BACKUP_RESTORE_PENDING_KEY}
 });
 window.__LET_B_TEST = Object.freeze({
   getState:snapshotState,
@@ -4798,6 +5366,44 @@ window.__LET_H_TEST = Object.freeze({
   parseImportPayload:parseImportPayload,
   constants:{appVersion:APP_VERSION,stateSchema:STATE_SCHEMA_VERSION,minTargetCssPx:44}
 });
+
+
+/* ════════════════════════════════════════
+   LOCAL TABLER ICONS — v3.46.0 exact sprite
+════════════════════════════════════════ */
+function tablerIconNameFromElement(el) {
+  if (!el || !el.classList) return '';
+  for (var i=0;i<el.classList.length;i++) {
+    var cls=el.classList.item(i)||'';
+    if (cls.indexOf('ti-')===0 && cls.length>3) return cls.slice(3);
+  }
+  return '';
+}
+function upgradeTablerIcon(el) {
+  if (!el || el.nodeType!==1 || String(el.tagName||'').toLowerCase()!=='i' || !el.classList.contains('ti')) return false;
+  var name=tablerIconNameFromElement(el); if(!name) return false;
+  var symbol=TABLER_ICON_ALIASES[name]||name;
+  var svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  Array.prototype.forEach.call(el.attributes,function(attr){svg.setAttribute(attr.name,attr.value);});
+  svg.setAttribute('focusable','false');
+  if(!svg.hasAttribute('aria-label')&&!svg.hasAttribute('aria-labelledby')&&!svg.hasAttribute('role')&&!svg.hasAttribute('aria-hidden')) svg.setAttribute('aria-hidden','true');
+  var use=document.createElementNS('http://www.w3.org/2000/svg','use');
+  use.setAttribute('href',TABLER_SPRITE_URL+'#tabler-'+symbol);
+  svg.appendChild(use); el.replaceWith(svg); return true;
+}
+function upgradeTablerIcons(root) {
+  if(!root) return 0; var count=0;
+  if(root.nodeType===1 && String(root.tagName||'').toLowerCase()==='i' && root.classList&&root.classList.contains('ti')) count+=upgradeTablerIcon(root)?1:0;
+  if(root.querySelectorAll) Array.prototype.forEach.call(root.querySelectorAll('i.ti'),function(el){count+=upgradeTablerIcon(el)?1:0;});
+  return count;
+}
+var _tablerIconObserver=null;
+function startTablerIconObserver() {
+  upgradeTablerIcons(document);
+  if(typeof MutationObserver!=='function'||_tablerIconObserver) return;
+  _tablerIconObserver=new MutationObserver(function(records){records.forEach(function(record){Array.prototype.forEach.call(record.addedNodes||[],function(node){if(node&&node.nodeType===1)upgradeTablerIcons(node);});});});
+  _tablerIconObserver.observe(document.documentElement,{childList:true,subtree:true});
+}
 
 /* ════════════════════════════════════════
    KEYBOARD
@@ -4941,6 +5547,7 @@ window.__LET_G_TEST = {
 window.__LET_I_TEST = Object.freeze({parseInitialRoute:parseInitialRoute,applyInitialRoute:applyInitialRoute,stableUrlForRoute:stableUrlForRoute,currentRouteDescriptor:currentRouteDescriptor,privacySafeSupportRouteDescriptor:privacySafeSupportRouteDescriptor,readerIsRouteVisible:readerIsRouteVisible,currentStableUrl:currentStableUrl,buildTextIssueReport:buildTextIssueReport,buildDiagnostics:buildDiagnostics,routeLetterNumber:routeLetterNumber,constants:{appVersion:APP_VERSION,stateSchema:STATE_SCHEMA_VERSION}});
 window.__LDL_HELP_TEST = Object.freeze({openHelp:openHelp,closeHelp:closeHelp,renderHelpSlide:renderHelpSlide,helpSlideCount:helpSlideCount,helpSlideIndex:helpSlideIndex,helpSelectTopic:helpSelectTopic,helpTopicTitle:helpTopicTitle,constants:{appVersion:APP_VERSION}});
 
+startTablerIconObserver();
 loadCorpus();
 </script>
 </body>
