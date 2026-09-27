@@ -1643,8 +1643,8 @@ function lettersScopeFingerprint(scope) {
   return (h >>> 0).toString(16).padStart(8, '0');
 }
 const LETTERS_SCOPE_FINGERPRINT = lettersScopeFingerprint(new URL('./', window.location.href).href);
-const SHELL_CACHE_ID = `luisa-letters-${LETTERS_SCOPE_FINGERPRINT}-shell-v2.3-r8-r4`;
-const CORPUS_CACHE_ID = `luisa-letters-${LETTERS_SCOPE_FINGERPRINT}-corpus-v2.3-r8-r4`;
+const SHELL_CACHE_ID = `luisa-letters-${LETTERS_SCOPE_FINGERPRINT}-shell-v2.3-r8-r6`;
+const CORPUS_CACHE_ID = `luisa-letters-${LETTERS_SCOPE_FINGERPRINT}-corpus-v2.3-r8-r6`;
 const TABLER_SPRITE_URL = './vendor/tabler/tabler-sprite.svg';
 const TABLER_ICON_ALIASES = Object.freeze({'book-open':'book'});
 const PROTECTED_USER_STORAGE_KEYS = Object.freeze([
@@ -5791,18 +5791,80 @@ function showUpdateBanner() {
     : '✦ Nouvelle version disponible';
   banner.style.display = 'flex';
 }
-function applyUpdate() {
+function setUpdateApplyState(busy, message) {
+  var button = document.getElementById('update-apply-btn');
+  var label = document.getElementById('update-banner-message');
+  if (button) {
+    button.disabled = !!busy;
+    button.textContent = busy ? 'Mise à jour…' : 'Mettre à jour';
+  }
+  if (label && message) label.textContent = message;
+}
+function waitForUpdateActivation(worker, timeoutMs) {
+  return new Promise(function(resolve) {
+    var done = false;
+    var timer = null;
+    function cleanup() {
+      if (timer) clearTimeout(timer);
+      try { navigator.serviceWorker.removeEventListener('controllerchange', onControllerChange); } catch (e) {}
+      try { worker.removeEventListener('statechange', onStateChange); } catch (e) {}
+    }
+    function finish(ok, reason) {
+      if (done) return;
+      done = true;
+      cleanup();
+      resolve({ok:ok, reason:reason});
+    }
+    function onControllerChange() { finish(true, 'controllerchange'); }
+    function onStateChange() {
+      if (worker.state === 'activated') finish(true, 'activated');
+      else if (worker.state === 'redundant') finish(false, 'redundant');
+    }
+    navigator.serviceWorker.addEventListener('controllerchange', onControllerChange);
+    worker.addEventListener('statechange', onStateChange);
+    timer = setTimeout(function() { finish(false, 'timeout'); }, timeoutMs || 10000);
+    onStateChange();
+  });
+}
+async function applyUpdate() {
   var safety = updateSafetyState();
   if (safety.blocked) {
     showUpdateBanner();
     showToast(safety.reason === 'note' ? 'Enregistrez ou annulez votre note avant la mise à jour' : 'Terminez ou annulez l’import avant la mise à jour');
     return false;
   }
-  var worker = _newWorker || (_swReg && _swReg.waiting);
-  if (!worker) { location.reload(); return true; }
+
+  var worker = (_swReg && _swReg.waiting) || _newWorker;
+  if ((!worker || worker.state === 'redundant') && _swReg) {
+    try { await _swReg.update(); } catch (e) {}
+    worker = _swReg.waiting || _swReg.installing || _newWorker;
+  }
+  if (!worker || worker.state === 'redundant') {
+    setUpdateApplyState(false, '✦ Mise à jour indisponible pour le moment — réessayez');
+    return false;
+  }
+
   _updateApplyRequested = true;
-  worker.postMessage({ type: 'SKIP_WAITING' });
-  return true;
+  setUpdateApplyState(true, '✦ Application de la mise à jour…');
+
+  var activation = waitForUpdateActivation(worker, 10000);
+  try {
+    worker.postMessage({ type: 'SKIP_WAITING' });
+  } catch (e) {
+    _updateApplyRequested = false;
+    setUpdateApplyState(false, '✦ Mise à jour prête — réessayez');
+    return false;
+  }
+
+  var result = await activation;
+  if (result.ok) {
+    location.reload();
+    return true;
+  }
+
+  _updateApplyRequested = false;
+  setUpdateApplyState(false, '✦ Mise à jour prête — réessayez');
+  return false;
 }
 
 if ('serviceWorker' in navigator) {
