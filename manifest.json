@@ -56,5 +56,8 @@
             ],
             "description": "Rechercher dans les lettres"
         }
-    ]
+    ],
+    "version": "2.10",
+    "build_revision": "B1",
+    "release_id": "lettres-v2.10-b1-prephysical"
 }
