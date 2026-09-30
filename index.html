@@ -726,6 +726,16 @@ input[type="search"],input[type="text"],textarea{min-height:44px;}
 .help-dot::after{content:"";position:absolute;left:50%;top:50%;width:7px;height:7px;border-radius:50%;background:var(--border);transform:translate(-50%,-50%);}
 .help-dot.active::after{background:var(--gold-text);}
 mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
+@media (forced-colors: active){
+  .chip.active,.setting-choice.active,.snav-item.active,.help-nav-btn.primary,
+  .path-step.done,.path-step.current,.help-dot.active,.letter-item.selected,.tab.active,
+  .pnav-item.active,.ldj-card{border:2px solid currentColor!important;}
+  .pnav-item.active::after{background:CanvasText!important;forced-color-adjust:auto;}
+  .letter-item.selected{outline:1px solid currentColor;outline-offset:-1px;}
+  .hl-color-btn,.hl-color-btn.selected{border:2px solid currentColor!important;}
+  .install-btn,.action-btn.active,.action-btn[aria-pressed="true"]{border:2px solid currentColor!important;}
+}
+
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;}
 }
@@ -1152,7 +1162,7 @@ html[data-layout="wide"] .snav-item{font-size:var(--ui-nav-target);}
           <strong>Lettres de Luisa Piccarreta</strong> est une application de lecture, de recherche et d’exploration d’une <strong>collection éditoriale actuelle de 136 entrées</strong>.<br><br>
           Cette collection ne constitue pas l’ensemble de la correspondance connue de Luisa et n’est pas présentée comme une édition critique officielle. La section <strong>Sources et vérification des textes</strong> explique l’origine du texte français, les documents consultés, les contrôles effectués et les principales questions encore ouvertes.<br><br>
           La collection utilise des identifiants stables et des paragraphes d’affichage reliés au texte source afin de permettre la recherche, les liens précis, les notes, les surlignages et la reprise de lecture sans modifier le texte lu.<br><br>
-          <strong>Version de l’app :</strong> v2.8<br>
+          <strong>Version de l’app :</strong> v2.9<br>
           <strong>Collection actuelle :</strong> 136 entrées · 909 paragraphes d’affichage<br><br>
           <strong>Confidentialité :</strong> vos données personnelles restent dans le stockage local de cette installation ou de ce contexte de l’app, sauf lorsque vous choisissez vous-même de les exporter. Elles ne sont pas automatiquement partagées avec les autres apps de la Collection Luisa et ne sont pas incluses dans les liens, signalements ou diagnostics.
         </div>
@@ -1447,7 +1457,7 @@ html[data-layout="wide"] .snav-item{font-size:var(--ui-nav-target);}
   <div class="settings-section" id="settings-help-section">
     <div class="settings-label">Aide</div>
     <button class="settings-action" id="settings-help-btn" onclick="openHelpFromSettings()" aria-label="Ouvrir l’aide"><i class="ti ti-help-circle" aria-hidden="true"></i> Ouvrir l’aide</button>
-    <div class="settings-current">À propos se trouve à la fin de l’Aide · v2.8 · 2026-09-29</div>
+    <div class="settings-current">À propos se trouve à la fin de l’Aide · v2.9 · 2026-09-30</div>
   </div>
 </div>
 
@@ -1475,7 +1485,7 @@ html[data-layout="wide"] .snav-item{font-size:var(--ui-nav-target);}
     <div class="sidebar-bottom">
       <button class="snav-item" id="snav-settings" onclick="openTextBar()" aria-label="Réglages"><i class="ti ti-settings" aria-hidden="true"></i>Réglages</button>
       <button class="snav-item" id="snav-help" onclick="openContextHelp(this)" aria-label="Aide sur l’écran actuel"><i class="ti ti-help-circle" aria-hidden="true"></i>Aide</button>
-      <div class="build-meta" style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v2.8 · 2026-09-29</div>
+      <div class="build-meta" style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.06em;padding:4px 0 2px;">v2.9 · 2026-09-30</div>
     </div>
   </nav>
 
@@ -1529,12 +1539,12 @@ html[data-layout="wide"] .snav-item{font-size:var(--ui-nav-target);}
           <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:16px;color:var(--muted)"></i>
         </button>
         <div style="height:12px"></div>
-        <div class="build-meta" style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v2.8 · 2026-09-29</div>
+        <div class="build-meta" style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:.55;letter-spacing:.06em;">v2.9 · 2026-09-30</div>
       </div>
     </div>
 
     <!-- LIST -->
-    <div class="panel" id="p-list">
+    <div class="panel" id="p-list" role="main" aria-label="Liste des lettres">
       <div class="top-bar">
         <span class="title" id="list-title" role="heading" aria-level="1">136 Lettres</span>
         <div class="top-actions">
@@ -1828,7 +1838,7 @@ function validateCuratedPaths() {
 /* ════════════════════════════════════════
    STATE
 ════════════════════════════════════════ */
-const APP_VERSION = '2.8';
+const APP_VERSION = '2.9';
 const APP_BUILD = 'B1';
 const STATE_SCHEMA_VERSION = 5;
 const STORAGE_TRANSACTION_JOURNAL_KEY = 'lp_pending_transaction';
@@ -1848,8 +1858,8 @@ function lettersScopeFingerprint(scope) {
   return (h >>> 0).toString(16).padStart(8, '0');
 }
 const LETTERS_SCOPE_FINGERPRINT = lettersScopeFingerprint(new URL('./', window.location.href).href);
-const SHELL_CACHE_ID = `luisa-letters-${LETTERS_SCOPE_FINGERPRINT}-shell-v2.8-b1`;
-const CORPUS_CACHE_ID = `luisa-letters-${LETTERS_SCOPE_FINGERPRINT}-corpus-v2.8-b1`;
+const SHELL_CACHE_ID = `luisa-letters-${LETTERS_SCOPE_FINGERPRINT}-shell-v2.9-b1`;
+const CORPUS_CACHE_ID = `luisa-letters-${LETTERS_SCOPE_FINGERPRINT}-corpus-v2.9-b1`;
 const TABLER_SPRITE_URL = './vendor/tabler/tabler-sprite.svg';
 const TABLER_ICON_ALIASES = Object.freeze({'book-open':'book'});
 const PROTECTED_USER_STORAGE_KEYS = Object.freeze([
@@ -5181,13 +5191,19 @@ function currentHelpKey() {
 }
 function openContextHelp(opener) { openHelp(currentHelpKey(), opener || document.activeElement); }
 
+function resolveHelpReturnFocus(returnFocusOverride) {
+  if (returnFocusOverride && returnFocusOverride.isConnected) return returnFocusOverride;
+  var active = document.activeElement;
+  if (active && active !== document.body && active !== document.documentElement && active.isConnected) return active;
+  return document.querySelector('.panel.active .phone-help-entry') || document.getElementById('snav-help') || document.getElementById('settings-help-btn') || null;
+}
 function openHelp(startSlide, returnFocusOverride) {
   _helpSlides = helpSlideCount();
   var requested = typeof startSlide === 'string' ? helpSlideIndex(startSlide) : Number(startSlide || 0);
   _helpSlide = Math.max(0, Math.min(_helpSlides - 1, Number.isFinite(requested) ? requested : 0));
   renderHelpSlide();
   document.getElementById('help-overlay').classList.add('show'); document.getElementById('help-overlay').setAttribute('aria-hidden','false');
-  activateDialog('help-modal','help-close-btn',returnFocusOverride);
+  activateDialog('help-modal','help-close-btn',resolveHelpReturnFocus(returnFocusOverride));
 }
 
 function closeHelp(suppressReturnFocus) {
