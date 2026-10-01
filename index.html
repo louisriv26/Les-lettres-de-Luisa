@@ -945,9 +945,13 @@ html[data-layout="wide"] .snav-item{font-size:var(--ui-nav-target);}
 @media(max-width:219px){
   .panel>.scroll{padding-bottom:calc(108px + env(safe-area-inset-bottom));}
 }
+.skip-link{position:fixed;left:12px;top:8px;z-index:1200;transform:translateY(-160%);background:var(--night);color:var(--white);padding:10px 14px;border-radius:8px;font:600 14px var(--body);}
+.skip-link:focus{transform:translateY(0);}
+@media (forced-colors: active){.ldj-card,.path-card,.letter-item,.search-result-card,.home-path-card{border:1px solid ButtonText!important;}.skip-link{border:1px solid ButtonText;}}
 </style>
 </head>
 <body>
+<a class="skip-link" href="#left-panel">Aller au contenu</a>
 
 <div id="loading" role="status" aria-label="Chargement…">
   <div class="loading-cross" aria-hidden="true">✦</div>
@@ -1106,12 +1110,12 @@ html[data-layout="wide"] .snav-item{font-size:var(--ui-nav-target);}
         <h2 class="help-title">Taille du texte et thème</h2>
         <div class="help-body">
           Dans <strong>Réglages</strong>, choisissez directement :<br><br>
-          <strong>Petit · 16 px</strong><br>
-          <strong>Normal · 19 px</strong><br>
-          <strong>Grand · 22 px</strong><br>
-          <strong>Très grand · 26 px</strong><br><br>
+          <strong>Petit</strong><br>
+          <strong>Normal</strong><br>
+          <strong>Grand</strong><br>
+          <strong>Très grand</strong><br><br>
           Pour le thème : <strong>Automatique · Clair · Sombre</strong>. Automatique suit le réglage clair/sombre du système ; Clair et Sombre restent fixes jusqu’à ce que vous les changiez.<br><br>
-          Le texte principal des lettres suit précisément le niveau choisi : <strong>Petit 16 px · Normal 19 px · Grand 22 px · Très grand 26 px</strong>. Certains éléments particuliers du texte, comme les salutations, peuvent être légèrement plus petits afin de conserver leur hiérarchie visuelle.<br><br>
+          Le texte principal des lettres suit le niveau choisi ; l’interface s’adapte en même temps pour rester lisible. Certains éléments particuliers du texte, comme les salutations, peuvent être légèrement plus petits afin de conserver leur hiérarchie visuelle.<br><br>
           Le réglage agit également sur les textes utiles de l’interface — titres, boutons, résultats de recherche, aide, descriptions et informations de progression — avec une taille adaptée à leur rôle. Certains éléments techniques ou décoratifs restent volontairement plus compacts. Sur des écrans exceptionnellement étroits, la navigation peut également adopter une taille compacte afin de rester entièrement utilisable.
         </div>
         <div class="help-tip">Changer la taille du texte ou passer entre les mises en page téléphone/tablette conserve autant que possible le même repère de lecture.</div>
@@ -1480,7 +1484,7 @@ html[data-layout="wide"] .snav-item{font-size:var(--ui-nav-target);}
   </nav>
 
   <!-- ═══ LEFT PANEL ═══ -->
-  <div id="left-panel">
+  <div id="left-panel" tabindex="-1">
 
     <!-- HOME -->
     <div class="panel active" id="p-home">
@@ -1534,7 +1538,7 @@ html[data-layout="wide"] .snav-item{font-size:var(--ui-nav-target);}
     </div>
 
     <!-- LIST -->
-    <div class="panel" id="p-list">
+    <div class="panel" id="p-list" role="region" aria-labelledby="list-title">
       <div class="top-bar">
         <span class="title" id="list-title" role="heading" aria-level="1">136 Lettres</span>
         <div class="top-actions">
@@ -1659,7 +1663,7 @@ html[data-layout="wide"] .snav-item{font-size:var(--ui-nav-target);}
       <div id="wide-reader-scroll" class="scroll" onscroll="updateReadProgress('wr')">
         <div class="letter-header">
           <div class="lh-num" id="wr-id"></div>
-          <div class="lh-title" id="wr-title" role="heading" aria-level="1"></div>
+          <div class="lh-title" id="wr-title" role="heading" aria-level="2"></div>
           <div class="lh-meta" id="wr-meta"></div>
           <div class="lh-topics" id="wr-topics"></div>
           <div class="reader-source-entry">
@@ -3291,7 +3295,7 @@ function chooseLetterOfDay(date) {
 }
 function renderLetterOfDayCard(letter) {
   if (!letter) return;
-  document.getElementById('ldj-id').textContent = letter.letter_id;
+  document.getElementById('ldj-id').textContent = 'Lettre ' + letter.canonical_number;
   document.getElementById('ldj-title').textContent = letter.title_fr;
   document.getElementById('ldj-dest').textContent = letter.recipient_display_fr;
   document.getElementById('ldj-card').onclick = openLetterFromHome;
@@ -3903,8 +3907,8 @@ function renderWideReader(l, skipScrollReset) {
   document.getElementById('reader-empty').style.display = 'none';
   const wr = document.getElementById('wide-reader');
   wr.style.display = 'flex';
-  document.getElementById('wr-num').textContent   = l.letter_id;
-  document.getElementById('wr-id').textContent    = l.letter_id;
+  document.getElementById('wr-num').textContent   = 'Lettre ' + l.canonical_number;
+  document.getElementById('wr-id').textContent    = 'Lettre ' + l.canonical_number;
   document.getElementById('wr-title').textContent = l.title_fr;
   document.getElementById('wr-meta').innerHTML    = buildMeta(l);
   document.getElementById('wr-topics').innerHTML  = buildTopics(l);
@@ -3922,7 +3926,7 @@ function renderWideReader(l, skipScrollReset) {
 }
 
 function renderPhoneReader(l, skipScrollReset) {
-  document.getElementById('pr-id').textContent    = l.letter_id;
+  document.getElementById('pr-id').textContent    = 'Lettre ' + l.canonical_number;
   document.getElementById('pr-title').textContent = l.title_fr;
   document.getElementById('pr-meta').innerHTML    = buildMeta(l);
   document.getElementById('pr-topics').innerHTML  = buildTopics(l);
@@ -4716,7 +4720,7 @@ function renderPassageResult(hit,raw,index){
   return '<div role="listitem" class="search-result-group"><button class="letter-item search-result-control'+selected+'" id="search-result-'+key+'" data-n="'+l.canonical_number+'" data-search-dp="'+esc(dpId)+'" data-search-key="'+key+'" data-search-top="0" data-search-passage-index="'+index+'" data-action="search-result"'+aria+'><div class="li-num'+(STATE.favs.has(l.canonical_number)?' is-fav':'')+'" aria-hidden="true">'+l.canonical_number+'</div><div class="li-body"><div class="li-title">'+highlightSearchQuery(l.title_fr,raw)+'</div><div class="li-dest">'+highlightSearchQuery(l.recipient_display_fr,raw)+'</div>'+resultDatePlace(l,raw)+'<div class="search-result-reason">'+esc(hit.label)+'</div><div class="search-result-stats">'+stats+'</div>'+evidenceHtml+resultTopics(l,raw,'')+'</div></button>'+detailHtml+'</div>';
 }
 function showMoreSearchResults(){var old=_searchViewState.visibleLimit||SEARCH_BATCH_SIZE;_searchViewState.visibleLimit=old+SEARCH_BATCH_SIZE;doSearch(_searchGeneration);requestAnimationFrame(function(){var b=document.querySelector('#search-results .letter-item[data-search-passage-index="'+old+'"]');if(b)b.focus();});}
-function renderSearchResults(raw,directHits,passageHits,specialLabel){var res=document.getElementById('search-results'),controls=document.getElementById('search-controls'),mode=_searchViewState.sort||'relevance',html='',total=directHits.length+passageHits.length;if(!total){controls.style.display='none';res.innerHTML='<div class="empty-state" role="status"><i class="ti ti-search-off" aria-hidden="true"></i>Aucun résultat pour « '+esc(raw)+' »</div>';return;}controls.style.display=total>1?'flex':'none';var disclosed=Math.min(passageHits.length,_searchViewState.visibleLimit||SEARCH_BATCH_SIZE);html+='<div class="search-count" role="status" aria-live="polite">'+directHits.length+' correspondance'+(directHits.length>1?'s':'')+' directe'+(directHits.length>1?'s':'')+' · '+passageHits.length+' lettre'+(passageHits.length>1?'s':'')+' avec passage'+(passageHits.length>1?'s':'')+(specialLabel?' · '+esc(specialLabel):'')+'</div>';if(directHits.length)html+='<div class="search-section-label" role="heading" aria-level="2">Correspondances directes · '+directHits.length+'</div><div role="list" aria-label="Correspondances directes">'+directHits.map(function(h){return renderDirectResult(h,raw);}).join('')+'</div>';if(passageHits.length)html+='<div class="search-section-label" role="heading" aria-level="2">Passages · '+passageHits.length+' lettre'+(passageHits.length>1?'s':'')+'</div><div role="list" aria-label="Passages trouvés">'+passageHits.slice(0,disclosed).map(function(h,i){return renderPassageResult(h,raw,i);}).join('')+'</div>';if(disclosed<passageHits.length)html+='<button class="search-more" data-action="search-more">Afficher '+Math.min(SEARCH_BATCH_SIZE,passageHits.length-disclosed)+' résultats supplémentaires</button>';res.innerHTML=html;updateSearchSelection(_searchViewState.selectedKey||'');}
+function renderSearchResults(raw,directHits,passageHits,specialLabel){var res=document.getElementById('search-results'),controls=document.getElementById('search-controls'),mode=_searchViewState.sort||'relevance',html='',total=directHits.length+passageHits.length;if(!total){controls.style.display='none';res.innerHTML='<div class="empty-state" role="status"><i class="ti ti-search-off" aria-hidden="true"></i>Aucun résultat pour « '+esc(raw)+' »<br><small>Vérifiez l’orthographe ou essayez un mot plus court.</small></div>';return;}controls.style.display=total>1?'flex':'none';var disclosed=Math.min(passageHits.length,_searchViewState.visibleLimit||SEARCH_BATCH_SIZE);html+='<div class="search-count" role="status" aria-live="polite">'+directHits.length+' correspondance'+(directHits.length>1?'s':'')+' directe'+(directHits.length>1?'s':'')+' · '+passageHits.length+' lettre'+(passageHits.length>1?'s':'')+' avec passage'+(passageHits.length>1?'s':'')+(specialLabel?' · '+esc(specialLabel):'')+'</div>';if(directHits.length)html+='<div class="search-section-label" role="heading" aria-level="2">Correspondances directes · '+directHits.length+'</div><div role="list" aria-label="Correspondances directes">'+directHits.map(function(h){return renderDirectResult(h,raw);}).join('')+'</div>';if(passageHits.length)html+='<div class="search-section-label" role="heading" aria-level="2">Passages · '+passageHits.length+' lettre'+(passageHits.length>1?'s':'')+'</div><div role="list" aria-label="Passages trouvés">'+passageHits.slice(0,disclosed).map(function(h,i){return renderPassageResult(h,raw,i);}).join('')+'</div>';if(disclosed<passageHits.length)html+='<button class="search-more" data-action="search-more">Afficher '+Math.min(SEARCH_BATCH_SIZE,passageHits.length-disclosed)+' résultats supplémentaires</button>';res.innerHTML=html;updateSearchSelection(_searchViewState.selectedKey||'');}
 function doSearch(generation){if(generation!==undefined&&generation!==_searchGeneration)return false;var input=document.getElementById('search-input'),raw=input.value.trim(),queryTokens=searchTokens(raw),directN=directLetterNumber(raw),dateShape=looksLikeCompleteDateIntent(raw),dateIntent=parseDateIntent(raw),hint=document.getElementById('search-hint'),res=document.getElementById('search-results'),sort=document.getElementById('search-sort'),controls=document.getElementById('search-controls');if(raw!==_searchLastQuery){_searchLastQuery=raw;_searchExpandedGroups.clear();_searchViewState.visibleLimit=SEARCH_BATCH_SIZE;_searchViewState.selectedKey='';_searchViewState.scrollTop=0;}if(!raw){hint.style.display='';res.innerHTML='';controls.style.display='none';_searchViewState.query='';return true;}hint.style.display='none';if(dateShape&&!dateIntent){controls.style.display='none';res.innerHTML='<div class="empty-state" role="status"><i class="ti ti-calendar-x" aria-hidden="true"></i>Date invalide.</div>';_searchViewState.query=raw;return true;}if(!directN&&!dateIntent&&(queryTokens.length===0||(queryTokens.length===1&&queryTokens[0].length<2))){controls.style.display='none';res.innerHTML='<div class="empty-state" role="status"><i class="ti ti-search" aria-hidden="true"></i>Saisissez au moins 2 caractères.</div>';_searchViewState.query=raw;return true;}if(!SEARCH_INDEX.length)buildSearchIndex();var directHits=[],passageHits=[],special='';if(directN){var l=CORPUS.find(function(x){return x.canonical_number===directN;});if(l)directHits=[{kind:'direct',l:l,score:20000,direct:{label:'Lettre '+directN,value:'Lettre '+directN,kind:'number',score:20000}}];special='Numéro exact';}
 else if(dateIntent){CORPUS.forEach(function(l){if((l.date_iso||'')===dateIntent)directHits.push({kind:'direct',l:l,score:19000,direct:{label:'Date exacte',value:l.date_text_fr||dateIntent,kind:'date',score:19000}});});special='Date exacte';}
 else {for(var li=0;li<CORPUS.length;li++){if(generation!==undefined&&generation!==_searchGeneration)return false;var l=CORPUS[li],d=bestDirectMetadataHit(l,raw,queryTokens);if(d)directHits.push({kind:'direct',l:l,score:d.score,direct:d});var p=collectPassageHit(l,raw,queryTokens);if(p)passageHits.push(p);}}
@@ -5412,7 +5416,7 @@ function renderPathModal(path) {
   document.getElementById('path-modal-progress').textContent =
     done.length + ' / ' + pathNumbers.length + ' lues';
 
-  var html = pathNumbers.map(function(n, idx) {
+  var html = '<div class="path-desc" style="padding:10px 16px 12px;border-bottom:0.5px solid var(--border)">' + esc(path.description) + '</div>' + pathNumbers.map(function(n, idx) {
     var l = CORPUS.find(function(x) { return x.canonical_number === n; });
     if (!l) return '';
     var isDone = done.indexOf(n) >= 0;
