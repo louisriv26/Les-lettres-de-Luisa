@@ -57,7 +57,7 @@
             "description": "Rechercher dans les lettres"
         }
     ],
-    "version": "2.10",
+    "version": "2.15",
     "build_revision": "B1",
-    "release_id": "lettres-v2.10-b1-prephysical"
+    "release_id": "lettres-v2.15-b1-contrast-closure"
 }
