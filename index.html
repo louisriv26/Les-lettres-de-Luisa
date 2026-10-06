@@ -1489,15 +1489,15 @@ html[data-layout="wide"] .snav-item{font-size:var(--ui-nav-target);}
   </div>
   <div class="settings-section" id="settings-support-section">
     <div class="settings-label">Liens et support</div>
-    <button class="settings-action" id="settings-copy-link-btn" onclick="copyCurrentStableLink()" aria-label="Copier le lien stable vers l’écran ou la lettre en cours"><i class="ti ti-share" aria-hidden="true"></i> Copier le lien courant</button>
-    <button class="settings-action" id="settings-report-text-btn" onclick="reportTextIssue()" aria-label="Préparer un signalement de problème de texte"><i class="ti ti-help-circle" aria-hidden="true"></i> Signaler un problème de texte</button>
-    <button class="settings-action" id="settings-copy-diagnostics-btn" onclick="copyDiagnostics()" aria-label="Copier un diagnostic technique sans données personnelles"><i class="ti ti-file-text" aria-hidden="true"></i> Copier le diagnostic</button>
+    <button class="settings-action" id="settings-copy-link-btn" onclick="copyCurrentStableLink()" aria-label="Copier le lien courant — lien stable vers l’écran ou la lettre en cours"><i class="ti ti-share" aria-hidden="true"></i> Copier le lien courant</button>
+    <button class="settings-action" id="settings-report-text-btn" onclick="reportTextIssue()" aria-label="Signaler un problème de texte — préparer le signalement"><i class="ti ti-help-circle" aria-hidden="true"></i> Signaler un problème de texte</button>
+    <button class="settings-action" id="settings-copy-diagnostics-btn" onclick="copyDiagnostics()" aria-label="Copier le diagnostic — données techniques sans données personnelles"><i class="ti ti-file-text" aria-hidden="true"></i> Copier le diagnostic</button>
     <div class="settings-current">Les notes, surlignages, favoris et positions de lecture ne sont jamais inclus automatiquement dans un lien, un signalement ou un diagnostic.</div>
   </div>
   <div class="settings-section" id="settings-help-section">
     <div class="settings-label">Aide</div>
     <button class="settings-action" id="settings-help-btn" onclick="openHelpFromSettings()" aria-label="Ouvrir l’aide"><i class="ti ti-help-circle" aria-hidden="true"></i> Ouvrir l’aide</button>
-    <div class="settings-current">À propos se trouve à la fin de l’Aide · v2.15 · 2026-10-05</div>
+    <div class="settings-current">À propos se trouve à la fin de l’Aide · v2.16 · 2026-10-06</div>
   </div>
 </div>
 
@@ -1525,12 +1525,12 @@ html[data-layout="wide"] .snav-item{font-size:var(--ui-nav-target);}
     <div class="sidebar-bottom">
       <button class="snav-item" id="snav-settings" onclick="openTextBar()" aria-label="Réglages"><i class="ti ti-settings" aria-hidden="true"></i>Réglages</button>
       <button class="snav-item" id="snav-help" onclick="openContextHelp(this)" aria-label="Aide sur l’écran actuel"><i class="ti ti-help-circle" aria-hidden="true"></i>Aide</button>
-      <div class="build-meta" style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.55);letter-spacing:.06em;padding:4px 0 2px;">v2.15 · 2026-10-05</div>
+      <div class="build-meta" style="font-family:var(--body);font-size:9px;color:rgba(255,255,255,.55);letter-spacing:.06em;padding:4px 0 2px;">v2.16 · 2026-10-06</div>
     </div>
   </nav>
 
   <!-- ═══ LEFT PANEL ═══ -->
-  <div id="left-panel">
+  <main id="left-panel" aria-label="Contenu principal">
 
     <!-- HOME -->
     <div class="panel active" id="p-home">
@@ -1547,7 +1547,7 @@ html[data-layout="wide"] .snav-item{font-size:var(--ui-nav-target);}
           <button class="install-btn" onclick="doInstall()">Installer</button>
           <button class="install-close" onclick="dismissInstall()" aria-label="Fermer">✕</button>
         </div>
-        <button class="ldj-card" id="ldj-card" aria-label="Ouvrir la lettre du jour">
+        <button class="ldj-card" id="ldj-card" aria-label="Lire la lettre du jour">
           <div class="ldj-eyebrow" id="ldj-eyebrow" aria-hidden="true"><i class="ti ti-sun"></i> Lettre du jour</div>
           <div class="ldj-num" id="ldj-id"></div>
           <div class="ldj-title" id="ldj-title"></div>
@@ -1579,12 +1579,12 @@ html[data-layout="wide"] .snav-item{font-size:var(--ui-nav-target);}
           <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:16px;color:var(--muted)"></i>
         </button>
         <div style="height:12px"></div>
-        <div class="build-meta" style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:1;letter-spacing:.06em;">v2.15 · 2026-10-05</div>
+        <div class="build-meta" style="text-align:center;padding:4px 0 16px;font-family:var(--body);font-size:10px;color:var(--muted);opacity:1;letter-spacing:.06em;">v2.16 · 2026-10-06</div>
       </div>
     </div>
 
     <!-- LIST -->
-    <div class="panel" id="p-list" role="main" aria-label="Liste des lettres">
+    <div class="panel" id="p-list" role="region" aria-label="Liste des lettres">
       <div class="top-bar">
         <span class="title" id="list-title" role="heading" aria-level="1">136 Lettres</span>
         <div class="top-actions">
@@ -1629,6 +1629,7 @@ html[data-layout="wide"] .snav-item{font-size:var(--ui-nav-target);}
           <option value="number">N° de lettre</option>
         </select>
       </div>
+      <div id="search-live-status" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
       <div class="scroll" id="search-results" aria-label="Résultats de recherche"></div>
     </div>
 
@@ -1687,7 +1688,7 @@ html[data-layout="wide"] .snav-item{font-size:var(--ui-nav-target);}
       </div>
     </div>
 
-  </div><!-- #left-panel -->
+  </main><!-- #left-panel -->
 
   <!-- ═══ RIGHT PANEL (tablet/desktop reader) ═══ -->
   <div id="right-panel" style="display:none">
@@ -1696,7 +1697,7 @@ html[data-layout="wide"] .snav-item{font-size:var(--ui-nav-target);}
       <p>Sélectionnez une lettre<br>pour commencer la lecture</p>
       <small>136 entrées de la collection</small>
     </div>
-    <div id="wide-reader" style="display:none;flex-direction:column;height:100%;overflow:hidden" role="main" aria-label="Lecteur">
+    <div id="wide-reader" style="display:none;flex-direction:column;height:100%;overflow:hidden" role="region" aria-label="Lecteur">
       <div class="read-progress" id="wr-progress"></div>
       <div class="reader-top">
         <div style="font-size:10px;color:var(--gold-text);font-family:var(--body);letter-spacing:.06em" id="wr-num" aria-hidden="true"></div>
@@ -1878,8 +1879,8 @@ function validateCuratedPaths() {
 /* ════════════════════════════════════════
    STATE
 ════════════════════════════════════════ */
-const APP_VERSION = '2.15';
-const APP_BUILD = 'B2';
+const APP_VERSION = '2.16';
+const APP_BUILD = 'B1';
 const STATE_SCHEMA_VERSION = 5;
 const STORAGE_TRANSACTION_JOURNAL_KEY = 'lp_pending_transaction';
 const PRE_MIGRATION_SNAPSHOT_KEY = 'lp_pre_migration_snapshot';
@@ -1898,8 +1899,8 @@ function lettersScopeFingerprint(scope) {
   return (h >>> 0).toString(16).padStart(8, '0');
 }
 const LETTERS_SCOPE_FINGERPRINT = lettersScopeFingerprint(new URL('./', window.location.href).href);
-const SHELL_CACHE_ID = `luisa-letters-${LETTERS_SCOPE_FINGERPRINT}-shell-v2.15-b2`;
-const CORPUS_CACHE_ID = `luisa-letters-${LETTERS_SCOPE_FINGERPRINT}-corpus-v2.15-b2`;
+const SHELL_CACHE_ID = `luisa-letters-${LETTERS_SCOPE_FINGERPRINT}-shell-v2.16-b1`;
+const CORPUS_CACHE_ID = `luisa-letters-${LETTERS_SCOPE_FINGERPRINT}-corpus-v2.16-b1`;
 const TABLER_SPRITE_URL = './vendor/tabler/tabler-sprite.svg';
 const TABLER_ICON_ALIASES = Object.freeze({'book-open':'book'});
 const PROTECTED_USER_STORAGE_KEYS = Object.freeze([
