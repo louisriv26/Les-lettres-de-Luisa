@@ -5197,7 +5197,7 @@ function hlClick(e,hlId){e.stopPropagation();void removeHighlightById(hlId,true)
 function renderHighlights(){
   var el=document.getElementById('t-highlights');if(!el)return;if(!STATE.highlights.length){el.innerHTML='<div class="empty-state"><i class="ti ti-highlight" aria-hidden="true"></i>Sélectionnez du texte dans une lettre pour le surligner.</div>';return;}
   var colorBg={gold:'rgba(214,177,61,.32)',blue:'rgba(80,140,220,.28)',green:'rgba(80,180,120,.28)',purple:'rgba(130,91,190,.28)',pink:'rgba(236,100,120,.28)'};
-  function itemHtml(h,i){var bg=colorBg[h.color]||colorBg.gold;var stale=h.stale?'<span class="hl-stale-badge">À réancrer</span>':'';return '<div class="hl-item"><button class="hl-item-body" data-action="highlight-open" data-highlight-index="'+i+'" aria-label="Ouvrir '+esc(h.letter_id)+'"><div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:'+bg+';flex-shrink:0"></span><span class="hl-ref">'+esc(h.letter_id)+' · '+esc(h.date)+'</span>'+stale+'</div><div class="hl-text">« '+esc(h.text.length>120?h.text.slice(0,120)+'…':h.text)+' »</div></button><button data-action="highlight-delete" data-highlight-index="'+i+'" aria-label="Supprimer le surlignage" style="padding:12px 14px 12px 4px;background:none;border:none;cursor:pointer;color:var(--muted);flex-shrink:0"><i class="ti ti-trash" aria-hidden="true" style="font-size:14px"></i></button></div>';}
+  function itemHtml(h,i){var bg=colorBg[h.color]||colorBg.gold;var stale=h.stale?'<span class="hl-stale-badge">À réancrer</span>':'';var letter=CORPUS.find(function(x){return x.canonical_number===h.n;});var excerpt=String(h.text||'').trim().replace(/\s+/g,' ').slice(0,90);var context=(letter?letter.title_fr:('Lettre '+h.n))+(h.date?' — '+h.date:'');return '<div class="hl-item"><button class="hl-item-body" data-action="highlight-open" data-highlight-index="'+i+'" aria-label="Ouvrir le surlignage — '+esc(excerpt)+' — '+esc(context)+'"><div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:'+bg+';flex-shrink:0"></span><span class="hl-ref">'+esc(h.letter_id)+' · '+esc(h.date)+'</span>'+stale+'</div><div class="hl-text">« '+esc(h.text.length>120?h.text.slice(0,120)+'…':h.text)+' »</div></button><button data-action="highlight-delete" data-highlight-index="'+i+'" aria-label="Supprimer le surlignage — '+esc(excerpt)+'" style="padding:12px 14px 12px 4px;background:none;border:none;cursor:pointer;color:var(--muted);flex-shrink:0"><i class="ti ti-trash" aria-hidden="true" style="font-size:14px"></i></button></div>';}
   var active=[],stale=[];STATE.highlights.forEach(function(h,i){(h.stale?stale:active).push({h:h,i:i});});
   var out='';
   if(active.length){out+='<div class="hl-section-head">Surlignages actifs ('+active.length+')</div>'+active.map(function(x){return itemHtml(x.h,x.i);}).join('');}
@@ -5867,13 +5867,23 @@ function mergeImportedAgainstDurable(parsed,durable,initiating) {
   next.favourites=cleanNumberArray(next.favourites.concat(incoming.favourites));
   next.read_state=cleanNumberArray(next.read_state.concat(incoming.read_state));
   if(parsed.present.notes){for(var i=0;i<incoming.notes.length;i++){var note=incoming.notes[i],same=noteById(next.notes,note.id);if(same&&!jsonEqual(same,note))return conflictResult('lp_notes','import_note_collision',same);if(!same)next.notes.push(note);}}
-  if(parsed.present.highlights){for(var j=0;j<incoming.highlights.length;j++){var hl=incoming.highlights[j],sameHl=next.highlights.find(function(x){return x.id===hl.id;});if(sameHl&&!jsonEqual(sameHl,hl))return conflictResult('lp_highlights','import_highlight_collision',sameHl);if(!sameHl){var hv=validateHighlightInsert(hl,next.highlights,hl.id);if(!hv.ok)return hv;next.highlights.push(hl);}}}
+  var mergeReport={highlight_duplicates:0,highlight_conflicts_skipped:0,highlights_imported:0};
+  if(parsed.present.highlights){for(var j=0;j<incoming.highlights.length;j++){
+    var hl=incoming.highlights[j];
+    var exact=next.highlights.find(function(x){return x.dp_id===hl.dp_id&&x.offset_start===hl.offset_start&&x.offset_end===hl.offset_end&&String(x.text||x.text_snapshot||'')===String(hl.text||hl.text_snapshot||'');});
+    if(exact){mergeReport.highlight_duplicates++;continue;}
+    var sameHl=next.highlights.find(function(x){return x.id===hl.id;});
+    if(sameHl){mergeReport.highlight_conflicts_skipped++;continue;}
+    var overlaps=next.highlights.some(function(x){return x.dp_id===hl.dp_id&&!x.stale&&!hl.stale&&Math.max(x.offset_start,hl.offset_start)<Math.min(x.offset_end,hl.offset_end);});
+    if(overlaps){mergeReport.highlight_conflicts_skipped++;continue;}
+    next.highlights.push(hl);mergeReport.highlights_imported++;
+  }}
   if(parsed.present.positions){var keys=Object.keys(incoming.positions);for(var k=0;k<keys.length;k++){var key=keys[k],base=initiating&&initiating.positions?initiating.positions[key]:undefined,current=durable.positions[key],value=incoming.positions[key];if(!jsonEqual(current,base)&&!jsonEqual(current,value))return conflictResult('lp_positions','import_position_collision',current);next.positions[key]=value;}}
   if(parsed.present.last_read&&incoming.last_read){if(initiating&&!jsonEqual(durable.lastRead,initiating.last_read)&&!jsonEqual(durable.lastRead,incoming.last_read))return conflictResult('lp_last','import_last_read_collision',durable.lastRead);next.last_read=incoming.last_read;}
   if(parsed.present.text_size){if(initiating&&durable.textLevel!==initiating.text_size&&durable.textLevel!==incoming.text_size)return conflictResult('lp_size','import_text_size_collision',durable.textLevel);next.text_size=incoming.text_size;}
   if(parsed.present.theme){if(initiating&&durable.theme!==initiating.theme&&durable.theme!==incoming.theme)return conflictResult('lp_theme','import_theme_collision',durable.theme);next.theme=incoming.theme;}
   next.highlights=ensureUniqueHighlightIds(next.highlights);next.highlights=canonicalizeHighlightsForCorpus(next.highlights).highlights;
-  return {ok:true,next:next};
+  return {ok:true,next:next,merge_report:mergeReport};
 }
 function prepareImportedState(parsed, mode) {
   var incoming = parsed.data;
@@ -5956,7 +5966,7 @@ async function commitImportedState(parsed, mode) {
     if(!committedMarkerCleanup.ok)console.warn('[Luisa] finalized import marker cleanup deferred:',committedMarkerCleanup.error||committedMarkerCleanup.phase);
     adoptDurableState(loadState());
     refreshPreImportUndoAvailability();
-    return {ok:true,next:next};
+    return {ok:true,next:next,merge_report:prepared.merge_report||null};
   });
 }
 function prepareImportedStateAgainstState(parsed, mode, baseState) {
@@ -6009,7 +6019,11 @@ async function commitImport(mode) {
   if (!result.ok) { notifyStorageFailure(result); return; }
   refreshPersonalUiAfterPeerState();
   closeImportPreview();
-  showToast(mode === 'replace' ? 'Données remplacées et sauvegardées' : 'Données fusionnées et sauvegardées');
+  if(mode==='merge'&&result.merge_report&&(result.merge_report.highlight_conflicts_skipped||result.merge_report.highlight_duplicates)){
+    var skipped=result.merge_report.highlight_conflicts_skipped||0,dupes=result.merge_report.highlight_duplicates||0;
+    var detail=[];if(dupes)detail.push(dupes+' déjà présent'+(dupes>1?'s':''));if(skipped)detail.push(skipped+' en conflit conservé'+(skipped>1?'s':'' )+' localement');
+    showToast('Fusion terminée. Surlignages ignorés : '+detail.join(' · ')+'. Les autres données valides ont été importées.',{type:'warning',duration:9000});
+  } else showToast(mode === 'replace' ? 'Données remplacées et sauvegardées' : 'Données fusionnées et sauvegardées',{type:'success'});
 }
 function importData(event) {
   var input = event.target;
@@ -6017,7 +6031,7 @@ function importData(event) {
   if (!file) return;
   if (file.size > MAX_IMPORT_BYTES) {
     input.value = '';
-    showToast('Fichier trop volumineux pour une restauration directe (maximum 24 Mo). Conservez-le comme archive de secours.');
+    showToast('Fichier trop volumineux pour une restauration directe (maximum 24 Mo). Conservez-le comme archive de secours.',{type:'warning',persistent:true});
     return;
   }
   var reader = new FileReader();
@@ -6029,13 +6043,13 @@ function importData(event) {
       showImportPreview(parseImportPayload(e.target.result));
     } catch (error) {
       console.warn('[Luisa] import rejected:', error);
-      showToast('Sauvegarde invalide ou incompatible');
+      showToast('Sauvegarde invalide ou incompatible',{type:'error',persistent:true});
     }
   };
   reader.onerror = function() {
     _importReadInProgress = false;
     input.value = '';
-    showToast('Impossible de lire le fichier');
+    showToast('Impossible de lire le fichier',{type:'error',persistent:true});
   };
   reader.readAsText(file);
 }
