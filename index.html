@@ -4821,22 +4821,22 @@ function buildExplore() {
 
   document.getElementById('dest-list').innerHTML =
     recData.slice(0,5).map(function(r) {
-      return `<button class="dest-item" data-action="recipient-key" data-recipient-key="${esc(r.key)}" role="listitem">
+      return listItemWrap(`<button class="dest-item" data-action="recipient-key" data-recipient-key="${esc(r.key)}" aria-label="${esc(r.display_fr)} — ${r.count} lettre${r.count>1?'s':''}">
         <div class="dest-name">${esc(r.display_fr)}</div>
         <div class="dest-count">${r.count} lettre${r.count>1?'s':''}</div>
         <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:13px;color:var(--muted)"></i>
-      </button>`;
+      </button>`);
     }).join('') +
     `<button class="see-all-btn" data-action="all-recipients">Tous les destinataires (${recData.length}) →</button>`;
 
   const dated = CORPUS.filter(l=>l.date_iso).sort((a,b)=>a.date_iso>b.date_iso?1:-1);
   document.getElementById('chron-list').innerHTML =
     dated.slice(0,6).map(l =>
-      `<button class="chron-item" data-action="open-letter" data-n="${l.canonical_number}" role="listitem">
+      listItemWrap(`<button class="chron-item" data-action="open-letter" data-n="${l.canonical_number}" aria-label="${esc(letterAccessibleName(l))}">
         <div class="chron-year">${l.date_iso.slice(0,4)}</div>
         <div class="chron-info"><div class="ct">${esc(l.title_fr)}</div><div class="cs">${String(l.recipient_display_fr||'').trim()===String(l.title_fr||'').trim()?'':esc(l.recipient_display_fr)}</div></div>
         <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:13px;color:var(--muted)"></i>
-      </button>`
+      </button>`)
     ).join('') +
     `<button class="see-all-btn" data-action="all-dated">Toutes les lettres datées →</button>`;
 }
@@ -4889,7 +4889,7 @@ function renderNotes() {
     ? `<div class="empty-state"><i class="ti ti-heart" aria-hidden="true"></i>Appuyez sur ♡ Favori dans une lettre pour l'ajouter ici.</div>`
     : [...STATE.favs].map(n => {
         const l = CORPUS.find(x=>x.canonical_number===n);
-        return l ? `<button class="fav-item" data-action="open-letter" data-n="${l.canonical_number}" aria-label="${esc(l.title_fr)}">
+        return l ? `<button class="fav-item" data-action="open-letter" data-n="${l.canonical_number}" aria-label="${esc(letterAccessibleName(l))}">
           <div class="fav-num" aria-hidden="true">${l.canonical_number}</div>
           <div class="fav-title">${esc(l.title_fr)}</div>
           <span class="fav-heart" aria-hidden="true">♥</span>
@@ -4903,19 +4903,22 @@ function renderNotes() {
         var dpRef = n.dp_text
           ? '<div class="ni-dp">❝ ' + esc(n.dp_text) + ' ❞</div>'
           : '';
+        var letter=CORPUS.find(function(x){return x.canonical_number===n.n;});
+        var excerpt=String(n.text||'').trim().replace(/\s+/g,' ').slice(0,90);
+        var context=(letter?letter.title_fr:('Lettre '+n.n))+(n.date?' — '+n.date:'');
         return `<div class="note-item" style="display:flex;align-items:flex-start;gap:8px;padding:0">
-          <button data-action="note-open" data-note-index="${i}" aria-label="Ouvrir ${esc(n.letter_id)}"
+          <button data-action="note-open" data-note-index="${i}" aria-label="Ouvrir la note — ${esc(excerpt)} — ${esc(context)}"
             style="flex:1;text-align:left;background:none;border:none;cursor:pointer;padding:13px 0 13px 16px">
             <div class="ni-ref">${esc(n.letter_id)}</div>
             ${dpRef}
             <div class="ni-text">« ${esc(n.text)} »</div>
             <div class="ni-date">${esc(n.date)}</div>
           </button>
-          <button data-action="note-edit" data-note-index="${i}" aria-label="Modifier la note"
+          <button data-action="note-edit" data-note-index="${i}" aria-label="Modifier la note — ${esc(excerpt)}"
             style="padding:13px 6px;background:none;border:none;cursor:pointer;color:var(--muted);flex-shrink:0">
             <i class="ti ti-pencil" aria-hidden="true" style="font-size:14px"></i>
           </button>
-          <button data-action="note-delete" data-note-index="${i}" aria-label="Supprimer la note"
+          <button data-action="note-delete" data-note-index="${i}" aria-label="Supprimer la note — ${esc(excerpt)}"
             style="padding:13px 14px 13px 4px;background:none;border:none;cursor:pointer;color:var(--muted);flex-shrink:0">
             <i class="ti ti-trash" aria-hidden="true" style="font-size:14px"></i>
           </button>
@@ -4975,32 +4978,47 @@ function esc(s) {
 var _toastTimer = null;
 var _undoAction = null;
 var _undoTimer = null;
-function showToast(msg) {
+var _toastDeadline=0,_toastResumeKind='',_toastResumeMs=0;
+function hideToast(){var t=document.getElementById('toast');if(_toastTimer)clearTimeout(_toastTimer);if(_undoTimer)clearTimeout(_undoTimer);_toastTimer=null;_undoTimer=null;_toastDeadline=0;_toastResumeKind='';_toastResumeMs=0;t.classList.remove('show','interactive','toast-warning','toast-error');}
+function scheduleToastDismiss(kind,duration){duration=Math.max(500,Number(duration)||1000);_toastResumeKind=kind;_toastResumeMs=duration;_toastDeadline=Date.now()+duration;if(kind==='undo'){if(_undoTimer)clearTimeout(_undoTimer);_undoTimer=setTimeout(function(){_undoAction=null;hideToast();},duration);}else{if(_toastTimer)clearTimeout(_toastTimer);_toastTimer=setTimeout(hideToast,duration);}}
+function pauseToastDismiss(){if(!_toastResumeKind)return;_toastResumeMs=Math.max(500,_toastDeadline-Date.now());if(_toastTimer){clearTimeout(_toastTimer);_toastTimer=null;}if(_undoTimer){clearTimeout(_undoTimer);_undoTimer=null;}}
+function resumeToastDismiss(){var t=document.getElementById('toast');if(!t||!_toastResumeKind||_toastTimer||_undoTimer)return;if(t.matches(':hover')||t.contains(document.activeElement))return;scheduleToastDismiss(_toastResumeKind,_toastResumeMs);}
+function showToast(msg, options) {
+  options=options||{};
   const t=document.getElementById('toast');
   if (_toastTimer) clearTimeout(_toastTimer);
   if (_undoTimer) { clearTimeout(_undoTimer); _undoTimer=null; _undoAction=null; }
-  t.textContent=msg; t.classList.add('show');
-  _toastTimer=setTimeout(function(){t.classList.remove('show');},2200);
+  t.textContent='';t.classList.remove('interactive','toast-warning','toast-error');
+  var type=options.type||'info',persistent=!!options.persistent,duration=Number(options.duration)||((type==='success'||type==='info')?4200:7000);
+  t.setAttribute('role',(type==='error'||type==='warning')?'alert':'status');
+  t.setAttribute('aria-live',(type==='error'||type==='warning')?'assertive':'polite');
+  var label=document.createElement('span');label.textContent=msg;t.appendChild(label);
+  if(type==='warning')t.classList.add('toast-warning');if(type==='error')t.classList.add('toast-error');
+  if(persistent){t.classList.add('interactive');var close=document.createElement('button');close.type='button';close.className='toast-close';close.setAttribute('aria-label','Fermer le message');close.textContent='×';close.onclick=hideToast;t.appendChild(close);}
+  t.classList.add('show');
+  if(!persistent)scheduleToastDismiss('toast',duration);
 }
 function showUndoToast(msg, undoFn) {
   const t=document.getElementById('toast');
   if (_toastTimer) clearTimeout(_toastTimer);
   if (_undoTimer) clearTimeout(_undoTimer);
   _undoAction=undoFn;
-  t.textContent='';
+  t.textContent='';t.classList.remove('toast-warning','toast-error');t.classList.add('interactive');t.setAttribute('role','status');t.setAttribute('aria-live','polite');
   var label=document.createElement('span'); label.textContent=msg; t.appendChild(label);
   var btn=document.createElement('button'); btn.type='button'; btn.className='undo-toast-btn'; btn.textContent='Annuler'; btn.onclick=performUndo; t.appendChild(btn);
   t.classList.add('show');
-  _undoTimer=setTimeout(function(){_undoAction=null;t.classList.remove('show');},6500);
+  scheduleToastDismiss('undo',9000);
 }
 async function performUndo() {
   if (!_undoAction) return false;
   var action=_undoAction; _undoAction=null;
-  if (_undoTimer) clearTimeout(_undoTimer); _undoTimer=null;
+  if (_undoTimer) clearTimeout(_undoTimer); _undoTimer=null; _toastResumeKind=''; _toastResumeMs=0;
   var ok=await action();
   if (ok) showToast('Suppression annulée');
   return !!ok;
 }
+var _toastNode=document.getElementById('toast');
+if(_toastNode){_toastNode.addEventListener('mouseenter',pauseToastDismiss);_toastNode.addEventListener('mouseleave',resumeToastDismiss);_toastNode.addEventListener('focusin',pauseToastDismiss);_toastNode.addEventListener('focusout',function(){setTimeout(resumeToastDismiss,0);});}
 
 // Close highlight popup when clicking outside it
 document.addEventListener('mousedown', function(e) {
@@ -5054,8 +5072,8 @@ document.addEventListener('click', function(e) {
     var hi = STATE.highlights[Number(btn.getAttribute('data-highlight-index'))]; if (hi) openLetterAtDP(hi.n, hi.dp_id);
   } else if (action === 'highlight-delete') {
     deleteHighlight(e, Number(btn.getAttribute('data-highlight-index')));
-  } else if (action === 'highlight-remove') {
-    e.stopPropagation(); void removeHighlightById(btn.getAttribute('data-hl-id'), true);
+  } else if (action === 'highlight-manage') {
+    e.stopPropagation(); openExistingHighlightMenu(btn.getAttribute('data-hl-id'));
   } else if (action === 'path-letter') {
     var pathN = Number(btn.getAttribute('data-n')); if (isCanonicalNumber(pathN)) openLetterFromPath(pathN);
   } else if (action === 'reload-app') {
@@ -5080,14 +5098,15 @@ var _hlPendingEnd = 0;
 var _hlPendingParagraphFingerprint = '';
 var _highlightListenerCounts = {};
 var _hlPopupInteracting = false;
+var _activeHighlightId = '';
 
-function showSelectionActions(){document.getElementById('selection-actions').style.display='flex';document.getElementById('hl-color-panel').classList.remove('show');}
-function showHighlightColors(){document.getElementById('selection-actions').style.display='none';document.getElementById('hl-color-panel').classList.add('show');}
+function showSelectionActions(){document.getElementById('selection-actions').style.display='flex';document.getElementById('hl-color-panel').classList.remove('show');document.getElementById('existing-highlight-panel').classList.remove('show');document.getElementById('hl-popup').setAttribute('aria-label','Actions sur le texte sélectionné');_activeHighlightId='';}
+function showHighlightColors(){document.getElementById('selection-actions').style.display='none';document.getElementById('existing-highlight-panel').classList.remove('show');document.getElementById('hl-color-panel').classList.add('show');}
 function selectHlColor(btn){_hlColor=btn.getAttribute('data-color')||'gold';}
 function clearHighlightPending(){_hlPendingText='';_hlPendingDpId='';_hlPendingLetterN=-1;_hlPendingStart=0;_hlPendingEnd=0;_hlPendingParagraphFingerprint='';}
 function hideHlPopup(keepPending){
   document.getElementById('hl-popup').classList.remove('show'); showSelectionActions();
-  if(!keepPending) clearHighlightPending();
+  if(!keepPending){clearHighlightPending();_activeHighlightId='';}
   if(window.getSelection) window.getSelection().removeAllRanges();
 }
 function positionHlPopup(rect){
@@ -5127,6 +5146,24 @@ function onTextSelected(){
   }catch(e){hideHlPopup();return;}
   positionHlPopup(range.getBoundingClientRect());
 }
+function openExistingHighlightMenu(hlId){
+  var h=STATE.highlights.find(function(item){return item.id===hlId;});if(!h)return false;
+  _activeHighlightId=hlId;clearHighlightPending();
+  var popup=document.getElementById('hl-popup');document.getElementById('selection-actions').style.display='none';document.getElementById('hl-color-panel').classList.remove('show');document.getElementById('existing-highlight-panel').classList.add('show');
+  popup.setAttribute('aria-label','Actions sur le surlignage');popup.classList.add('show');
+  document.querySelectorAll('[data-existing-color]').forEach(function(btn){btn.classList.toggle('selected',btn.getAttribute('data-existing-color')===h.color);btn.setAttribute('aria-pressed',btn.getAttribute('data-existing-color')===h.color?'true':'false');});
+  return true;
+}
+async function changeActiveHighlightColor(color){
+  var idx=STATE.highlights.findIndex(function(item){return item.id===_activeHighlightId;});if(idx<0)return false;
+  var current=STATE.highlights[idx];if(current.color===color){hideHlPopup();return true;}
+  var next=STATE.highlights.slice();next[idx]=Object.assign({},current,{color:color});var result=await saveHighlights(next);if(!result.ok){notifyStorageFailure(result);return false;}STATE.highlights=result.value||STATE.highlights;renderHighlights();rerenderCurrentReaderKeepingScroll();hideHlPopup();showToast('Couleur du surlignage modifiée',{type:'success'});return true;
+}
+function addNoteFromActiveHighlight(){
+  var h=STATE.highlights.find(function(item){return item.id===_activeHighlightId;});if(!h)return false;
+  var idx=CORPUS.findIndex(function(x){return x.canonical_number===h.n;});if(idx<0)return false;currentLetterIdx=idx;_noteEditingId='';_notePendingDpId=h.dp_id||'';_notePendingDpText=String(h.text||'').slice(0,90)+(String(h.text||'').length>90?'…':'');_notePendingSelection={text:String(h.text||''),offset_start:h.offset_start,offset_end:h.offset_end,paragraph_fingerprint:h.paragraph_fingerprint||'',corpus_fingerprint:h.corpus_fingerprint||CORPUS_META.fingerprint||''};hideHlPopup(true);openNoteSheetForCurrentLetter();return true;
+}
+function deleteActiveHighlight(){var id=_activeHighlightId;if(!id)return false;hideHlPopup();void removeHighlightById(id,true);return true;}
 function confirmHighlightColor(color){_hlColor=color||'gold';return confirmHighlight();}
 async function confirmHighlight(){
   if(!_hlPendingText||_hlPendingLetterN<0){hideHlPopup();return false;}
