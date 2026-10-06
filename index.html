@@ -198,7 +198,8 @@ mark.hl-blue{background:rgba(80,140,220,.28);color:inherit;}
 mark.hl-green{background:rgba(80,180,120,.28);color:inherit;}
 mark.hl-purple{background:rgba(130,91,190,.28);color:inherit;}
 mark.hl-pink{background:rgba(236,100,120,.28);color:inherit;}
-mark.hl:hover{opacity:.7;}
+mark.hl{cursor:pointer;}
+mark.hl:hover{opacity:.86;}
 
 /* Selection popup */
 #hl-popup{position:fixed;z-index:700;left:50%;right:auto;top:auto;bottom:calc(var(--sat-bot) + 72px);
@@ -218,6 +219,8 @@ mark.hl:hover{opacity:.7;}
 .hl-action-btn:hover,.hl-action-btn:focus-visible{background:rgba(255,255,255,.16);}.hl-action-btn.primary{background:rgba(255,255,255,.10);color:var(--gold);border:none;}
 #selection-actions{display:flex;gap:4px;align-items:center;flex-wrap:nowrap;}
 #hl-color-panel{display:none;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;}#hl-color-panel.show{display:flex;}
+#existing-highlight-panel{display:none;flex-direction:column;gap:6px;max-width:100%;}#existing-highlight-panel.show{display:flex;}
+#existing-highlight-panel .hl-popup-row{flex-wrap:wrap;}
 @media(max-width:360px){#hl-popup{padding-left:5px;padding-right:5px;}#selection-actions{gap:2px;}.hl-action-btn{padding-left:6px;padding-right:6px;font-size:12.5px;}#hl-color-panel .hl-popup-label{width:100%;text-align:center;}}
 .hl-stale-badge{display:inline-flex;align-items:center;margin-left:6px;padding:2px 6px;border-radius:999px;border:0.5px solid var(--border);font-family:var(--body);font-size:9px;color:var(--muted);font-style:normal;}
 .toast .undo-toast-btn{margin-left:10px;border:0;border-left:1px solid rgba(255,255,255,.25);padding:2px 0 2px 10px;background:none;color:var(--gold);font:600 12px var(--body);cursor:pointer;pointer-events:auto;}
@@ -504,10 +507,22 @@ mark.hl:hover{opacity:.7;}
 
 /* Toast — aria-live */
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(10px);
-  background:#1A2A4A;color:var(--gold);font-family:var(--body);font-size:13px;
-  padding:8px 18px;border-radius:20px;opacity:0;transition:all .25s;pointer-events:none;
-  white-space:nowrap;z-index:9000;}
+  background:#1A2A4A;color:#F8F6FC;font-family:var(--body);font-size:13px;line-height:1.45;
+  padding:10px 14px;border-radius:14px;opacity:0;transition:all .25s;pointer-events:none;
+  width:max-content;max-width:min(620px,calc(100vw - 24px));white-space:normal;overflow-wrap:anywhere;text-align:left;z-index:9000;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.interactive{pointer-events:auto;}
+.toast.toast-warning{border:1px solid rgba(228,188,88,.72);}
+.toast.toast-error{border:1px solid #F0B8B8;}
+.toast .toast-close{margin-left:10px;border:0;background:none;color:#F8F6FC;font:600 16px var(--body);cursor:pointer;pointer-events:auto;vertical-align:middle;}
+
+
+/* v2.16 — structural list semantics without overriding native button roles. */
+.listitem-wrap{display:block;min-width:0;}
+.listitem-wrap>.letter-item,.listitem-wrap>.situ-card,.listitem-wrap>.exp-card,.listitem-wrap>.dest-item,.listitem-wrap>.chron-item{width:100%;height:100%;}
+.dest-list .listitem-wrap:last-child>.dest-item,.chron-list .listitem-wrap:last-child>.chron-item{border-bottom:none;}
+/* L-42: the dark rail needs its own light focus indicator in the light theme. */
+html[data-layout="wide"] #sidebar .snav-item:focus-visible{outline:2px solid #F3D87A!important;outline-offset:2px!important;}
 
 /* Loading */
 #loading{position:fixed;inset:0;background:var(--ivory);display:flex;flex-direction:column;
@@ -737,7 +752,6 @@ input[type="search"],input[type="text"],textarea{min-height:44px;}
 .help-dot{position:relative;width:44px;height:44px;min-width:44px;min-height:44px;background:transparent!important;border:0;padding:0;}
 .help-dot::after{content:"";position:absolute;left:50%;top:50%;width:7px;height:7px;border-radius:50%;background:var(--border);transform:translate(-50%,-50%);}
 .help-dot.active::after{background:var(--gold-text);}
-mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
 @media (forced-colors: active){
   .chip.active,.setting-choice.active,.snav-item.active,.help-nav-btn.primary,
   .path-step.done,.path-step.current,.help-dot.active,.letter-item.selected,.tab.active,
@@ -770,7 +784,7 @@ mark.hl[role="button"]:focus-visible{outline:2px solid var(--focus);outline-offs
   .phone-nav .pnav-item{min-width:44px;width:auto;}
   #phone-reader .action-bar{display:grid;grid-template-columns:repeat(3,minmax(44px,1fr));}
   #phone-reader .action-bar .action-btn{min-width:44px;width:auto;}
-  .panel>.scroll{padding-bottom:calc(108px + env(safe-area-inset-bottom));}
+  .panel>.scroll{padding-bottom:calc(108px + env(safe-area-inset-bottom));scroll-padding-bottom:calc(108px + env(safe-area-inset-bottom));}
 }
 
 @media (max-width:520px){
@@ -945,7 +959,7 @@ html[data-text-level]{
 
 /* Shared fixed-phone-nav clearance contract. */
 @media(max-width:767px){
-  .panel>.scroll{padding-bottom:calc(var(--phone-nav-clearance) + env(safe-area-inset-bottom));}
+  .panel>.scroll{padding-bottom:calc(var(--phone-nav-clearance) + env(safe-area-inset-bottom));scroll-padding-bottom:calc(var(--phone-nav-clearance) + env(safe-area-inset-bottom));}
 }
 @media(min-width:241px) and (max-width:767px){
   .pnav-item{font-size:clamp(11px,calc(5vw - 1px),var(--ui-nav-target));}
@@ -959,13 +973,13 @@ html[data-layout="wide"] .snav-item{font-size:var(--ui-nav-target);}
   html[data-text-level="large"]{--ui-tech:11px;}
   html[data-text-level="xlarge"]{--ui-tech:12px;}
   .pnav-item{font-size:10px;}
-  .panel>.scroll{padding-bottom:calc(72px + env(safe-area-inset-bottom));}
+  .panel>.scroll{padding-bottom:calc(72px + env(safe-area-inset-bottom));scroll-padding-bottom:calc(72px + env(safe-area-inset-bottom));}
 }
 @media(max-width:280px){
   .exp-grid{grid-template-columns:1fr;}
 }
 @media(max-width:219px){
-  .panel>.scroll{padding-bottom:calc(108px + env(safe-area-inset-bottom));}
+  .panel>.scroll{padding-bottom:calc(108px + env(safe-area-inset-bottom));scroll-padding-bottom:calc(108px + env(safe-area-inset-bottom));}
 }
 </style>
 </head>
@@ -995,6 +1009,20 @@ html[data-layout="wide"] .snav-item{font-size:var(--ui-nav-target);}
     <button class="hl-color-btn hc-purple" data-color="purple" onclick="confirmHighlightColor('purple')" aria-label="Violet"></button>
     <button class="hl-color-btn hc-pink" data-color="pink" onclick="confirmHighlightColor('pink')" aria-label="Rose"></button>
     <button class="hl-remove-btn" onclick="showSelectionActions()">Retour</button>
+  </div>
+  <div id="existing-highlight-panel" aria-label="Actions sur le surlignage">
+    <div class="hl-popup-row" aria-label="Changer la couleur du surlignage">
+      <button class="hl-color-btn hc-gold" data-existing-color="gold" onclick="changeActiveHighlightColor('gold')" aria-label="Changer la couleur en jaune"></button>
+      <button class="hl-color-btn hc-blue" data-existing-color="blue" onclick="changeActiveHighlightColor('blue')" aria-label="Changer la couleur en bleu"></button>
+      <button class="hl-color-btn hc-green" data-existing-color="green" onclick="changeActiveHighlightColor('green')" aria-label="Changer la couleur en vert"></button>
+      <button class="hl-color-btn hc-purple" data-existing-color="purple" onclick="changeActiveHighlightColor('purple')" aria-label="Changer la couleur en violet"></button>
+      <button class="hl-color-btn hc-pink" data-existing-color="pink" onclick="changeActiveHighlightColor('pink')" aria-label="Changer la couleur en rose"></button>
+    </div>
+    <div class="hl-popup-row">
+      <button class="hl-action-btn" onclick="addNoteFromActiveHighlight()">Ajouter une note</button>
+      <button class="hl-action-btn" onclick="deleteActiveHighlight()">Supprimer</button>
+      <button class="hl-action-btn" onclick="hideHlPopup()">Fermer</button>
+    </div>
   </div>
 </div>
 
@@ -1174,7 +1202,7 @@ html[data-layout="wide"] .snav-item{font-size:var(--ui-nav-target);}
           <strong>Lettres de Luisa Piccarreta</strong> est une application de lecture, de recherche et d’exploration d’une <strong>collection éditoriale actuelle de 136 entrées</strong>.<br><br>
           Cette collection ne constitue pas l’ensemble de la correspondance connue de Luisa et n’est pas présentée comme une édition critique officielle. La section <strong>Sources et vérification des textes</strong> explique l’origine du texte français, les documents consultés, les contrôles effectués et les principales questions encore ouvertes.<br><br>
           La collection utilise des identifiants stables et des paragraphes d’affichage reliés au texte source afin de permettre la recherche, les liens précis, les notes, les surlignages et la reprise de lecture sans modifier le texte lu.<br><br>
-          <strong>Version de l’app :</strong> v2.15<br>
+          <strong>Version de l’app :</strong> v2.16<br>
           <strong>Collection actuelle :</strong> 136 entrées · 909 paragraphes d’affichage<br><br>
           <strong>Confidentialité :</strong> vos données personnelles restent dans le stockage local de cette installation ou de ce contexte de l’app, sauf lorsque vous choisissez vous-même de les exporter. Elles ne sont pas automatiquement partagées avec les autres apps de la Collection Luisa et ne sont pas incluses dans les liens, signalements ou diagnostics.
         </div>
