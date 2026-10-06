@@ -57,7 +57,7 @@
             "description": "Rechercher dans les lettres"
         }
     ],
-    "version": "2.15",
-    "build_revision": "B2",
-    "release_id": "lettres-v2.15-b2-contrast-repair"
+    "version": "2.16",
+    "build_revision": "B1",
+    "release_id": "lettres-v2.16-b1-ux-audit-core-repair"
 }
